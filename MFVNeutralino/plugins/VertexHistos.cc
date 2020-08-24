@@ -59,6 +59,8 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_absdeltaphi01_shared_jets;
   TH1F* h_absdeltaphi01_no_shared_jets;
 
+  TH1F* h_max_absdeltaphi_sv_jets;
+
   TH1F* h_sv_track_weight[sv_num_indices];
   TH1F* h_sv_track_q[sv_num_indices];
   TH1F* h_sv_track_pt[sv_num_indices];
@@ -359,6 +361,8 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_svdist2d_no_shared_jets = fs->make<TH1F>("h_svdist2d_no_shared_jets", ";dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);
   h_absdeltaphi01_shared_jets = fs->make<TH1F>("h_absdeltaphi01_shared_jets", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
   h_absdeltaphi01_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_no_shared_jets", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
+  h_max_absdeltaphi_sv_jets = fs->make<TH1F>("h_max_absdeltaphi_sv_jets", ";max(abs(delta(phi of sv , phi of jets)));arb. units", 316, 0, 3.16);
+
 }
 
 void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
@@ -729,8 +733,45 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
   }
 
   //////////////////////////////////////////////////////////////////////
+  std::vector<std::vector<int> > sv_track_which_jet;
+  for (int isv = 0; isv < nsv; ++isv) {
+	  const MFVVertexAux& aux = auxes->at(isv);
+	  const int ntracks = aux.ntracks();
 
-  if (nsv >= 2) {
+	  double phin = atan2(aux.y - bsy, aux.x - bsx);
+
+	  std::vector<int> track_which_jet;
+	  std::vector<int> absdeltaphi_sv_jets;
+	  for (int i = 0; i < ntracks; ++i) {
+		  double match_threshold = 1.3;
+		  int jet_index = 255;
+		  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {
+			  double a = fabs(aux.track_pt(i) - fabs(mevent->jet_track_qpt[j])) + 1;
+			  double b = fabs(aux.track_eta[i] - mevent->jet_track_eta[j]) + 1;
+			  double c = fabs(aux.track_phi[i] - mevent->jet_track_phi[j]) + 1;
+			  if (a * b * c < match_threshold) {
+				  match_threshold = a * b * c;
+				  jet_index = mevent->jet_track_which_jet[j];
+			  }
+		  }
+		  if (jet_index != 255) {
+			  track_which_jet.push_back((int)jet_index);
+			  std::vector<int>::iterator itn = std::find(jet_track_which_jet.begin(), jet_track_which_jet.end(), jet_index);
+			  int jn = std::distance(jet_track_which_jet.begin(), itn);
+			  absdelta = fabs(reco::deltaPhi(phin, mevent->jet_track_phi[jn]));
+			  absdeltaphi_sv_jets.push_back((double)absdelta);
+		  }
+	  }
+	  
+	  h_max_absdeltaphi_sv_jets->Fill(std::max_element(absdeltaphi_sv_jets, absdeltaphi_sv_jets + track_which_jet.size()), w);
+	  sv_track_which_jet.push_back(track_which_jet);
+  }
+
+
+
+
+
+  if (sv_track_which_jet.size() >= 2) {
     const MFVVertexAux& sv0 = auxes->at(0);
     const MFVVertexAux& sv1 = auxes->at(1);
     double svdist2d = mag(sv0.x - sv1.x, sv0.y - sv1.y);
@@ -749,30 +790,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
                                sv1.ntrackssharedwpvs() ? sv1.pvmosttracksshared() : -1,
                                w);
 
-    std::vector<std::vector<int> > sv_track_which_jet;
-    for (int isv = 0; isv < nsv; ++isv) {
-      const MFVVertexAux& aux = auxes->at(isv);
-      const int ntracks = aux.ntracks();
-
-      std::vector<int> track_which_jet;
-      for (int i = 0; i < ntracks; ++i) {
-	double match_threshold = 1.3;
-	int jet_index = 255;
-	for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {
-	  double a = fabs(aux.track_pt(i) - fabs(mevent->jet_track_qpt[j])) + 1;
-	  double b = fabs(aux.track_eta[i] - mevent->jet_track_eta[j]) + 1;
-	  double c = fabs(aux.track_phi[i] - mevent->jet_track_phi[j]) + 1;
-	  if (a * b * c < match_threshold) {
-	    match_threshold = a * b * c;
-	    jet_index = mevent->jet_track_which_jet[j];
-	  }
-	}
-	if (jet_index != 255) {
-	  track_which_jet.push_back((int) jet_index);
-	}
-      }
-      sv_track_which_jet.push_back(track_which_jet);
-    }
+    
 
     bool shared_jet = std::find_first_of (sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
     h_sv_shared_jets->Fill(shared_jet, w);
