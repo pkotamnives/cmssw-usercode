@@ -13,6 +13,7 @@
 #include "JMTucker/MFVNeutralinoFormats/interface/Event.h"
 #include "JMTucker/MFVNeutralinoFormats/interface/VertexAux.h"
 #include <iostream>
+#include <algorithm>
 class MFVVertexHistos : public edm::EDAnalyzer {
  public:
   explicit MFVVertexHistos(const edm::ParameterSet&);
@@ -807,11 +808,22 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 	  int nsharedjets=1;
 	  std::vector<std::vector<int> > sv_track_which_jet_copy;
 	  sv_track_which_jet_copy = sv_track_which_jet;
-	  sv_track_which_jet_copy[0].erase(std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()));
+	 
+          std::vector<int>::iterator it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
+	  int jet_index = sv_track_which_jet_copy[0].at((*it)+1);
+	  sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
+	  sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());	  
+
 	  while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
 		  nsharedjets ++;
-		  sv_track_which_jet_copy[0].erase(std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()));
+		  it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
+         	  jet_index = sv_track_which_jet_copy[0].at((*it)+1);
+	          sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
+	          sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());	  
+
 	  }
+          std::cout << "# of shared jets are " << nsharedjets << std::endl;
+          std::cout << "sv#0 has ntracks="<< sv_track_which_jet[0].size() << ", sv#1 has ntracks="<< sv_track_which_jet[1].size() << std::endl;
 	  h_nsharedjets_shared_jets->Fill(nsharedjets);
 
     } else {
