@@ -12,7 +12,7 @@
 #include "JMTucker/Tools/interface/Utilities.h"
 #include "JMTucker/MFVNeutralinoFormats/interface/Event.h"
 #include "JMTucker/MFVNeutralinoFormats/interface/VertexAux.h"
-
+#include <iostream>
 class MFVVertexHistos : public edm::EDAnalyzer {
  public:
   explicit MFVVertexHistos(const edm::ParameterSet&);
@@ -741,11 +741,13 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 	  double phin = atan2(aux.y - bsy, aux.x - bsx);
 
 	  std::vector<int> track_which_jet;
-	  std::vector<int> absdeltaphi_sv_jets;
+	  std::vector<double> absdeltaphi_sv_jets;
+          //jmt::MaxValue max_absdelta;
 	  for (int i = 0; i < ntracks; ++i) {
 		  double match_threshold = 1.3;
 		  int jet_index = 255;
-		  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {
+		  double absdelta = 0;
+                  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {
 			  double a = fabs(aux.track_pt(i) - fabs(mevent->jet_track_qpt[j])) + 1;
 			  double b = fabs(aux.track_eta[i] - mevent->jet_track_eta[j]) + 1;
 			  double c = fabs(aux.track_phi[i] - mevent->jet_track_phi[j]) + 1;
@@ -756,22 +758,25 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 		  }
 		  if (jet_index != 255) {
 			  track_which_jet.push_back((int)jet_index);
-			  std::vector<int>::iterator itn = std::find(jet_track_which_jet.begin(), jet_track_which_jet.end(), jet_index);
-			  int jn = std::distance(jet_track_which_jet.begin(), itn);
-			  absdelta = fabs(reco::deltaPhi(phin, mevent->jet_track_phi[jn]));
-			  absdeltaphi_sv_jets.push_back((double)absdelta);
-		  }
+			  absdelta = double(fabs(reco::deltaPhi(phin, mevent->jet_phi[jet_index])));
+			  absdeltaphi_sv_jets.push_back(absdelta);
+			 // max_absdelta(absdelta);
+          	  }
 	  }
-	  
-	  h_max_absdeltaphi_sv_jets->Fill(std::max_element(absdeltaphi_sv_jets, absdeltaphi_sv_jets + track_which_jet.size()), w);
 	  sv_track_which_jet.push_back(track_which_jet);
-  }
+	  if (absdeltaphi_sv_jets.size() > 0 ){
+              h_max_absdeltaphi_sv_jets->Fill(*max_element(absdeltaphi_sv_jets.begin(), absdeltaphi_sv_jets.end()),w);
+              
+	  }
+   }
 
 
 
 
 
-  if (sv_track_which_jet.size() >= 2) {
+
+
+  if (nsv >= 2) {
     const MFVVertexAux& sv0 = auxes->at(0);
     const MFVVertexAux& sv1 = auxes->at(1);
     double svdist2d = mag(sv0.x - sv1.x, sv0.y - sv1.y);
