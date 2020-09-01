@@ -59,7 +59,7 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_svdist2d_no_shared_jets;
   TH1F* h_absdeltaphi01_shared_jets;
   TH1F* h_absdeltaphi01_no_shared_jets;
-
+  TH1F* h_absdeltaphi01_nsv2_shared_jets;                                                                                                                                             TH1F* h_absdeltaphi01_nsv2_no_shared_jets;
   TH1F* h_max_absdeltaphi_sv_jets;
   TH1F* h_nsharedjets_shared_jets;
 
@@ -361,10 +361,11 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_sv_shared_jets  = fs->make<TH1F>("h_sv_shared_jets", ";SV tracks share jet?", 2, 0, 2);
   h_svdist2d_shared_jets = fs->make<TH1F>("h_svdist2d_shared_jets", ";dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);
   h_svdist2d_no_shared_jets = fs->make<TH1F>("h_svdist2d_no_shared_jets", ";dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);
-  h_absdeltaphi01_shared_jets = fs->make<TH1F>("h_absdeltaphi01_shared_jets", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
-  h_absdeltaphi01_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_no_shared_jets", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
+  h_absdeltaphi01_shared_jets = fs->make<TH1F>("h_absdeltaphi01_shared_jets", "nsv >= 2;abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
+  h_absdeltaphi01_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_no_shared_jets", "nsv >= 2;abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
+  h_absdeltaphi01_nsv2_shared_jets = fs->make<TH1F>("h_absdeltaphi01_nsv2_shared_jets", "nsv = 2;abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);                   h_absdeltaphi01_nsv2_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_nsv2_no_shared_jets", "nsv = 2;abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi_sv_jets = fs->make<TH1F>("h_max_absdeltaphi_sv_jets", ";max(abs(delta(phi of sv , phi of jets)));arb. units", 316, 0, 3.16);
-  h_nsharedjets_shared_jets = fs->make<TH1F>("h_nsharedjets_shared_jets", "# of shared jets;two secondary vertices", 20, 0, 20);
+  h_nsharedjets_shared_jets = fs->make<TH1F>("h_nsharedjets_shared_jets", ";# of shared jets;arb. units", 10, 0, 10);
 }
 
 void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
@@ -810,27 +811,32 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 	  sv_track_which_jet_copy = sv_track_which_jet;
 	 
       std::vector<int>::iterator it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
-	  int jet_index = sv_track_which_jet_copy[0].at((*it)+1);
+          int idx = std::distance(sv_track_which_jet_copy[0].begin(),it);
+	  int jet_index = sv_track_which_jet_copy[0].at(idx);
 	  sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
 	  sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());	  
-	  std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index) << std::endl;
+	  std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index) << std::endl;
 
 	  while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
 		  nsharedjets ++;
 		  it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
-          jet_index = sv_track_which_jet_copy[0].at((*it)+1);
+          idx = std::distance(sv_track_which_jet_copy[0].begin(),it);
+          jet_index = sv_track_which_jet_copy[0].at(idx);
 	      sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
 	      sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());	  
-	      std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index) << std::endl;
+	      std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index) << std::endl;
 
 	  }
       std::cout << "# of shared jets are " << nsharedjets << std::endl;
       std::cout << "sv#0 has ntracks="<< sv_track_which_jet[0].size() << ", sv#1 has ntracks="<< sv_track_which_jet[1].size() << std::endl;
       h_nsharedjets_shared_jets->Fill(nsharedjets);
-
+      if (nsv==2){
+          h_absdeltaphi01_nsv2_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+      }
     } else {
       h_svdist2d_no_shared_jets->Fill(svdist2d, w);
       h_absdeltaphi01_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+      if (nsv==2){                                                                                                                                                                            h_absdeltaphi01_nsv2_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);                                                                                                    }
     }
 
 	
