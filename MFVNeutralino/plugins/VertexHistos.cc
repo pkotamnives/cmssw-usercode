@@ -59,7 +59,8 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_svdist2d_no_shared_jets;
   TH1F* h_absdeltaphi01_shared_jets;
   TH1F* h_absdeltaphi01_no_shared_jets;
-  TH1F* h_absdeltaphi01_nsv2_shared_jets;                                                                                 TH1F* h_absdeltaphi01_nsv2_no_shared_jets;
+  TH1F* h_absdeltaphi01_nsv2_shared_jets;
+  TH1F* h_absdeltaphi01_nsv2_no_shared_jets;
   TH1F* h_max_absdeltaphi_sv_jets;
   TH1F* h_nsharedjets_shared_jets;
   TH2F* h_ntracks_sv0sv1_nsharedjet1;
