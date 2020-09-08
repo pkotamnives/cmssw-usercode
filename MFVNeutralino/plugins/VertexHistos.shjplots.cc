@@ -51,7 +51,22 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_absdeltaphi01_nsv2_no_shared_jets;
   TH1F* h_max_absdeltaphi_sv_jets;
   TH1F* h_nsharedjets_shared_jets;
-};
+  TH1F* h_ratio_ntracks_shared_jets;
+  TH2F* h_ntracks_sv0sv1_nsharedjet1;
+  TH2F* h_ntracks_sv0sv1_nsharedjet2;
+  TH2F* h_ntracks_sv0sv1_nsharedjet3;
+  TH2F* h_ntracks_sv0sv1_nsharedjet4;
+  TH2F* h_ntracks_sv0sv1_nsharedjet5;
+  TH1F* h_ntracks_sv0_ntrack1_sv1;
+  TH1F* h_ntracks_sv0_ntrack2_sv1;
+  TH1F* h_ntracks_sv0_ntrack3_sv1;
+  TH1F* h_ntracks_sv0_ntrack4_sv1;
+  TH1F* h_ntracks_sv0_ntrack5_sv1;
+  TH1F* h_svdist2d_small_absdeltaphi01_shared_jets;
+  TH1F* h_svdist3d_small_absdeltaphi01_shared_jets;
+  TH1F* h_svdist2d_small_absdeltaphi01_no_shared_jets;
+  TH1F* h_svdist3d_small_absdeltaphi01_no_shared_jets;
+ };
 
 const char* MFVVertexHistos::sv_index_names[MFVVertexHistos::sv_num_indices] = { "all" };
 
@@ -83,11 +98,21 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_absdeltaphi01_nsv2_shared_jets = fs->make<TH1F>("h_absdeltaphi01_nsv2_shared_jets", "nsv = 2;abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);                   h_absdeltaphi01_nsv2_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_nsv2_no_shared_jets", "nsv = 2;abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi_sv_jets = fs->make<TH1F>("h_max_absdeltaphi_sv_jets", ";max(abs(delta(phi of sv , phi of jets)));arb. units", 316, 0, 3.16);
   h_nsharedjets_shared_jets = fs->make<TH1F>("h_nsharedjets_shared_jets", ";# of shared jets;arb. units", 10, 0, 10);
+  h_ratio_ntracks_shared_jets = fs->make<TH1F>("h_ratio_ntracks_shared_jets", ";ratios of shared jets (>=1);arb. units", 8, 0, 8);
   h_ntracks_sv0sv1_nsharedjet1 = fs->make<TH2F>("h_ntracks_sv0sv1_nsharedjet1", "nsharedjets = 1;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
   h_ntracks_sv0sv1_nsharedjet2 = fs->make<TH2F>("h_ntracks_sv0sv1_nsharedjet2", "nsharedjets = 2;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
   h_ntracks_sv0sv1_nsharedjet3 = fs->make<TH2F>("h_ntracks_sv0sv1_nsharedjet3", "nsharedjets = 3;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
   h_ntracks_sv0sv1_nsharedjet4 = fs->make<TH2F>("h_ntracks_sv0sv1_nsharedjet4", "nsharedjets = 4;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
   h_ntracks_sv0sv1_nsharedjet5 = fs->make<TH2F>("h_ntracks_sv0sv1_nsharedjet5", "nsharedjets = 5;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
+  h_ntracks_sv0_ntrack1_sv1 = fs->make<TH1F>("h_ntracks_sv0_ntrack1_sv1", "sv #1 with ntracks = 1 from a shared jet ;sv #0 # of tracks from a shared jet;arb. units", 10, 0, 10);   
+  h_ntracks_sv0_ntrack2_sv1 = fs->make<TH1F>("h_ntracks_sv0_ntrack2_sv1", "sv #1 with ntracks = 2 from a shared jet ;sv #0 # of tracks from a shared jet;arb. units", 10, 0, 10);
+  h_ntracks_sv0_ntrack3_sv1 = fs->make<TH1F>("h_ntracks_sv0_ntrack3_sv1", "sv #1 with ntracks = 3 from a shared jet ;sv #0 # of tracks from a shared jet;arb. units", 10, 0, 10);
+  h_ntracks_sv0_ntrack4_sv1 = fs->make<TH1F>("h_ntracks_sv0_ntrack4_sv1", "sv #1 with ntracks = 4 from a shared jet ;sv #0 # of tracks from a shared jet;arb. units", 10, 0, 10);
+  h_ntracks_sv0_ntrack5_sv1 = fs->make<TH1F>("h_ntracks_sv0_ntrack5_sv1", "sv #1 with ntracks = 5 from a shared jet ;sv #0 # of tracks from a shared jet;arb. units", 10, 0, 10);
+  h_svdist2d_small_absdeltaphi01_shared_jets = fs->make<TH1F>("h_svdist2d_small_absdeltaphi01_shared_jets", "absdeltaphi01 <= 0.5 ;dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1); 
+  h_svdist3d_small_absdeltaphi01_shared_jets = fs->make<TH1F>("h_svdist3d_small_absdeltaphi01_shared_jets", "absdeltaphi01 <= 0.5 ;dist3d(sv #0, #1) (cm);arb. units", 500, 0, 1); 
+  h_svdist2d_small_absdeltaphi01_no_shared_jets = fs->make<TH1F>("h_svdist2d_small_absdeltaphi01_no_shared_jets", "absdeltaphi01 <= 0.5 ;dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);    
+  h_svdist3d_small_absdeltaphi01_no_shared_jets = fs->make<TH1F>("h_svdist3d_small_absdeltaphi01_no_shared_jets", "absdeltaphi01 <= 0.5 ;dist3d(sv #0, #1) (cm);arb. units", 500, 0, 1);   
 }
 
 void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
@@ -167,7 +192,6 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
     double phi0 = atan2(sv0.y - bsy, sv0.x - bsx);
     double phi1 = atan2(sv1.y - bsy, sv1.x - bsx);
     h_absdeltaphi01->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
-
     h_fractrackssharedwpv01 ->Fill(float(sv0.ntrackssharedwpv () + sv1.ntrackssharedwpv ())/(sv0.ntracks() + sv1.ntracks()), w);
     h_fractrackssharedwpvs01->Fill(float(sv0.ntrackssharedwpvs() + sv1.ntrackssharedwpvs())/(sv0.ntracks() + sv1.ntracks()), w);
     h_pvmosttracksshared->Fill(sv0.ntrackssharedwpvs() ? sv0.pvmosttracksshared() : -1,
@@ -181,7 +205,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
     if (shared_jet) {
       h_svdist2d_shared_jets->Fill(svdist2d, w);
       h_absdeltaphi01_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
-
+      
 	  int nsharedjets=1;
 	  std::vector<std::vector<int> > sv_track_which_jet_copy;
 	  sv_track_which_jet_copy = sv_track_which_jet;
@@ -211,6 +235,14 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
       //std::cout << "sv#0 has ntracks="<< sv_track_which_jet[0].size() << ", sv#1 has ntracks="<< sv_track_which_jet[1].size() << std::endl;
       h_nsharedjets_shared_jets->Fill(nsharedjets);
       for (int i =0; i < nsharedjets; i++){
+          if (nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) {
+               h_ratio_ntracks_shared_jets->Fill(nsharedjet_tracks_sv0[i]/nsharedjet_tracks_sv1[i]);
+             std::cout << nsharedjet_tracks_sv0[i]/nsharedjet_tracks_sv1[i] << std::endl;
+             }
+          if (nsharedjet_tracks_sv0[i] <= nsharedjet_tracks_sv1[i]){
+               std::cout << nsharedjet_tracks_sv1[i]/nsharedjet_tracks_sv0[i] << std::endl; 
+               h_ratio_ntracks_shared_jets->Fill(nsharedjet_tracks_sv1[i]/nsharedjet_tracks_sv0[i]);
+             }
           if (nsharedjets == 1){
                h_ntracks_sv0sv1_nsharedjet1->Fill(nsharedjet_tracks_sv0[i],nsharedjet_tracks_sv1[i]);       
              }
@@ -218,15 +250,29 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
           if (nsharedjets == 3){                                                                                                                                                                    h_ntracks_sv0sv1_nsharedjet3->Fill(nsharedjet_tracks_sv0[i],nsharedjet_tracks_sv1[i]);                                                                                             }
           if (nsharedjets == 4){                                                                                                                                                                    h_ntracks_sv0sv1_nsharedjet4->Fill(nsharedjet_tracks_sv0[i],nsharedjet_tracks_sv1[i]);                                                                                             }
           if (nsharedjets == 5){                                                                                                                                                                    h_ntracks_sv0sv1_nsharedjet5->Fill(nsharedjet_tracks_sv0[i],nsharedjet_tracks_sv1[i]);                                                                                             }
+          if (nsharedjet_tracks_sv1[i]==1){
+                h_ntracks_sv0_ntrack1_sv1->Fill(nsharedjet_tracks_sv0[i]);
+               }
+          if (nsharedjet_tracks_sv1[i]==2){                                                                                                                                                         h_ntracks_sv0_ntrack2_sv1->Fill(nsharedjet_tracks_sv0[i]);                                                                                                                      }
+          if (nsharedjet_tracks_sv1[i]==3){                                                                                                                                                         h_ntracks_sv0_ntrack3_sv1->Fill(nsharedjet_tracks_sv0[i]);                                                                                                                      }
+          if (nsharedjet_tracks_sv1[i]==4){                                                                                                                                                         h_ntracks_sv0_ntrack4_sv1->Fill(nsharedjet_tracks_sv0[i]);                                                                                                                      }
+          if (nsharedjet_tracks_sv1[i]==5){                                                                                                                                                         h_ntracks_sv0_ntrack5_sv1->Fill(nsharedjet_tracks_sv0[i]);                                                                                                                      }
+
       }
       if (nsv==2){
           h_absdeltaphi01_nsv2_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+          if (fabs(reco::deltaPhi(phi0, phi1)) <= 0.5){
+             h_svdist2d_small_absdeltaphi01_shared_jets->Fill(svdist2d,w);
+             h_svdist3d_small_absdeltaphi01_shared_jets->Fill(svdist3d,w); 
+            }
       }
        
     } else {
       h_svdist2d_no_shared_jets->Fill(svdist2d, w);
       h_absdeltaphi01_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
-      if (nsv==2){                                                                                                                                                                            h_absdeltaphi01_nsv2_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);                                                                                                    }
+      if (nsv==2){                                                                                                                                                                            h_absdeltaphi01_nsv2_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);                                                                                           
+          if (fabs(reco::deltaPhi(phi0, phi1)) <= 0.5){                                                                                                                                          h_svdist2d_small_absdeltaphi01_no_shared_jets->Fill(svdist2d,w);                                                                                                                    h_svdist3d_small_absdeltaphi01_no_shared_jets->Fill(svdist3d,w);                                                                                                                      } 
+          }
     }
 
 	
