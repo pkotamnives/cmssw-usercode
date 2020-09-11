@@ -54,6 +54,13 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_max_absdeltaphi0_sv_shared_jets;
   TH1F* h_max_absdeltaphi1_sv_shared_jets;
 
+  TH1F* h_lspdist2d_nsv2_shared_jets;
+  TH1F* h_lspdist3d_nsv2_shared_jets;
+  TH1F* h_absdeltaphi01_genlsp_nsv2_shared_jets;
+  TH1F* h_lspdist2d_nsv2_no_shared_jets;
+  TH1F* h_lspdist3d_nsv2_no_shared_jets;
+  TH1F* h_absdeltaphi01_genlsp_nsv2_no_shared_jets;
+
   TH1F* h_nsharedjets_shared_jets;
   TH1F* h_ratio_ntracks_shared_jets;
   TH2F* h_ntracks_sv0sv1_nsharedjet1;
@@ -130,6 +137,13 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_max_absdeltaphi1_sv_nshj1_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_nshj1_shared_jets", "nsv = 2, nsharedjets = 1;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi0_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi0_sv_shared_jets", "nsv = 2;max( dphi(sv0, shared jets), dphi(sv1, shared jets) );arb. units", 316, 0, 3.16);
   h_max_absdeltaphi1_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_shared_jets", "nsv = 2;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
+  
+  h_lspdist2d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
+  h_lspdist3d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
+  h_absdeltaphi01_genlsp_nsv2_shared_jets = fs->make<TH1F>("h_absdeltaphi01_genlsp_nsv2_shared_jets", "nsv = 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
+  h_lspdist2d_nsv2_no_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_no_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
+  h_lspdist3d_nsv2_no_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_no_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
+  h_absdeltaphi01_genlsp_nsv2_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_genlsp_nsv2_no_shared_jets", "nsv = 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
 
   h_nsharedjets_shared_jets = fs->make<TH1F>("h_nsharedjets_shared_jets", "nsv >= 2;# of shared jets;arb. units", 10, 0, 10);
   h_ratio_ntracks_shared_jets = fs->make<TH1F>("h_ratio_ntracks_shared_jets", "nsv >= 2;ratios of shared jets (>=1);arb. units", 50, 0, 10);
@@ -400,7 +414,10 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 		  else {
 			  h_max_absdeltaphi1_sv_shared_jets->Fill(absdeltaphi_sv0_shared_jets[max_dphi_sv1_idx], w);
 		  }
-		   
+
+		  h_lspdist2d_nsv2_shared_jets->Fill(mevent->lspdist2d(), w);
+		  h_lspdist3d_nsv2_shared_jets->Fill(mevent->lspdist3d(), w);
+		  h_absdeltaphi01_genlsp_nsv2_shared_jets->Fill(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1]), w);
 
 		  
           h_absdeltaphi01_nsv2_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
@@ -418,6 +435,9 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
     } else {
       h_svdist2d_no_shared_jets->Fill(svdist2d, w);
       h_absdeltaphi01_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+	  h_lspdist2d_nsv2_no_shared_jets->Fill(mevent->lspdist2d(), w);
+	  h_lspdist3d_nsv2_no_shared_jets->Fill(mevent->lspdist3d(), w);
+	  h_absdeltaphi01_genlsp_nsv2_no_shared_jets->Fill(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1]), w);
       if (nsv==2){                                                                                                                                                                            h_absdeltaphi01_nsv2_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);                                                                                           
           if (fabs(reco::deltaPhi(phi0, phi1)) <= 0.5){                                                                                                                                          h_svdist2d_small_absdeltaphi01_no_shared_jets->Fill(svdist2d,w);                                                                                                                    h_svdist3d_small_absdeltaphi01_no_shared_jets->Fill(svdist3d,w);                                                                                                                      } 
           }
