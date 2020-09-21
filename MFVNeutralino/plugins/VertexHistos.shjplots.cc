@@ -58,6 +58,8 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_max_absdeltaphi1_sv_nshj1_shared_jets;
   TH1F* h_max_absdeltaphi0_sv_shared_jets;
   TH1F* h_max_absdeltaphi1_sv_shared_jets;
+  h_max_absdeltaphi0_sv_nshj1_shared_tracks;
+  h_max_absdeltaphi1_sv_nshj1_shared_tracks;
 
   TH1F* h_lspdist2d_nsv2_shared_jets;
   TH1F* h_lspdist3d_nsv2_shared_jets;
@@ -164,7 +166,11 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_max_absdeltaphi1_sv_nshj1_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_nshj1_shared_jets", "nsv = 2, nsharedjets = 1;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi0_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi0_sv_shared_jets", "nsv = 2;max( dphi(sv0, shared jets), dphi(sv1, shared jets) );arb. units", 316, 0, 3.16);
   h_max_absdeltaphi1_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_shared_jets", "nsv = 2;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
-  
+  h_max_absdeltaphi0_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi0_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1;max(dPhi of sv opposite to the jet, dPhi of its tracks);arb. units", 316, 0, 3.16);
+  h_max_absdeltaphi1_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi1_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1;min(dPhi of sv close to the jet, dPhi of its tracks);arb. units", 316, 0, 3.16);
+
+
+
   h_lspdist2d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
   h_lspdist3d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
   h_absdeltaphi01_genlsp_nsv2_shared_jets = fs->make<TH1F>("h_absdeltaphi01_genlsp_nsv2_shared_jets", "nsv = 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
@@ -441,14 +447,49 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 		  max_dphi_sv0_sv1.push_back(max_dphi_sv0);
 		  max_dphi_sv0_sv1.push_back(max_dphi_sv1);
 
+
 		  if (nsharedjets == 1) {
 			  h_max_absdeltaphi0_sv_nshj1_shared_jets->Fill(*std::max_element(max_dphi_sv0_sv1.begin(), max_dphi_sv0_sv1.end()), w);
 			  if (max_dphi_sv0 > max_dphi_sv1) {
 				  h_max_absdeltaphi1_sv_nshj1_shared_jets->Fill(absdeltaphi_sv1_shared_jets[max_dphi_sv0_idx], w);
+
+				  std::vector<double> absdeltaphi_min_sv1_shared_tracks;
+				  for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
+					  double absdelta_min_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[j])));
+					  absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
+				  }
+				  double min_dphi_sv1_track = *std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end());
+				  h_max_absdeltaphi1_sv_nshj1_shared_tracks->Fill(min_dphi_sv1_track, w);
+
+				  std::vector<double> absdeltaphi_max_sv0_shared_tracks;
+				  for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
+					  double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[j])));
+					  absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
+				  }
+				  double max_dphi_sv0_track = *std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end());
+				  h_max_absdeltaphi0_sv_nshj1_shared_tracks->Fill(max_dphi_sv0_track, w);
+
 			  }
 			  else {
 				  h_max_absdeltaphi1_sv_nshj1_shared_jets->Fill(absdeltaphi_sv0_shared_jets[max_dphi_sv1_idx], w);
+
+				  std::vector<double> absdeltaphi_min_sv0_shared_tracks;
+				  for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
+					  double absdelta_min_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[j])));
+					  absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
+				  }
+				  double min_dphi_sv0_track = *std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end());
+				  h_max_absdeltaphi1_sv_nshj1_shared_tracks->Fill(min_dphi_sv0_track, w);
+
+				  std::vector<double> absdeltaphi_max_sv1_shared_tracks;
+				  for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
+					  double absdelta_max_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[j])));
+					  absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
+				  }
+				  double max_dphi_sv1_track = *std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end());
+				  h_max_absdeltaphi0_sv_nshj1_shared_tracks->Fill(max_dphi_sv1_track, w);
 			  }
+			
 		  }
 
 		  h_max_absdeltaphi0_sv_shared_jets->Fill(*std::max_element(max_dphi_sv0_sv1.begin(), max_dphi_sv0_sv1.end()), w);
