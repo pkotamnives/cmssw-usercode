@@ -13,6 +13,7 @@
 #include "JMTucker/Tools/interface/Utilities.h"
 #include "JMTucker/MFVNeutralinoFormats/interface/Event.h"
 #include "JMTucker/MFVNeutralinoFormats/interface/VertexAux.h"
+#include "DataFormats/GeometryCommonDetAlgo/interface/Measurement1D.h"
 #include <iostream>
 #include <algorithm>
 class MFVVertexHistos : public edm::EDAnalyzer {
@@ -32,6 +33,38 @@ class MFVVertexHistos : public edm::EDAnalyzer {
 
   void fill(TH1F** hs,          const int, const double val,                    const double weight) const { hs[sv_all]->Fill(val, weight); }
   void fill(TH2F** hs,          const int, const double val, const double val2, const double weight) const { hs[sv_all]->Fill(val, val2, weight); }
+
+  Measurement1D miss_dist_min(const reco::Vertex& sv0, const reco::Vertex& sv1, const math::XYZTLorentzVector& mom_min) {
+	  // miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
+	  // to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
+	  AlgebraicVector3 n = ROOT::Math::Unit(AlgebraicVector3(mom_min.x(), mom_min.y(), mom_min.z()));
+	  AlgebraicVector3 d(sv1.x() - sv0.x(),
+		  sv1.y() - sv0.y(),
+		  sv1.z() - sv0.z());
+	  AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
+	  double n_dot_d = ROOT::Math::Dot(n, d);
+	  double val = ROOT::Math::Mag(n_cross_d);
+	  AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
+		  2 * d(1) - 2 * n_dot_d * n(1),
+		  2 * d(2) - 2 * n_dot_d * n(2));
+	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv0.covariance() + sv1.covariance())) / 2 / val);
+  }
+
+  Measurement1D miss_dist_max(const reco::Vertex& sv0, const reco::Vertex& sv1, const math::XYZTLorentzVector& mom_max) {
+	  // miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
+	  // to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
+	  AlgebraicVector3 n = ROOT::Math::Unit(AlgebraicVector3(mom_max.x(), mom_max.y(), mom_max.z()));
+	  AlgebraicVector3 d(sv1.x() - sv0.x(),
+		  sv1.y() - sv0.y(),
+		  sv1.z() - sv0.z());
+	  AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
+	  double n_dot_d = ROOT::Math::Dot(n, d);
+	  double val = ROOT::Math::Mag(n_cross_d);
+	  AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
+		  2 * d(1) - 2 * n_dot_d * n(1),
+		  2 * d(2) - 2 * n_dot_d * n(2));
+	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv0.covariance() + sv1.covariance())) / 2 / val);
+  }
 
   TH1F* h_w;
   TH1F* h_nsv;
@@ -58,8 +91,12 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_max_absdeltaphi1_sv_nshj1_shared_jets;
   TH1F* h_max_absdeltaphi0_sv_shared_jets;
   TH1F* h_max_absdeltaphi1_sv_shared_jets;
-  h_max_absdeltaphi0_sv_nshj1_shared_tracks;
-  h_max_absdeltaphi1_sv_nshj1_shared_tracks;
+  TH1F* h_max_absdeltaphi0_large_sv_nshj1_shared_tracks;
+  TH1F* h_max_absdeltaphi1_large_sv_nshj1_shared_tracks;
+  TH1F* h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks;
+  TH1F* h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks;
+  TH1F* h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks;
+  TH1F* h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks;
 
   TH1F* h_lspdist2d_nsv2_shared_jets;
   TH1F* h_lspdist3d_nsv2_shared_jets;
@@ -166,10 +203,12 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_max_absdeltaphi1_sv_nshj1_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_nshj1_shared_jets", "nsv = 2, nsharedjets = 1;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi0_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi0_sv_shared_jets", "nsv = 2;max( dphi(sv0, shared jets), dphi(sv1, shared jets) );arb. units", 316, 0, 3.16);
   h_max_absdeltaphi1_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_shared_jets", "nsv = 2;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
-  h_max_absdeltaphi0_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi0_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1;max(dPhi of sv opposite to the jet, dPhi of its tracks);arb. units", 316, 0, 3.16);
-  h_max_absdeltaphi1_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi1_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1;min(dPhi of sv close to the jet, dPhi of its tracks);arb. units", 316, 0, 3.16);
-
-
+  h_max_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;max(dPhi of SV opposite to the jet, dPhi of its tracks);arb. units", 316, 0, 3.16);
+  h_max_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;min(dPhi of SV close to the jet, dPhi of its tracks);arb. units", 316, 0, 3.16);
+  h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5; SV opposite to the jet's tracks p_{T} (GeV);arb. units", 200, 0, 200);
+  h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5; SV close to the jet's tracks p_{T} (GeV);arb. units", 200, 0, 200);
+  h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;SV opposite to the jet's track miss distance (cm);arb. units", 100, 0, 0.5);
+  h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;SV close to the jet's track miss distance (cm);arb. units", 100, 0, 0.5);
 
   h_lspdist2d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
   h_lspdist3d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
@@ -453,41 +492,9 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			  if (max_dphi_sv0 > max_dphi_sv1) {
 				  h_max_absdeltaphi1_sv_nshj1_shared_jets->Fill(absdeltaphi_sv1_shared_jets[max_dphi_sv0_idx], w);
 
-				  std::vector<double> absdeltaphi_min_sv1_shared_tracks;
-				  for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
-					  double absdelta_min_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[j])));
-					  absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
-				  }
-				  double min_dphi_sv1_track = *std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end());
-				  h_max_absdeltaphi1_sv_nshj1_shared_tracks->Fill(min_dphi_sv1_track, w);
-
-				  std::vector<double> absdeltaphi_max_sv0_shared_tracks;
-				  for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
-					  double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[j])));
-					  absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
-				  }
-				  double max_dphi_sv0_track = *std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end());
-				  h_max_absdeltaphi0_sv_nshj1_shared_tracks->Fill(max_dphi_sv0_track, w);
-
 			  }
 			  else {
 				  h_max_absdeltaphi1_sv_nshj1_shared_jets->Fill(absdeltaphi_sv0_shared_jets[max_dphi_sv1_idx], w);
-
-				  std::vector<double> absdeltaphi_min_sv0_shared_tracks;
-				  for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
-					  double absdelta_min_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[j])));
-					  absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
-				  }
-				  double min_dphi_sv0_track = *std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end());
-				  h_max_absdeltaphi1_sv_nshj1_shared_tracks->Fill(min_dphi_sv0_track, w);
-
-				  std::vector<double> absdeltaphi_max_sv1_shared_tracks;
-				  for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
-					  double absdelta_max_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[j])));
-					  absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
-				  }
-				  double max_dphi_sv1_track = *std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end());
-				  h_max_absdeltaphi0_sv_nshj1_shared_tracks->Fill(max_dphi_sv1_track, w);
 			  }
 			
 		  }
@@ -589,10 +596,79 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			 // end split-vertex 
 
 
+
             }
 		  else {
+
+			// start not split vertex
 			 h_svdist2d_large_absdeltaphi01_nsv2_shared_jets->Fill(svdist2d, w);
 			 h_svdist3d_large_absdeltaphi01_nsv2_shared_jets->Fill(svdist3d, w);
+
+			 if (max_dphi_sv0 > max_dphi_sv1) {
+				 std::vector<double> absdeltaphi_min_sv1_shared_tracks;
+				 for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
+					 double absdelta_min_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1->track_phi[j])));
+					 absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
+				 }
+				 double min_dphi_sv1_track = *std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end());
+				 int min_dphi_sv1_track_idx = std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end()) - absdeltaphi_min_sv1_shared_tracks.begin();
+				 h_max_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(min_dphi_sv1_track, w);
+				 h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(sv1->track_pt(min_dphi_sv1_track_idx), w);
+				 
+
+				 std::vector<double> absdeltaphi_max_sv0_shared_tracks;
+				 for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
+					 double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0->track_phi[j])));
+					 absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
+				 }
+				 double max_dphi_sv0_track = *std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end());
+				 int max_dphi_sv0_track_idx = std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end()) - absdeltaphi_max_sv0_shared_tracks.begin();
+				 h_max_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(max_dphi_sv0_track, w);
+				 h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(sv0->track_pt(max_dphi_sv0_track_idx), w);
+
+				 const math::XYZTLorentzVector mom_max;
+				 AlgebraicVector3 mom_max(sv0->track_px[max_dphi_sv0_track_idx], sv0->track_py[max_dphi_sv0_track_idx], sv0->track_pz[max_dphi_sv0_track_idx]);
+				 const math::XYZTLorentzVector mom_min;
+				 AlgebraicVector3 mom_min(sv1->track_px[min_dphi_sv1_track_idx], sv0->track_py[min_dphi_sv1_track_idx], sv0->track_pz[min_dphi_sv1_track_idx]);
+
+				 
+
+			 }
+			 else {
+
+				 std::vector<double> absdeltaphi_min_sv0_shared_tracks;
+				 for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
+					 double absdelta_min_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0->track_phi[j])));
+					 absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
+				 }
+				 double min_dphi_sv0_track = *std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end());
+				 int min_dphi_sv0_track_idx = std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end()) - absdeltaphi_min_sv0_shared_tracks.begin();
+				 h_max_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(min_dphi_sv0_track, w);
+				 h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(sv0->track_pt(min_dphi_sv0_track_idx), w);
+
+				 std::vector<double> absdeltaphi_max_sv1_shared_tracks;
+				 for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
+					 double absdelta_max_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1->track_phi[j])));
+					 absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
+				 }
+				 double max_dphi_sv1_track = *std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end());
+				 int max_dphi_sv1_track_idx = std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end()) - absdeltaphi_max_sv1_shared_tracks.begin();
+				 h_max_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(max_dphi_sv1_track, w);
+				 h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(sv1->track_pt(max_dphi_sv1_track_idx), w);
+
+				 const math::XYZTLorentzVector mom_max;
+				 AlgebraicVector3 mom_max(sv1->track_px[max_dphi_sv1_track_idx], sv1->track_py[max_dphi_sv1_track_idx], sv1->track_pz[max_dphi_sv1_track_idx]);
+				 const math::XYZTLorentzVector mom_min;
+				 AlgebraicVector3 mom_min(sv0->track_px[min_dphi_sv0_track_idx], sv0->track_py[min_dphi_sv0_track_idx], sv0->track_pz[min_dphi_sv0_track_idx]);
+			 }
+			 
+			 Measurement1D miss_dist_max(1e9, 1);
+			 h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);
+			 Measurement1D miss_dist_min(1e9, 1);
+			 h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w);
+
+
+			//end not split vertex 
 		  }
       }
        
