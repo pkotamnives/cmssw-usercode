@@ -15,6 +15,8 @@
 #include "JMTucker/MFVNeutralinoFormats/interface/VertexAux.h"
 #include "DataFormats/GeometryCommonDetAlgo/interface/Measurement1D.h"
 #include <iostream>
+#include <vector>
+#include <map>
 #include <algorithm>
 class MFVVertexHistos : public edm::EDAnalyzer {
  public:
@@ -302,13 +304,14 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
   h_nsv->Fill(nsv, w);
 
     //////////////////////////////////////////////////////////////////////
+  std::vector<std::vector<int> > sv_track_which_idx;
   std::vector<std::vector<int> > sv_track_which_jet;
   for (int isv = 0; isv < nsv; ++isv) {			//loop over vertices
 	  const MFVVertexAux& aux = auxes->at(isv);
 	  const int ntracks = aux.ntracks();
 
 	  //double phin = atan2(aux.y - bsy, aux.x - bsx);
-
+	  std::vector<int> track_which_idx;
 	  std::vector<int> track_which_jet;
 	  std::vector<double> absdeltaphi_sv_jets;
 	  for (int i = 0; i < ntracks; ++i) {		   //loop over tracks associated with a vertex
@@ -324,12 +327,14 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			  }
 		  }
 		  if (jet_index != 255) {
+			  track_which_idx.push_back(i);
 			  track_which_jet.push_back((int)jet_index);	  // get a valid set of jets for a track
 			  //absdelta = double(fabs(reco::deltaPhi(phin, mevent->jet_phi[jet_index])));
 			  //absdeltaphi_sv_jets.push_back(absdelta);
           	  }
 	  }
 	  sv_track_which_jet.push_back(track_which_jet);
+	  sv_track_which_idx.push_back(track_which_idx);
 	  /*
 	  if (absdeltaphi_sv_jets.size() > 0 ){
               h_max_absdeltaphi_sv_jets->Fill(*max_element(absdeltaphi_sv_jets.begin(), absdeltaphi_sv_jets.end()),w);
@@ -377,13 +382,59 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 	  sv_track_which_jet_copy = sv_track_which_jet;
 	  std::vector<int> nsharedjet_tracks_sv0;
           std::vector<int> nsharedjet_tracks_sv1;
+		  std::vector<std::vector<int> >sv0_sharedjet_which_idx;
+		  std::vector<std::vector<int> >sv1_sharedjet_which_idx;
           std::vector<int>::iterator it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
           int idx = std::distance(sv_track_which_jet_copy[0].begin(),it);
 	  int jet_index = sv_track_which_jet_copy[0].at(idx);
 	  nsharedjet_jet_index.push_back(jet_index);
 	  sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
 	  sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());	  
-	  nsharedjet_tracks_sv0.push_back(std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index));                                                                 nsharedjet_tracks_sv1.push_back(std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index));
+	  nsharedjet_tracks_sv0.push_back(std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index)); 
+	  
+	  std::vector<int> sv0_track_which_jet = sv_track_which_jet[0];
+	  std::vector<int> sv0_track_which_idx = sv_track_which_idx[0];
+	  std::vector<int> sv0_track_which_temp_idx;
+	  std::multimap<int, size_t> sv0_m;
+
+	  for (size_t k = 0; k < sv0_track_which_jet.size(); k++) if (sv0_track_which_jet[k] == jet_index ) { sv0_m.insert({ sv0_track_which_jet[k], k }); }
+
+	  for (auto it = sv0_m.begin(); it != sv0_m.end(); )
+	  {
+		  auto p = sv0_m.equal_range(it->first);
+
+		  while (p.first != p.second)
+		  {
+			  sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);
+		  }
+		  sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx);
+		  sv0_track_which_temp_idx = {};
+		  it = p.second;
+
+	  }
+
+	  nsharedjet_tracks_sv1.push_back(std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index));
+
+	  std::vector<int> sv1_track_which_jet = sv_track_which_jet[1];
+	  std::vector<int> sv1_track_which_idx = sv_track_which_idx[1];
+	  std::vector<int> sv1_track_which_temp_idx;
+	  std::multimap<int, size_t> sv1_m;
+
+	  for (size_t k = 0; k < sv1_track_which_jet.size(); k++) if (sv1_track_which_jet[k] == jet_index) { sv1_m.insert({ sv1_track_which_jet[k], k }); }
+
+	  for (auto it = sv1_m.begin(); it != sv1_m.end(); )
+	  {
+		  auto p = sv1_m.equal_range(it->first);
+
+		  while (p.first != p.second)
+		  {
+			  sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);
+		  }
+		  sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);
+		  sv1_track_which_temp_idx = {};
+		  it = p.second;
+
+	  }
       // std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index) << std::endl;
 
 	  while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
@@ -394,8 +445,44 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 		  nsharedjet_jet_index.push_back(jet_index);
 	      sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
 	      sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());	  
-              nsharedjet_tracks_sv0.push_back(std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index));
-              nsharedjet_tracks_sv1.push_back(std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index));	   
+		  nsharedjet_tracks_sv0.push_back(std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index));
+
+
+		  for (size_t k = 0; k < sv0_track_which_jet.size(); k++) if (sv0_track_which_jet[k] == jet_index) { sv0_m.insert({ sv0_track_which_jet[k], k }); }
+
+		  for (auto it = sv0_m.begin(); it != sv0_m.end(); )
+		  {
+			  auto p = sv0_m.equal_range(it->first);
+
+			  while (p.first != p.second)
+			  {
+				  sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);
+			  }
+			  std::cout << sv0_track_which_temp_idx.size() << "==" << nsharedjet_tracks_sv0 << std::endl;
+			  sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx);
+			  sv0_track_which_temp_idx = {};
+			  it = p.second;
+
+		  }
+
+		  nsharedjet_tracks_sv1.push_back(std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index));
+
+		  for (size_t k = 0; k < sv1_track_which_jet.size(); k++) if (sv1_track_which_jet[k] == jet_index) { sv1_m.insert({ sv1_track_which_jet[k], k }); }
+
+		  for (auto it = sv1_m.begin(); it != sv1_m.end(); )
+		  {
+			  auto p = sv1_m.equal_range(it->first);
+
+			  while (p.first != p.second)
+			  {
+				  sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);
+			  }
+			  std::cout << sv1_track_which_temp_idx.size() << "==" << nsharedjet_tracks_sv1 << std::endl;
+			  sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);
+			  sv1_track_which_temp_idx = {};
+			  it = p.second;
+
+		  }
        //  std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index) << std::endl;
 
 	  }
@@ -609,29 +696,37 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
                          if (max_dphi_sv0 > max_dphi_sv1) {
 				 std::vector<double> absdeltaphi_min_sv1_shared_tracks;
 				 for (int j = 0; j < nsharedjet_tracks_sv1[0]; j++) {
-					 double absdelta_min_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[j])));
+					 std::vector<int> sv1_nsharedjets1_which_idx = sv1_sharedjets_which_idx[0];
+					 int track_idx = sv1_nsharedjets1_which_idx[j];
+					 double absdelta_min_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[track_idx])));
 					 absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
 				 }
 				 double min_dphi_sv1_track = *std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end());
 				 int min_dphi_sv1_track_idx = std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end()) - absdeltaphi_min_sv1_shared_tracks.begin();
 				 h_max_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(min_dphi_sv1_track, w);
-				 h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(sv1.track_pt(min_dphi_sv1_track_idx), w);
+
+				 int min_sv1_track_idx = sv1_nsharedjets1_which_idx[min_dphi_sv1_track_idx];
+				 h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(sv1.track_pt(min_sv1_track_idx), w);
 				 
 
 				 std::vector<double> absdeltaphi_max_sv0_shared_tracks;
 				 for (int j = 0; j < nsharedjet_tracks_sv0[0]; j++) {
-					 double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[j])));
+					 std::vector<int> sv0_nsharedjets1_which_idx = sv0_sharedjets_which_idx[0];
+					 int track_idx = sv0_nsharedjets1_which_idx[j];
+					 double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[track_idx])));
 					 absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
 				 }
 				 double max_dphi_sv0_track = *std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end());
 				 int max_dphi_sv0_track_idx = std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end()) - absdeltaphi_max_sv0_shared_tracks.begin();
 				 h_max_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(max_dphi_sv0_track, w);
-				 h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(sv0.track_pt(max_dphi_sv0_track_idx), w);
+
+				 int max_sv0_track_idx = sv0_nsharedjets1_which_idx[max_dphi_sv0_track_idx];
+				 h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(sv0.track_pt(max_sv0_track_idx), w);
 
 				 
-				 AlgebraicVector3 mom_max(sv0.track_px[max_dphi_sv0_track_idx], sv0.track_py[max_dphi_sv0_track_idx], sv0.track_pz[max_dphi_sv0_track_idx]);
+				 AlgebraicVector3 mom_max(sv0.track_px[max_sv0_track_idx], sv0.track_py[max_sv0_track_idx], sv0.track_pz[max_sv0_track_idx]);
 				 
-				 AlgebraicVector3 mom_min(sv1.track_px[min_dphi_sv1_track_idx], sv1.track_py[min_dphi_sv1_track_idx], sv1.track_pz[min_dphi_sv1_track_idx]);
+				 AlgebraicVector3 mom_min(sv1.track_px[min_sv1_track_idx], sv1.track_py[min_sv1_track_idx], sv1.track_pz[min_sv1_track_idx]);
 
 				 Measurement1D miss_dist_max = miss_dist(sv0,sv1,mom_max);                                                                                                                           h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);                                                                                              Measurement1D miss_dist_min = miss_dist(sv0,sv1,mom_min);                                                                                                                           h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w); 
 
@@ -640,28 +735,36 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
 				 std::vector<double> absdeltaphi_min_sv0_shared_tracks;
 				 for (int j = 0; j < nsharedjet_tracks_sv0[0]; j++) {
+					 std::vector<int> sv0_nsharedjets1_which_idx = sv0_sharedjets_which_idx[0];
+					 int track_idx = sv0_nsharedjets1_which_idx[j];
 					 double absdelta_min_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[j])));
 					 absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
 				 }
 				 double min_dphi_sv0_track = *std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end());
 				 int min_dphi_sv0_track_idx = std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end()) - absdeltaphi_min_sv0_shared_tracks.begin();
 				 h_max_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(min_dphi_sv0_track, w);
-				 h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(sv0.track_pt(min_dphi_sv0_track_idx), w);
+
+				 int min_sv0_track_idx = sv0_nsharedjets1_which_idx[min_dphi_sv0_track_idx];
+				 h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(sv0.track_pt(min_sv0_track_idx), w);
 
 				 std::vector<double> absdeltaphi_max_sv1_shared_tracks;
 				 for (int j = 0; j < nsharedjet_tracks_sv1[0]; j++) {
+					 std::vector<int> sv1_nsharedjets1_which_idx = sv1_sharedjets_which_idx[0];
+					 int track_idx = sv1_nsharedjets1_which_idx[j];
 					 double absdelta_max_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[j])));
 					 absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
 				 }
 				 double max_dphi_sv1_track = *std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end());
 				 int max_dphi_sv1_track_idx = std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end()) - absdeltaphi_max_sv1_shared_tracks.begin();
 				 h_max_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(max_dphi_sv1_track, w);
-				 h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(sv1.track_pt(max_dphi_sv1_track_idx), w);
+
+				 int max_sv1_track_idx = sv1_nsharedjets1_which_idx[max_dphi_sv1_track_idx];
+				 h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(sv1.track_pt(max_sv1_track_idx), w);
 
 				 
-				 AlgebraicVector3 mom_max(sv1.track_px[max_dphi_sv1_track_idx], sv1.track_py[max_dphi_sv1_track_idx], sv1.track_pz[max_dphi_sv1_track_idx]);
+				 AlgebraicVector3 mom_max(sv1.track_px[max_sv1_track_idx], sv1.track_py[max_sv1_track_idx], sv1.track_pz[max_sv1_track_idx]);
 				 
-				 AlgebraicVector3 mom_min(sv0.track_px[min_dphi_sv0_track_idx], sv0.track_py[min_dphi_sv0_track_idx], sv0.track_pz[min_dphi_sv0_track_idx]);
+				 AlgebraicVector3 mom_min(sv0.track_px[min_sv0_track_idx], sv0.track_py[min_sv0_track_idx], sv0.track_pz[min_sv0_track_idx]);
 
                                  Measurement1D miss_dist_max = miss_dist(sv0,sv1,mom_max);                                                                                                                           h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);                                                                                              Measurement1D miss_dist_min = miss_dist(sv0,sv1,mom_min);                                                                                                                           h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w);
 			 }
