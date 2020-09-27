@@ -36,36 +36,20 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   void fill(TH1F** hs,          const int, const double val,                    const double weight) const { hs[sv_all]->Fill(val, weight); }
   void fill(TH2F** hs,          const int, const double val, const double val2, const double weight) const { hs[sv_all]->Fill(val, val2, weight); }
 
-  Measurement1D miss_dist(const reco::Vertex& sv0, const reco::Vertex& sv1, const AlgebraicVector3& mom) {
+  Measurement1D miss_dist(const reco::Vertex& sv, const reco::Vertex& ref, const AlgebraicVector3& mom) {
 	  // miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
 	  // to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
 	  AlgebraicVector3 n = ROOT::Math::Unit(mom);
-	  AlgebraicVector3 d(sv1.x() - sv0.x(),
-		  sv1.y() - sv0.y(),
-		  sv1.z() - sv0.z());
+	  AlgebraicVector3 d(sv.x() - ref.x(),
+		  sv.y() - ref.y(),
+		  sv.z() - ref.z());
 	  AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
 	  double n_dot_d = ROOT::Math::Dot(n, d);
 	  double val = ROOT::Math::Mag(n_cross_d);
 	  AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
 		  2 * d(1) - 2 * n_dot_d * n(1),
 		  2 * d(2) - 2 * n_dot_d * n(2));
-	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv0.covariance() + sv1.covariance())) / 2 / val);
-  }
-
-  Measurement1D miss_dist_max_rm(const reco::Vertex& sv0, const reco::Vertex& sv1, const math::XYZTLorentzVector& mom_max) {
-	  // miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
-	  // to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
-	  AlgebraicVector3 n = ROOT::Math::Unit(AlgebraicVector3(mom_max.x(), mom_max.y(), mom_max.z()));
-	  AlgebraicVector3 d(sv1.x() - sv0.x(),
-		  sv1.y() - sv0.y(),
-		  sv1.z() - sv0.z());
-	  AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
-	  double n_dot_d = ROOT::Math::Dot(n, d);
-	  double val = ROOT::Math::Mag(n_cross_d);
-	  AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
-		  2 * d(1) - 2 * n_dot_d * n(1),
-		  2 * d(2) - 2 * n_dot_d * n(2));
-	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv0.covariance() + sv1.covariance())) / 2 / val);
+	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance() + ref.covariance())) / 2 / val);
   }
 
   TH1F* h_w;
@@ -144,7 +128,7 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_ntracks_nshj1_sv0_ntrack5_sv1_nsv2;
 
   TH1F* h_nsharedjets_small_nsv2_shared_jets;
-  TH1F* h_ratio_ntracks_small_nsv2_shared_jets;
+  TH1F* h_ratio_ntracks_small_nsv2_nshj1_shared_jets;
   TH2F* h_ntracks_sv0sv1_small_nsv2_nsharedjet1;
   TH2F* h_ntracks_sv0sv1_small_nsv2_nsharedjet2;
   TH2F* h_ntracks_sv0sv1_small_nsv2_nsharedjet3;
@@ -162,6 +146,8 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_ntracks_small_nshj1_sv0_ntrack5_sv1_nsv2;
 
   TH1F* h_nsharedjets_large_nsv2_shared_jets;
+  TH1F* h_ratio_ntracks_large_nsv2_nshj1_shared_jets;
+  TH1F* h_max_absdeltaphi1_large_sv_nshj1_shared_jets;                                                                                                                                TH1F* h_max_absdeltaphi0_large_sv_nshj1_shared_jets;
 
   TH1F* h_svdist2d_small_absdeltaphi01_nsv2_shared_jets;
   TH1F* h_svdist3d_small_absdeltaphi01_nsv2_shared_jets;
@@ -207,12 +193,13 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_max_absdeltaphi1_sv_nshj1_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_nshj1_shared_jets", "nsv = 2, nsharedjets = 1;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi0_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi0_sv_shared_jets", "nsv = 2;max( dphi(sv0, shared jets), dphi(sv1, shared jets) );arb. units", 316, 0, 3.16);
   h_max_absdeltaphi1_sv_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_sv_shared_jets", "nsv = 2;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);
+  h_max_absdeltaphi0_large_sv_nshj1_shared_jets = fs->make<TH1F>("h_max_absdeltaphi0_large_sv_nshj1_shared_jets", "nsv = 2, absdeltaphi01 > 0.5, nsharedjets = 1;max( dphi(sv0, a shared jet), dphi(sv1, a shared jet) );arb. units", 316, 0, 3.16);                                                                                                                     h_max_absdeltaphi1_large_sv_nshj1_shared_jets = fs->make<TH1F>("h_max_absdeltaphi1_large_sv_nshj1_shared_jets", "nsv = 2, absdeltaphi01 > 0.5, nsharedjets = 1;abs(delta(phi of max-dphi shared jet, phi of another sv ));arb. units", 316, 0, 3.16);                                                                                                                
   h_max_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;max(delta(phi of sv opposite to shared jet, phi of its tracks));arb. units", 316, 0, 3.16);
   h_max_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;min(delta(phi of sv close to shared jet, phi of its tracks));arb. units", 316, 0, 3.16);
-  h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5; SV opposite to the jet's tracks p_{T} (GeV);arb. units", 200, 0, 200);
-  h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5; SV close to the jet's tracks p_{T} (GeV);arb. units", 200, 0, 200);
-  h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;SV opposite to the jet's track miss distance (cm);arb. units", 100, 0, 0.5);
-  h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;SV close to the jet's track miss distance (cm);arb. units", 100, 0, 0.5);
+  h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_pt_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5; sv opposite to the shared jet's track p_{T} (GeV);arb. units", 200, 0, 200);
+  h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_max_pt_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5; SV close to the shared jet's track p_{T} (GeV);arb. units", 200, 0, 200);
+  h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;sv opposite to the shared jet's track miss distance (cm);arb. units", 100, 0, 0.5);
+  h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks = fs->make<TH1F>("h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks", "nsv = 2, nsharedjets = 1, absdeltaphi01 > 0.5;sv close to the shared jet's track miss distance (cm);arb. units", 100, 0, 0.5);
 
   h_lspdist2d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
   h_lspdist3d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
@@ -258,9 +245,9 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_ntracks_nshj1_sv0_ntrack5_sv1_nsv2 = fs->make<TH1F>("h_ntracks_nshj1_sv0_ntrack5_sv1_nsv2", "nsv = 2, sv #1 with ntracks = 5 from an only-one shared jet ;sv #0 # of tracks from an only-one shared jet;arb. units", 10, 0, 10);
 
   h_nsharedjets_large_nsv2_shared_jets = fs->make<TH1F>("h_nsharedjets_large_nsv2_shared_jets", "nsv = 2, absdeltaphi01 > 0.5;# of shared jets;arb. units", 10, 0, 10); 
-
+  h_ratio_ntracks_large_nsv2_nshj1_shared_jets = fs->make<TH1F>("h_ratio_ntracks_large_nsv2_nshj1_shared_jets", "nsv = 2, absdeltaphi01 > 0.5, nsharedjets = 1;ratios of shared tracks (>=1);arb. units", 50, 0, 10); 
   h_nsharedjets_small_nsv2_shared_jets = fs->make<TH1F>("h_nsharedjets_small_nsv2_shared_jets", "nsv = 2, absdeltaphi01 <= 0.5;# of shared jets;arb. units", 10, 0, 10);
-  h_ratio_ntracks_small_nsv2_shared_jets = fs->make<TH1F>("h_ratio_ntracks_small_nsv2_shared_jets", "nsv = 2, absdeltaphi01 <= 0.5;ratios of shared tracks (>=1);arb. units", 50, 0, 10);
+  h_ratio_ntracks_small_nsv2_nshj1_shared_jets = fs->make<TH1F>("h_ratio_ntracks_small_nsv2_nshj1_shared_jets", "nsv = 2, absdeltaphi01 <= 0.5, nsharedjets = 1;ratios of shared tracks (>=1);arb. units", 50, 0, 10);
   h_ntracks_sv0sv1_small_nsv2_nsharedjet1 = fs->make<TH2F>("h_ntracks_sv0sv1_small_nsv2_nsharedjet1", "nsv = 2, absdeltaphi01 <= 0.5, nsharedjets = 1;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
   h_ntracks_sv0sv1_small_nsv2_nsharedjet2 = fs->make<TH2F>("h_ntracks_sv0sv1_small_nsv2_nsharedjet2", "nsv = 2, absdeltaphi01 <= 0.5, nsharedjets = 2;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
   h_ntracks_sv0sv1_small_nsv2_nsharedjet3 = fs->make<TH2F>("h_ntracks_sv0sv1_small_nsv2_nsharedjet3", "nsv = 2, absdeltaphi01 <= 0.5, nsharedjets = 3;sv #0 # of tracks from a shared jet;sv #1 # of tracks from a shared jet", 10, 0, 10, 10, 0, 10);
@@ -539,6 +526,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 				  double absdelta_sv1 = double(fabs(reco::deltaPhi(phi1, mevent->jet_phi[jet_index])));
 				  absdeltaphi_sv1_shared_jets.push_back(absdelta_sv1);
 			  }
+                          
 
 			  if (nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) {
 				  h_ratio_ntracks_nsv2_shared_jets->Fill(nsharedjet_tracks_sv0[i] / nsharedjet_tracks_sv1[i]);
@@ -546,7 +534,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			  if (nsharedjet_tracks_sv0[i] <= nsharedjet_tracks_sv1[i]) {
 				  h_ratio_ntracks_nsv2_shared_jets->Fill(nsharedjet_tracks_sv1[i] / nsharedjet_tracks_sv0[i]);
 			  }
-			  if (nsharedjets == 1) {
+                          if (nsharedjets == 1){
 				  h_ntracks_sv0sv1_nsv2_nsharedjet1->Fill(nsharedjet_tracks_sv0[i], nsharedjet_tracks_sv1[i]);
 				  if (nsharedjet_tracks_sv1[i] == 1) { h_ntracks_nshj1_sv0_ntrack1_sv1_nsv2->Fill(nsharedjet_tracks_sv0[i]); }
 				  if (nsharedjet_tracks_sv1[i] == 2) { h_ntracks_nshj1_sv0_ntrack2_sv1_nsv2->Fill(nsharedjet_tracks_sv0[i]); }
@@ -615,27 +603,21 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 				 //TODO: add histo with max of max dphi from sv#1 and sv#0		
 					 //    : add histo with dphi of another sv and such a jet index
 
-				 int ntracks_small_sv0 = nsharedjet_tracks_sv0[i];
-				 int ntracks_small_sv1 = nsharedjet_tracks_sv1[i];
-				 std::vector<double> absdeltaphi_small_sv_shared_jets;
-				 for (int j = 0; j < ntracks_small_sv0; ++j) {
-					 jet_index = nsharedjet_jet_index[i];
-					 double absdelta_small_sv0 = double(fabs(reco::deltaPhi(phi0, mevent->jet_phi[jet_index])));
-					 absdeltaphi_small_sv0_shared_jets.push_back(absdelta_small_sv0);
-				 }
-				 for (int j = 0; j < ntracks_small_sv1; ++j) {
-					 jet_index = nsharedjet_jet_index[i];
-					 double absdelta_small_sv1 = double(fabs(reco::deltaPhi(phi1, mevent->jet_phi[jet_index])));
-					 absdeltaphi_small_sv1_shared_jets.push_back(absdelta_small_sv1);
-				 }
+		                 jet_index = nsharedjet_jet_index[i];
+		                 double absdelta_small_sv0 = double(fabs(reco::deltaPhi(phi0, mevent->jet_phi[jet_index])));
+				 absdeltaphi_small_sv0_shared_jets.push_back(absdelta_small_sv0);
+				 
+			         double absdelta_small_sv1 = double(fabs(reco::deltaPhi(phi1, mevent->jet_phi[jet_index])));
+			         absdeltaphi_small_sv1_shared_jets.push_back(absdelta_small_sv1);
+                                 if (nsharedjets == 1){
 
 				 if (nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) {
-					 h_ratio_ntracks_small_nsv2_shared_jets->Fill(nsharedjet_tracks_sv0[i] / nsharedjet_tracks_sv1[i]);		   
+					 h_ratio_ntracks_small_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv0[i] / nsharedjet_tracks_sv1[i]);		   
 				 }
 				 if (nsharedjet_tracks_sv0[i] <= nsharedjet_tracks_sv1[i]) {
-					 h_ratio_ntracks_small_nsv2_shared_jets->Fill(nsharedjet_tracks_sv1[i] / nsharedjet_tracks_sv0[i]);			 
+					 h_ratio_ntracks_small_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv1[i] / nsharedjet_tracks_sv0[i]);			 
 				 }
-				 if (nsharedjets == 1) {
+			
 					 h_ntracks_sv0sv1_small_nsv2_nsharedjet1->Fill(nsharedjet_tracks_sv0[i], nsharedjet_tracks_sv1[i]);				
 					 if (nsharedjet_tracks_sv1[i] == 1) { h_ntracks_small_nshj1_sv0_ntrack1_sv1_nsv2->Fill(nsharedjet_tracks_sv0[i]); }
 					 if (nsharedjet_tracks_sv1[i] == 2) { h_ntracks_small_nshj1_sv0_ntrack2_sv1_nsv2->Fill(nsharedjet_tracks_sv0[i]); }
@@ -692,8 +674,18 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			 h_nsharedjets_large_nsv2_shared_jets->Fill(nsharedjets, w);
 			 h_svdist2d_large_absdeltaphi01_nsv2_shared_jets->Fill(svdist2d, w);
 			 h_svdist3d_large_absdeltaphi01_nsv2_shared_jets->Fill(svdist3d, w);
-
+                                                                                                                                                                                   
+                   std::vector<double> absdeltaphi_large_sv0_shared_jets;                                                                                                                              std::vector<double> absdeltaphi_large_sv1_shared_jets;                                                                                                                              
+                   std::vector<double> max_large_dphi_sv0_sv1;                                                                                                                                         for (int i = 0; i < nsharedjets; i++) {                                                                                                                                                                                                                                                                                                                                        jet_index = nsharedjet_jet_index[i];                                                                                                                                                double absdelta_large_sv0 = double(fabs(reco::deltaPhi(phi0, mevent->jet_phi[jet_index])));                                                                                         absdeltaphi_large_sv0_shared_jets.push_back(absdelta_large_sv0);                                                                                                                                                                                                                                                                                                        double absdelta_large_sv1 = double(fabs(reco::deltaPhi(phi1, mevent->jet_phi[jet_index])));                                                                                         absdeltaphi_large_sv1_shared_jets.push_back(absdelta_large_sv1);
+                   }
+                   
+                   double max_large_dphi_sv0 = *std::max_element(absdeltaphi_large_sv0_shared_jets.begin(), absdeltaphi_large_sv0_shared_jets.end());                                                  int max_large_dphi_sv0_idx = std::max_element(absdeltaphi_large_sv0_shared_jets.begin(), absdeltaphi_large_sv0_shared_jets.end()) - absdeltaphi_large_sv0_shared_jets.begin();                                                                                                                                                                                          double max_large_dphi_sv1 = *std::max_element(absdeltaphi_large_sv1_shared_jets.begin(), absdeltaphi_large_sv1_shared_jets.end());                                                  int max_large_dphi_sv1_idx = std::max_element(absdeltaphi_large_sv1_shared_jets.begin(), absdeltaphi_large_sv1_shared_jets.end()) - absdeltaphi_large_sv1_shared_jets.begin();                                                                                                                                                                                          max_large_dphi_sv0_sv1.push_back(max_large_dphi_sv0);                                                                                                                               max_large_dphi_sv0_sv1.push_back(max_large_dphi_sv1);
+                   
                    if (nsharedjets == 1){
+
+                         h_max_absdeltaphi0_large_sv_nshj1_shared_jets->Fill(*std::max_element(max_large_dphi_sv0_sv1.begin(), max_large_dphi_sv0_sv1.end()), w);                                            if (max_large_dphi_sv0 > max_large_dphi_sv1) {                                                                                                                                              h_max_absdeltaphi1_large_sv_nshj1_shared_jets->Fill(absdeltaphi_large_sv1_shared_jets[max_large_dphi_sv0_idx], w);                                                          }                                                                                                                                                                                   else {                                                                                                                                                                                      h_max_absdeltaphi1_large_sv_nshj1_shared_jets->Fill(absdeltaphi_large_sv0_shared_jets[max_large_dphi_sv1_idx], w);                                                          }
+
+                         if (nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) {                                                                                                                                  h_ratio_ntracks_large_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv0[i] / nsharedjet_tracks_sv1[i]);                                                                          }                                                                                                                                                                                   if (nsharedjet_tracks_sv0[i] <= nsharedjet_tracks_sv1[i]) {                                                                                                                                 h_ratio_ntracks_large_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv1[i] / nsharedjet_tracks_sv0[i]);                                                                          }
                          		
                          if (max_dphi_sv0 > max_dphi_sv1) {
 				 std::vector<double> absdeltaphi_min_sv1_shared_tracks;
@@ -726,10 +718,11 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
 				 
 				 AlgebraicVector3 mom_max(sv0.track_px[max_sv0_track_idx], sv0.track_py[max_sv0_track_idx], sv0.track_pz[max_sv0_track_idx]);
-				 
+				 AlgebraicVector3 ref_max(sv0.track_vx[max_sv0_track_idx], sv0.track_vy[max_sv0_track_idx], sv0.track_vz[max_sv0_track_idx]);
 				 AlgebraicVector3 mom_min(sv1.track_px[min_sv1_track_idx], sv1.track_py[min_sv1_track_idx], sv1.track_pz[min_sv1_track_idx]);
+                                 AlgebraicVector3 ref_min(sv1.track_vx[min_sv1_track_idx], sv1.track_vy[min_sv1_track_idx], sv1.track_vz[min_sv1_track_idx]);
 
-				 Measurement1D miss_dist_max = miss_dist(sv0,sv1,mom_max);                                                                                                                           h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);                                                                                              Measurement1D miss_dist_min = miss_dist(sv0,sv1,mom_min);                                                                                                                           h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w); 
+				 Measurement1D miss_dist_max = miss_dist(sv1,ref_max,mom_max);                                                                                                                       h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);                                                                                              Measurement1D miss_dist_min = miss_dist(sv0,ref_min,mom_min);                                                                                                                       h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w); 
 
 			 }
 			 else {
@@ -764,10 +757,11 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
 				 
 				 AlgebraicVector3 mom_max(sv1.track_px[max_sv1_track_idx], sv1.track_py[max_sv1_track_idx], sv1.track_pz[max_sv1_track_idx]);
-				 
+				 AlgebraicVector3 ref_max(sv1.track_vx[max_sv1_track_idx], sv1.track_vy[max_sv1_track_idx], sv1.track_vz[max_sv1_track_idx]); 
 				 AlgebraicVector3 mom_min(sv0.track_px[min_sv0_track_idx], sv0.track_py[min_sv0_track_idx], sv0.track_pz[min_sv0_track_idx]);
-
-                                 Measurement1D miss_dist_max = miss_dist(sv0,sv1,mom_max);                                                                                                                           h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);                                                                                              Measurement1D miss_dist_min = miss_dist(sv0,sv1,mom_min);                                                                                                                           h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w);
+                                 AlgebraicVector3 ref_min(sv0.track_vx[min_sv0_track_idx], sv0.track_vy[min_sv0_track_idx], sv0.track_vz[min_sv0_track_idx]); 
+                                 
+                                 Measurement1D miss_dist_max = miss_dist(sv0,ref_max,mom_max);                                                                                                                       h_miss_dist_absdeltaphi0_large_sv_nshj1_shared_tracks->Fill(miss_dist_max.value(), w);                                                                                              Measurement1D miss_dist_min = miss_dist(sv1,ref_min,mom_min);                                                                                                                       h_miss_dist_absdeltaphi1_large_sv_nshj1_shared_tracks->Fill(miss_dist_min.value(), w);
 			 }
 			 
 			 
