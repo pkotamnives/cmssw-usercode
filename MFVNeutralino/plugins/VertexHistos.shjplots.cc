@@ -36,20 +36,20 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   void fill(TH1F** hs,          const int, const double val,                    const double weight) const { hs[sv_all]->Fill(val, weight); }
   void fill(TH2F** hs,          const int, const double val, const double val2, const double weight) const { hs[sv_all]->Fill(val, val2, weight); }
 
-  Measurement1D miss_dist(const reco::Vertex& sv, const reco::Vertex& ref, const AlgebraicVector3& mom) {
+  Measurement1D miss_dist(const reco::Vertex& sv, const AlgebraicVector3& ref, const AlgebraicVector3& mom) {
 	  // miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
 	  // to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
 	  AlgebraicVector3 n = ROOT::Math::Unit(mom);
-	  AlgebraicVector3 d(sv.x() - ref.x(),
-		  sv.y() - ref.y(),
-		  sv.z() - ref.z());
+	  AlgebraicVector3 d(sv.x() - ref(0),
+		  sv.y() - ref(1),
+		  sv.z() - ref(2));
 	  AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
 	  double n_dot_d = ROOT::Math::Dot(n, d);
 	  double val = ROOT::Math::Mag(n_cross_d);
 	  AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
 		  2 * d(1) - 2 * n_dot_d * n(1),
 		  2 * d(2) - 2 * n_dot_d * n(2));
-	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance() + ref.covariance())) / 2 / val);
+	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv
   }
 
   TH1F* h_w;
@@ -685,7 +685,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
                          h_max_absdeltaphi0_large_sv_nshj1_shared_jets->Fill(*std::max_element(max_large_dphi_sv0_sv1.begin(), max_large_dphi_sv0_sv1.end()), w);                                            if (max_large_dphi_sv0 > max_large_dphi_sv1) {                                                                                                                                              h_max_absdeltaphi1_large_sv_nshj1_shared_jets->Fill(absdeltaphi_large_sv1_shared_jets[max_large_dphi_sv0_idx], w);                                                          }                                                                                                                                                                                   else {                                                                                                                                                                                      h_max_absdeltaphi1_large_sv_nshj1_shared_jets->Fill(absdeltaphi_large_sv0_shared_jets[max_large_dphi_sv1_idx], w);                                                          }
 
-                         if (nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) {                                                                                                                                  h_ratio_ntracks_large_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv0[i] / nsharedjet_tracks_sv1[i]);                                                                          }                                                                                                                                                                                   if (nsharedjet_tracks_sv0[i] <= nsharedjet_tracks_sv1[i]) {                                                                                                                                 h_ratio_ntracks_large_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv1[i] / nsharedjet_tracks_sv0[i]);                                                                          }
+                         if (nsharedjet_tracks_sv0[0] > nsharedjet_tracks_sv1[0]) {                                                                                                                                  h_ratio_ntracks_large_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv0[0] / nsharedjet_tracks_sv1[0]);                                                                          }                                                                                                                                                                                   if (nsharedjet_tracks_sv0[0] <= nsharedjet_tracks_sv1[0]) {                                                                                                                                 h_ratio_ntracks_large_nsv2_nshj1_shared_jets->Fill(nsharedjet_tracks_sv1[0] / nsharedjet_tracks_sv0[0]);                                                                          }
                          		
                          if (max_dphi_sv0 > max_dphi_sv1) {
 				 std::vector<double> absdeltaphi_min_sv1_shared_tracks;
