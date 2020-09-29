@@ -55,9 +55,6 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   Measurement1D miss_dist_2D(const reco::Vertex& sv, const AlgebraicVector3& ref, const AlgebraicVector3& mom) {
 	  // miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
 	  // to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
-	  sv.z() = 0.0;
-	  ref(2) = 0.0;
-	  mom(2) = 0.0;
 	  AlgebraicVector3 n = ROOT::Math::Unit(mom);
 	  n(2) = 0.0;
 	  AlgebraicVector3 d(sv.x() - ref(0),
@@ -70,7 +67,7 @@ class MFVVertexHistos : public edm::EDAnalyzer {
 	  AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
 		  2 * d(1) - 2 * n_dot_d * n(1),
 		  2 * d(2) - 2 * n_dot_d * n(2));
-	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv
+	  return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv and need sv to be modified for sig
   }
 
   TH1F* h_w;
@@ -351,7 +348,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 	  for (int i = 0; i < ntracks; ++i) {		   //loop over tracks associated with a vertex
 		  double match_threshold = 1.3;
 		  int jet_index = 255;
-                  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {		   //loop over jets associated with all tracks
+                  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {		   //loop over all jets to take ones associated with each track
 			  double a = fabs(aux.track_pt(i) - fabs(mevent->jet_track_qpt[j])) + 1;
 			  double b = fabs(aux.track_eta[i] - mevent->jet_track_eta[j]) + 1;
 			  double c = fabs(aux.track_phi[i] - mevent->jet_track_phi[j]) + 1;
@@ -361,8 +358,8 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			  }
 		  }
 		  if (jet_index != 255) {
-			  track_which_idx.push_back(i);
-			  track_which_jet.push_back((int)jet_index);	  // get a valid set of jets for a track
+			  track_which_idx.push_back(i);                   // get one-to-one track_idx : track_idx
+			  track_which_jet.push_back((int)jet_index);	  // get one-to-one track_idx : jet_Index
 			  //absdelta = double(fabs(reco::deltaPhi(phin, mevent->jet_phi[jet_index])));
 			  //absdeltaphi_sv_jets.push_back(absdelta);
           	  }
@@ -378,8 +375,18 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 	  
    }
 
+  std::vector<int> sv1_test_track_which_idx = sv_track_which_idx[1];
+  std::vector<int> sv0_test_track_which_idx = sv_track_which_idx[0];
+  for (unsigned i = 0; i < sv0_test_track_which_idx.size(); ++i){
 
+       for (unsigned j = 0; j < sv1_test_track_which_idx.size(); ++j){
+              if (sv0_test_track_which_idx[i] == sv1_test_track_which_idx[j]){
+                   std::cout << "found at" << sv0_test_track_which_idx[i] << std::endl;
+              }
+           
+}
 
+}
 
 
 
@@ -789,7 +796,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
 				 h_vertex_chi2dof_absdeltaphi0_large_sv2_nshj1->Fill(sv0.chi2dof(),w);
 
-				 std::cout << max_sv0_track_idx << "!=" << min_sv1_track_idx << std::endl;
+				// std::cout << max_sv0_track_idx << "!=" << min_sv1_track_idx << std::endl;
 
 
 			 }
@@ -853,7 +860,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
 				h_vertex_chi2dof_absdeltaphi0_large_sv2_nshj1->Fill(sv1.chi2dof(), w);
 
-				std::cout << max_sv1_track_idx << "!=" << min_sv0_track_idx << std::endl;
+				//std::cout << max_sv1_track_idx << "!=" << min_sv0_track_idx << std::endl;
 			 }
 			 
 			 
