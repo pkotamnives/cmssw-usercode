@@ -569,7 +569,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 									h_absdeltaphi_large_jet_shared_tracks_nsv2->Fill(absdelta_jet_track, w);
 									h_pt_good_shared_tracks_large_nsv2->Fill(sv1.track_pt(track_idx), w);
-									h_dxy_err_good_shared_tracks_large_nsv2->Fill(sv1.track_dxy_err[track_idx], w);
+									h_dxy_err_good_shared_tracks_large_nsv2->Fill(sv1.track_dxy_err(track_idx), w);
 									std::cout << "sv0>sv1 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 									absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
 								}
@@ -589,7 +589,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))); //phi0
 									double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));                                                                     h_absdeltaphi_large_jet_shared_tracks_nsv2->Fill(absdelta_jet_track, w);
 									h_pt_poor_shared_tracks_large_nsv2->Fill(sv0.track_pt(track_idx), w);
-									h_dxy_err_poor_shared_tracks_large_nsv2->Fill(sv0.track_dxy_err[track_idx], w);
+									h_dxy_err_poor_shared_tracks_large_nsv2->Fill(sv0.track_dxy_err(track_idx), w);
 									std::cout << "sv0>sv1 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 									absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
 								}
@@ -636,8 +636,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_miss_dist_phi_absdeltaphi0_large_sv->Fill(miss_dist_max.value(), double(fabs(reco::deltaPhi(phi0, sv0.track_phi[max_sv0_track_idx]))));
 								h_2D_miss_dist_phi_absdeltaphi1_large_sv->Fill(miss_dist_min.value(), double(fabs(reco::deltaPhi(phi1, sv1.track_phi[min_sv1_track_idx]))));
 
-								h_2D_pt_dxy_err_absdeltaphi0_large_sv->Fill(sv0.track_pt(max_sv0_track_idx), sv0.track_dxy_err[max_sv0_track_idx]);
-								h_2D_pt_dxy_err_absdeltaphi1_large_sv->Fill(sv1.track_pt(min_sv1_track_idx), sv1.track_dxy_err[min_sv1_track_idx]);
+								h_2D_pt_dxy_err_absdeltaphi0_large_sv->Fill(sv0.track_pt(max_sv0_track_idx), sv0.track_dxy_err(max_sv0_track_idx));
+								h_2D_pt_dxy_err_absdeltaphi1_large_sv->Fill(sv1.track_pt(min_sv1_track_idx), sv1.track_dxy_err(min_sv1_track_idx));
 
 
 								h_vertex_chi2dof_absdeltaphi0_large_nsv2->Fill(sv0.chi2dof(), w);
@@ -659,13 +659,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nsv2_fig2->Fill(absdelta_jet_track, w);
 										h_pt_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_pt(track_idx), w);
-										h_dxy_err_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy_err[track_idx], w);
-										h_dxy_sig_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy[track_idx]/sv1.track_dxy_err[track_idx], w);
+										h_dxy_err_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy_err(track_idx), w);
+										h_dxy_sig_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy[track_idx]/sv1.track_dxy_err(track_idx), w);
 										std::cout << "sv0>sv1 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 										absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
 										for (int k = 0; k < nsharedjet_tracks_sv0[i]; k++) {
 											int track_idx_poor = sv0_nsharedjets1_which_idx[k];
-											h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2->Fill(sv0.track_dxy[track_idx_poor] / sv0.track_dxy_err[track_idx_poor], sv1.track_dxy[track_idx] / sv1.track_dxy_err[track_idx]);
+											h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2->Fill(sv0.track_dxy[track_idx_poor] / sv0.track_dxy_err(track_idx_poor), sv1.track_dxy[track_idx] / sv1.track_dxy_err(track_idx));
 											h_2D_poor_pt_good_pt_large_sv_fig2->Fill(sv0.track_pt(track_idx_poor), sv1.track_pt(track_idx));
 										}
 
@@ -686,8 +686,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_max_sv0_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))); //phi0
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));                                                                     h_absdeltaphi_large_jet_shared_tracks_nsv2_fig2->Fill(absdelta_jet_track, w);
 										h_pt_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_pt(track_idx), w);
-										h_dxy_err_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy_err[track_idx], w);
-										h_dxy_sig_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy[track_idx]/sv0.track_dxy_err[track_idx], w);
+										h_dxy_err_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy_err(track_idx), w);
+										h_dxy_sig_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy[track_idx]/sv0.track_dxy_err(track_idx), w);
 										std::cout << "sv0>sv1 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 										absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
 									}
@@ -729,8 +729,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_miss_dist_phi_absdeltaphi0_large_sv_fig2->Fill(miss_dist_max.value(), double(fabs(reco::deltaPhi(phi0, sv0.track_phi[max_sv0_track_idx]))));
 									h_2D_miss_dist_phi_absdeltaphi1_large_sv_fig2->Fill(miss_dist_min.value(), double(fabs(reco::deltaPhi(phi1, sv1.track_phi[min_sv1_track_idx]))));
 
-									h_2D_pt_dxy_err_absdeltaphi0_large_sv_fig2->Fill(sv0.track_pt(max_sv0_track_idx), sv0.track_dxy_err[max_sv0_track_idx]);
-									h_2D_pt_dxy_err_absdeltaphi1_large_sv_fig2->Fill(sv1.track_pt(min_sv1_track_idx), sv1.track_dxy_err[min_sv1_track_idx]);
+									h_2D_pt_dxy_err_absdeltaphi0_large_sv_fig2->Fill(sv0.track_pt(max_sv0_track_idx), sv0.track_dxy_err(max_sv0_track_idx));
+									h_2D_pt_dxy_err_absdeltaphi1_large_sv_fig2->Fill(sv1.track_pt(min_sv1_track_idx), sv1.track_dxy_err(min_sv1_track_idx));
 
 
 									h_vertex_chi2dof_absdeltaphi0_large_nsv2_fig2->Fill(sv0.chi2dof(), w);
@@ -759,7 +759,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));
 									h_absdeltaphi_large_jet_shared_tracks_nsv2->Fill(absdelta_jet_track, w);
 									h_pt_good_shared_tracks_large_nsv2->Fill(sv0.track_pt(track_idx), w);
-									h_dxy_err_good_shared_tracks_large_nsv2->Fill(sv0.track_dxy_err[track_idx], w);
+									h_dxy_err_good_shared_tracks_large_nsv2->Fill(sv0.track_dxy_err(track_idx), w);
 									absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
 									std::cout << "sv1>sv0 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 								}
@@ -779,7 +779,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 									h_absdeltaphi_large_jet_shared_tracks_nsv2->Fill(absdelta_jet_track, w);
 									h_pt_poor_shared_tracks_large_nsv2->Fill(sv1.track_pt(track_idx), w);
-									h_dxy_err_poor_shared_tracks_large_nsv2->Fill(sv1.track_dxy_err[track_idx], w);
+									h_dxy_err_poor_shared_tracks_large_nsv2->Fill(sv1.track_dxy_err(track_idx), w);
 									absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
 									std::cout << "sv1>sv0 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 								}
@@ -827,8 +827,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_miss_dist_phi_absdeltaphi0_large_sv->Fill(miss_dist_max.value(), double(fabs(reco::deltaPhi(phi1, sv1.track_phi[max_sv1_track_idx]))));
 								h_2D_miss_dist_phi_absdeltaphi1_large_sv->Fill(miss_dist_min.value(), double(fabs(reco::deltaPhi(phi0, sv0.track_phi[min_sv0_track_idx]))));
 
-								h_2D_pt_dxy_err_absdeltaphi0_large_sv->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err[max_sv1_track_idx]);
-								h_2D_pt_dxy_err_absdeltaphi1_large_sv->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err[min_sv0_track_idx]);
+								h_2D_pt_dxy_err_absdeltaphi0_large_sv->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err(max_sv1_track_idx));
+								h_2D_pt_dxy_err_absdeltaphi1_large_sv->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err(min_sv0_track_idx));
 
 								h_vertex_chi2dof_absdeltaphi0_large_nsv2->Fill(sv1.chi2dof(), w);
 
@@ -853,13 +853,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nsv2_fig2->Fill(absdelta_jet_track, w);
 										h_pt_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_pt(track_idx), w);
-										h_dxy_err_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy_err[track_idx], w);
-										h_dxy_sig_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy[track_idx]/sv0.track_dxy_err[track_idx], w);
+										h_dxy_err_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy_err(track_idx), w);
+										h_dxy_sig_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy[track_idx]/sv0.track_dxy_err(track_idx), w);
 										absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
 										std::cout << "sv1>sv0 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 										for (int k = 0; k < nsharedjet_tracks_sv1[i]; k++) {
 											int track_idx_poor = sv1_nsharedjets1_which_idx[k];
-											h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2->Fill(sv1.track_dxy[track_idx_poor] / sv1.track_dxy_err[track_idx_poor], sv0.track_dxy[track_idx] / sv0.track_dxy_err[track_idx]);
+											h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2->Fill(sv1.track_dxy[track_idx_poor] / sv1.track_dxy_err(track_idx_poor), sv0.track_dxy[track_idx] / sv0.track_dxy_err(track_idx));
 											h_2D_poor_pt_good_pt_large_sv_fig2->Fill(sv1.track_pt(track_idx_poor), sv0.track_pt(track_idx));
 										}
 									}
@@ -879,8 +879,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nsv2_fig2->Fill(absdelta_jet_track, w);
 										h_pt_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_pt(track_idx), w);
-										h_dxy_err_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy_err[track_idx], w);
-										h_dxy_sig_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy[track_idx]/sv1.track_dxy_err[track_idx], w);
+										h_dxy_err_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy_err(track_idx), w);
+										h_dxy_sig_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy[track_idx]/sv1.track_dxy_err(track_idx), w);
 										absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
 										std::cout << "sv1>sv0 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 									}
@@ -924,8 +924,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_miss_dist_phi_absdeltaphi0_large_sv_fig2->Fill(miss_dist_max.value(), double(fabs(reco::deltaPhi(phi1, sv1.track_phi[max_sv1_track_idx]))));
 									h_2D_miss_dist_phi_absdeltaphi1_large_sv_fig2->Fill(miss_dist_min.value(), double(fabs(reco::deltaPhi(phi0, sv0.track_phi[min_sv0_track_idx]))));
 
-									h_2D_pt_dxy_err_absdeltaphi0_large_sv_fig2->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err[max_sv1_track_idx]);
-									h_2D_pt_dxy_err_absdeltaphi1_large_sv_fig2->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err[min_sv0_track_idx]);
+									h_2D_pt_dxy_err_absdeltaphi0_large_sv_fig2->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err(max_sv1_track_idx));
+									h_2D_pt_dxy_err_absdeltaphi1_large_sv_fig2->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err(min_sv0_track_idx));
 
 									h_vertex_chi2dof_absdeltaphi0_large_nsv2_fig2->Fill(sv1.chi2dof(), w);
 
@@ -962,7 +962,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nshj1_nsv2->Fill(absdelta_jet_track, w);
 										h_pt_good_shared_tracks_large_nshj1_nsv2->Fill(sv1.track_pt(track_idx),w);
-										h_dxy_err_good_shared_tracks_large_nshj1_nsv2->Fill(sv1.track_dxy_err[track_idx], w);
+										h_dxy_err_good_shared_tracks_large_nshj1_nsv2->Fill(sv1.track_dxy_err(track_idx), w);
 										std::cout << "sv0>sv1 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 										absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
 									}
@@ -983,7 +983,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));                                                                     
 										h_absdeltaphi_large_jet_shared_tracks_nshj1_nsv2->Fill(absdelta_jet_track, w);
 										h_pt_poor_shared_tracks_large_nshj1_nsv2->Fill(sv0.track_pt(track_idx),w);
-										h_dxy_err_poor_shared_tracks_large_nshj1_nsv2->Fill(sv0.track_dxy_err[track_idx], w);
+										h_dxy_err_poor_shared_tracks_large_nshj1_nsv2->Fill(sv0.track_dxy_err(track_idx), w);
 										std::cout << "sv0>sv1 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 										absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
 									}
@@ -1030,8 +1030,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_miss_dist_phi_absdeltaphi0_large_sv_nshj1->Fill(miss_dist_max.value(), double(fabs(reco::deltaPhi(phi0, sv0.track_phi[max_sv0_track_idx]))));
 									h_2D_miss_dist_phi_absdeltaphi1_large_sv_nshj1->Fill(miss_dist_min.value(), double(fabs(reco::deltaPhi(phi1, sv1.track_phi[min_sv1_track_idx]))));
 									
-									h_2D_pt_dxy_err_absdeltaphi0_large_sv_nshj1->Fill(sv0.track_pt(max_sv0_track_idx), sv0.track_dxy_err[max_sv0_track_idx]);
-									h_2D_pt_dxy_err_absdeltaphi1_large_sv_nshj1->Fill(sv1.track_pt(min_sv1_track_idx), sv1.track_dxy_err[min_sv1_track_idx]);
+									h_2D_pt_dxy_err_absdeltaphi0_large_sv_nshj1->Fill(sv0.track_pt(max_sv0_track_idx), sv0.track_dxy_err(max_sv0_track_idx));
+									h_2D_pt_dxy_err_absdeltaphi1_large_sv_nshj1->Fill(sv1.track_pt(min_sv1_track_idx), sv1.track_dxy_er([min_sv1_track_idx));
 
 									
 									h_vertex_chi2dof_absdeltaphi0_large_nsv2_nshj1->Fill(sv0.chi2dof(), w);
@@ -1054,7 +1054,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nshj1_nsv2->Fill(absdelta_jet_track, w);
 										h_pt_good_shared_tracks_large_nshj1_nsv2->Fill(sv0.track_pt(track_idx), w);
-										h_dxy_err_good_shared_tracks_large_nshj1_nsv2->Fill(sv0.track_dxy_err[track_idx], w);
+										h_dxy_err_good_shared_tracks_large_nshj1_nsv2->Fill(sv0.track_dxy_err(track_idx), w);
 										absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
 										std::cout << "sv1>sv0 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 									}
@@ -1074,7 +1074,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nshj1_nsv2->Fill(absdelta_jet_track, w);
 										h_pt_poor_shared_tracks_large_nshj1_nsv2->Fill(sv1.track_pt(track_idx), w);
-										h_dxy_err_poor_shared_tracks_large_nshj1_nsv2->Fill(sv1.track_dxy_err[track_idx], w);
+										h_dxy_err_poor_shared_tracks_large_nshj1_nsv2->Fill(sv1.track_dxy_err(track_idx), w);
 										absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
 										std::cout << "sv1>sv0 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 									}
@@ -1122,8 +1122,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_miss_dist_phi_absdeltaphi0_large_sv_nshj1->Fill(miss_dist_max.value(), double(fabs(reco::deltaPhi(phi1, sv1.track_phi[max_sv1_track_idx]))));
 									h_2D_miss_dist_phi_absdeltaphi1_large_sv_nshj1->Fill(miss_dist_min.value(), double(fabs(reco::deltaPhi(phi0, sv0.track_phi[min_sv0_track_idx]))));
 
-									h_2D_pt_dxy_err_absdeltaphi0_large_sv_nshj1->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err[max_sv1_track_idx]);
-									h_2D_pt_dxy_err_absdeltaphi1_large_sv_nshj1->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err[min_sv0_track_idx]);
+									h_2D_pt_dxy_err_absdeltaphi0_large_sv_nshj1->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err(max_sv1_track_idx));
+									h_2D_pt_dxy_err_absdeltaphi1_large_sv_nshj1->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err(min_sv0_track_idx));
 
 									h_vertex_chi2dof_absdeltaphi0_large_nsv2_nshj1->Fill(sv1.chi2dof(), w);
 
