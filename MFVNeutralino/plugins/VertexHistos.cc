@@ -259,7 +259,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	unsigned run = event.id().run();
 	unsigned lumi = event.luminosityBlock();
 	unsigned long long evt = event.id().event();
-	if ( 42000 <= evt && evt <= 42115 ){
+	//if ( 42000 <= evt && evt <= 42115 ){
 	edm::Handle<MFVEvent> mevent;
 	event.getByToken(mevent_token, mevent);
 	edm::Handle<double> weight;
@@ -570,7 +570,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_max_absdeltaphi1_large_sv_shared_jets->Fill(dphi_large_sv0_sharedjet, w);
 
 								std::vector<double> absdeltaphi_min_sv0_shared_tracks;
-								std::vector<int> sv0_nsharedjets1_which_idx = sv0_sharedjet_which_idx[0];
+								std::vector<int> sv0_nsharedjets1_which_idx = sv0_sharedjet_which_idx[i];
 
 								for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
 									int track_idx = sv0_nsharedjets1_which_idx[j];
@@ -591,7 +591,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_max_pt_absdeltaphi1_large_sv_shared_tracks->Fill(sv0.track_pt(min_sv0_track_idx), w);
 
 								std::cout << "sv1>sv0 : phi0 is " << phi0 << " with min track phi " << sv0.track_phi[min_sv0_track_idx] << ", shj is at" << mevent->jet_phi[nsharedjet_jet_index[i]] << ", deltaPhi(sv0,trk) is " << double(fabs(reco::deltaPhi(phi0, sv0.track_phi[min_sv0_track_idx]))) << std::endl;
-								std::vector<int> sv1_nsharedjets1_which_idx = sv1_sharedjet_which_idx[0];
+								std::vector<int> sv1_nsharedjets1_which_idx = sv1_sharedjet_which_idx[i];
 								std::vector<double> absdeltaphi_max_sv1_shared_tracks;
 								for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 									int track_idx = sv1_nsharedjets1_which_idx[j];
@@ -875,7 +875,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
            }
 	}
-  }
+ //  }
   
 }
 
