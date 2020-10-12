@@ -193,7 +193,7 @@ private:
 	TH2F* h_2D_pt_dxy_err_absdeltaphi0_large_sv_fig2;
 	TH2F* h_2D_pt_dxy_err_absdeltaphi1_large_sv_fig2;
 	TH2F* h_2D_poor_dxy_err_good_dxy_err_large_sv_fig2;
-	TH2F* h_2D_poor_dz_err_good_dz_err_large_sv_fig2
+	TH2F* h_2D_poor_dz_err_good_dz_err_large_sv_fig2;
 	TH2F* h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2;
 	TH2F* h_2D_poor_pt_good_pt_large_sv_fig2;
 	TH2F* h_2D_poor_sum_pt_good_sum_pt_large_sv_fig2;
@@ -599,10 +599,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						if (ratio_ntracks_nsv2 >= 4) {		// study sample with all sh jets
 
 							if ((dphi_large_sv0_sharedjet > dphi_large_sv1_sharedjet) && (nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i])) {
-								h_less_dphi_more_shared_tracks_large_nsv2->Fill(0, w);
+								h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(0), w);
 							}
 							if ((dphi_large_sv0_sharedjet > dphi_large_sv1_sharedjet) && (nsharedjet_tracks_sv0[i] < nsharedjet_tracks_sv1[i])) {
-								h_less_dphi_more_shared_tracks_large_nsv2->Fill(1, w);
+								h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(1), w);
 								nsharedjets_sv1_fig1_2++;
 
 								h_max_absdeltaphi0_large_sv_shared_jets->Fill(dphi_large_sv0_sharedjet, w);
@@ -820,10 +820,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 							}
 							if ((dphi_large_sv1_sharedjet > dphi_large_sv0_sharedjet) && (nsharedjet_tracks_sv1[i] < nsharedjet_tracks_sv0[i])) {
-								h_less_dphi_more_shared_tracks_large_nsv2->Fill(0, w);
+								h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(0), w);
 							}
 							if ((dphi_large_sv1_sharedjet > dphi_large_sv0_sharedjet) && (nsharedjet_tracks_sv1[i] < nsharedjet_tracks_sv0[i])) {
-								h_less_dphi_more_shared_tracks_large_nsv2->Fill(1, w);
+								h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(1), w);
 								nsharedjets_sv0_fig1_2++;
 
 								h_max_absdeltaphi0_large_sv_shared_jets->Fill(dphi_large_sv1_sharedjet, w);
@@ -970,8 +970,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									std::vector<double> absdeltaphi_max_jet_shared_tracks;
 									for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 										int track_idx = sv1_nsharedjets1_which_idx[j];
-										double absdelta_sv1_track = double(phi1, sv1.track_phi[track_idx]))); //phi1
-										double absdelta_sv0_track = double(phi0, sv1.track_phi[track_idx]))); //phi1
+										double absdelta_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[track_idx]))); //phi1
+										double absdelta_sv0_track = double(fabs(reco::deltaPhi(phi0, sv1.track_phi[track_idx]))); //phi1
 										double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx])));
 										h_absdeltaphi_large_jet_shared_tracks_nsv2_fig2->Fill(absdelta_jet_track, w);
 										h_pt_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_pt(track_idx), w);
