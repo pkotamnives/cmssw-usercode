@@ -196,7 +196,7 @@ private:
 	TH2F* h_2D_poor_dz_err_good_dz_err_large_sv_fig2;
 	TH2F* h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2;
 	TH2F* h_2D_poor_pt_good_pt_large_sv_fig2;
-	TH2F* h_2D_poor_sum_pt_good_sum_pt_large_sv_fig2;
+	TH2F* h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2;
 	TH1F* h_ratio_nsharedjets_large_nsv2_fig2;
 
 	TH1F* h_max_absdeltaphi0_large_nsv2_shared_tracks_semi_fig2;
@@ -247,7 +247,7 @@ private:
 	TH2F* h_2D_poor_dz_err_good_dz_err_large_sv_semi_fig2;
 	TH2F* h_2D_poor_dxy_sig_good_dxy_sig_large_sv_semi_fig2;
 	TH2F* h_2D_poor_pt_good_pt_large_sv_semi_fig2;
-	TH2F* h_2D_poor_sum_pt_good_sum_pt_large_sv_semi_fig2;
+	TH2F* h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2;
 	TH1F* h_ratio_nsharedjets_large_nsv2_semi_fig2;
 
 	TH1F* h_ratio_nsharedjets_large_nsv2_fig1;
@@ -393,7 +393,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dz_err_good_dz_err_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_dz_err_good_dz_err_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track d_{z} err (cm);good track d_{z} err (cm)", 50, 0, 0.05, 50, 0, 0.05);
 	h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track d_{xy} significance;good track d_{xy} significance", 200, 0, 20, 400, 0, 40);
 	h_2D_poor_pt_good_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
-	h_2D_poor_sum_pt_good_sum_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_sum_pt_good_sum_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track sum p_{T} (GeV);good track sum p_{T} (GeV)", 200, 0, 200, 200, 0, 200);
+	h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_pt_poor_shared_tracks_large_nsv2_fig2 = fs->make<TH1F>("h_pt_poor_shared_tracks_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; poor track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_pt_good_shared_tracks_large_nsv2_fig2 = fs->make<TH1F>("h_pt_good_shared_tracks_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; good track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_dxy_err_poor_shared_tracks_large_nsv2_fig2 = fs->make<TH1F>("h_dxy_err_poor_shared_tracks_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; poor track d_{xy} (cm);arb. units", 50, 0, 0.05);
@@ -442,7 +442,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dz_err_good_dz_err_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_dz_err_good_dz_err_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track d_{z} err (cm);good track d_{z} err (cm)", 50, 0, 0.05, 50, 0, 0.05);
 	h_2D_poor_dxy_sig_good_dxy_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_dxy_sig_good_dxy_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track d_{xy} significance;good track d_{xy} significance", 200, 0, 20, 400, 0, 40);
 	h_2D_poor_pt_good_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
-	h_2D_poor_sum_pt_good_sum_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_sum_pt_good_sum_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track sum p_{T} (GeV);good track sum p_{T} (GeV)", 200, 0, 200, 200, 0, 200);
+	h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_pt_poor_shared_tracks_large_nsv2_semi_fig2 = fs->make<TH1F>("h_pt_poor_shared_tracks_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; poor track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_pt_good_shared_tracks_large_nsv2_semi_fig2 = fs->make<TH1F>("h_pt_good_shared_tracks_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; good track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_dxy_err_poor_shared_tracks_large_nsv2_semi_fig2 = fs->make<TH1F>("h_dxy_err_poor_shared_tracks_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; poor track d_{xy} (cm);arb. units", 50, 0, 0.05);
@@ -798,7 +798,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									
 									if (nsharedjet_tracks_sv0[i] < nsharedjet_tracks_sv1[i]) {
-										h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(1), w);
+										h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(1), w);
 
 										nsharedjets_sv1_fig2++;
 										nsharedjets_sv1_all_fig2++;
@@ -843,7 +843,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											}
 
 										}
-										h_2D_poor_sum_pt_good_sum_pt_large_sv_fig2->Fill(sum_pt_poor, sum_pt_good);
+										h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2->Fill(sum_pt_poor/nsharedjet_tracks_sv0[i], sum_pt_good/nsharedjet_tracks_sv1[i]);
 										
 										h_max_absdeltaphi1_large_sv_shared_tracks_fig2->Fill(double(fabs(reco::deltaPhi(phi1, sv1.track_phi[min_sv1_track_idx]))), w);
 										h_max_pt_absdeltaphi1_large_sv_shared_tracks_fig2->Fill(sv1.track_pt(min_sv1_track_idx), w);
@@ -902,7 +902,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									else
 									{
-									h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(0), w);		   // sv1 next to a shared jet and sv0 is away
+									h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(0), w);		   // sv1 next to a shared jet and sv0 is away
 
 									nsharedjets_sv0_semi_fig2++;
 									nsharedjets_sv0_all_fig2++;
@@ -947,7 +947,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										}
 
 									}
-									h_2D_poor_sum_pt_good_sum_pt_large_sv_semi_fig2->Fill(sum_pt_poor, sum_pt_good);
+									h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2->Fill(sum_pt_poor/nsharedjet_tracks_sv1[i], sum_pt_good/nsharedjet_tracks_sv0[i]);
 									double max_dphi_jet_track = *std::max_element(absdeltaphi_max_jet_shared_tracks.begin(), absdeltaphi_max_jet_shared_tracks.end());
 									int max_dphi_jet_track_idx = std::max_element(absdeltaphi_max_jet_shared_tracks.begin(), absdeltaphi_max_jet_shared_tracks.end()) - absdeltaphi_max_jet_shared_tracks.begin();
 
@@ -957,7 +957,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 									std::vector<int> sv1_nsharedjets1_which_idx = sv1_sharedjet_which_idx[i];
-									std::vector<double> absdeltaphi_max_jet_shared_tracks;
+									std::vector<double> absdeltaphi_min_jet_shared_tracks;
 									for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 										int track_idx = sv1_nsharedjets1_which_idx[j];
 										double absdelta_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[track_idx]))); //phi1
@@ -969,7 +969,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_dxy_err_poor_shared_tracks_large_nsv2_semi_fig2->Fill(sv1.track_dxy_err(track_idx), w);
 										h_dxy_sig_poor_shared_tracks_large_nsv2_semi_fig2->Fill(sv1.track_dxy[track_idx] / sv1.track_dxy_err(track_idx), w);
 
-										absdeltaphi_max_jet_shared_tracks.push_back(absdelta_jet_track);
+										absdeltaphi_min_jet_shared_tracks.push_back(absdelta_jet_track);
 									}
 									double min_dphi_jet_track = *std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end());
 									int min_dphi_jet_track_idx = std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end()) - absdeltaphi_min_jet_shared_tracks.begin();
@@ -999,7 +999,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									Measurement1D miss_dist_max_own_semi_fig2 = miss_dist(sv0, ref_max, mom_max);
 									Measurement1D miss_dist_2D_max_own_semi_fig2 = miss_dist_2D(sv0, ref_max, mom_max);
-									h_miss_dist_absdeltaphi0_large_its_sv_shared_tracks_semi_semi_fig2->Fill(miss_dist_max_own_semi_fig2.value(), w);
+									h_miss_dist_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_max_own_semi_fig2.value(), w);
 									h_miss_dist_err_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_max_own_semi_fig2.error(), w);
 									h_miss_dist_2D_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_2D_max_own_semi_fig2.value(), w);
 									h_miss_dist_sig_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_max_own_semi_fig2.significance(), w);
@@ -1138,7 +1138,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 									if (nsharedjet_tracks_sv1[i] < nsharedjet_tracks_sv0[i]) {
-										h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(1), w);
+										h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(1), w);
 										nsharedjets_sv0_fig2++;
 										nsharedjets_sv0_all_fig2++;
 										h_dPhi_sv_large_nsv2_fig2->Fill(double(fabs(reco::deltaPhi(phi0, phi1))), w);
@@ -1177,7 +1177,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 											}
 										}
-										h_2D_poor_sum_pt_good_sum_pt_large_sv_fig2->Fill(sum_pt_poor, sum_pt_good);
+										h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2->Fill(sum_pt_poor/nsharedjet_tracks_sv1[i], sum_pt_good/nsharedjet_tracks_sv0[i]);
 										h_max_absdeltaphi1_large_sv_shared_tracks_fig2->Fill(double(fabs(reco::deltaPhi(phi0, sv0.track_phi[min_sv0_track_idx]))), w);
 										h_max_pt_absdeltaphi1_large_sv_shared_tracks_fig2->Fill(sv0.track_pt(min_sv0_track_idx), w);
 
@@ -1232,7 +1232,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									}
 									else
 									{
-									h_less_dphi_more_shared_tracks_large_nsv2->Fill(int(0), w);		   // sv0 next to a shared jet and sv1 is away
+									h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(0), w);		   // sv0 next to a shared jet and sv1 is away
 
 									nsharedjets_sv1_semi_fig2++;
 									nsharedjets_sv1_all_fig2++;
@@ -1277,7 +1277,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										}
 
 									}
-									h_2D_poor_sum_pt_good_sum_pt_large_sv_semi_fig2->Fill(sum_pt_poor, sum_pt_good);
+									h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2->Fill(sum_pt_poor/nsharedjet_tracks_sv0[i], sum_pt_good/nsharedjet_tracks_sv1[i]);
 									double max_dphi_jet_track = *std::max_element(absdeltaphi_max_jet_shared_tracks.begin(), absdeltaphi_max_jet_shared_tracks.end());
 									int max_dphi_jet_track_idx = std::max_element(absdeltaphi_max_jet_shared_tracks.begin(), absdeltaphi_max_jet_shared_tracks.end()) - absdeltaphi_max_jet_shared_tracks.begin();
 
@@ -1287,7 +1287,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 									std::vector<int> sv0_nsharedjets1_which_idx = sv0_sharedjet_which_idx[i];
-									std::vector<double> absdeltaphi_max_jet_shared_tracks;
+									std::vector<double> absdeltaphi_min_jet_shared_tracks;
 									for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
 										int track_idx = sv0_nsharedjets1_which_idx[j];
 										double absdelta_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[track_idx]))); //phi0
@@ -1299,7 +1299,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_dxy_err_poor_shared_tracks_large_nsv2_semi_fig2->Fill(sv0.track_dxy_err(track_idx), w);
 										h_dxy_sig_poor_shared_tracks_large_nsv2_semi_fig2->Fill(sv0.track_dxy[track_idx] / sv0.track_dxy_err(track_idx), w);
 
-										absdeltaphi_max_jet_shared_tracks.push_back(absdelta_jet_track);
+										absdeltaphi_min_jet_shared_tracks.push_back(absdelta_jet_track);
 									}
 									double min_dphi_jet_track = *std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end());
 									int min_dphi_jet_track_idx = std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end()) - absdeltaphi_min_jet_shared_tracks.begin();
@@ -1329,7 +1329,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									Measurement1D miss_dist_max_own_semi_fig2 = miss_dist(sv1, ref_max, mom_max);
 									Measurement1D miss_dist_2D_max_own_semi_fig2 = miss_dist_2D(sv1, ref_max, mom_max);
-									h_miss_dist_absdeltaphi0_large_its_sv_shared_tracks_semi_semi_fig2->Fill(miss_dist_max_own_semi_fig2.value(), w);
+									h_miss_dist_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_max_own_semi_fig2.value(), w);
 									h_miss_dist_err_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_max_own_semi_fig2.error(), w);
 									h_miss_dist_2D_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_2D_max_own_semi_fig2.value(), w);
 									h_miss_dist_sig_absdeltaphi0_large_its_sv_shared_tracks_semi_fig2->Fill(miss_dist_max_own_semi_fig2.significance(), w);
