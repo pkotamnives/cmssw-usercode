@@ -749,7 +749,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					
 					if ((sv0_track_which_idx.size()- sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
 						if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-							if (sv0_track_which_idx_no.size() >= sv1_track_which_idx_no_shared_track.size()) {
+							if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
 								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
 							}
 							else {
@@ -759,8 +759,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						}
 					}
 					else {
-						if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-							if (sv1_track_which_idx_no.size() >= sv0_track_which_idx_no_shared_track.size()) {
+						if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {	  
+							if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
 								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
 							}
 							else {
@@ -786,16 +786,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					int nsharedjets_sv0_all_fig2 = 0;
 					int nsharedjets_sv1_all_fig2 = 0;
 
-					std::vector<int> sv0_track_which_non_shared_jet; = sv_track_which_jet_copy[0];
-					std::vector<int> sv1_track_which_non_shared_jet; = sv_track_which_jet_copy[1];
+					std::vector<int> sv0_track_which_non_shared_jet = sv_track_which_jet_copy[0];
+					std::vector<int> sv1_track_which_non_shared_jet = sv_track_which_jet_copy[1];
 
 					double sum_sv0_non_shared_jet_pt = 0;
 					double sum_sv1_non_shared_jet_pt = 0;
 					for (size_t k = 0; k < sv0_track_which_non_shared_jet.size(); k++) {
-						sum_sv0_non_shared_jet_pt = sum_sv0_non_shared_jet_pt + jet_pt[int(sv0_track_which_non_shared_jet[k])];
+						sum_sv0_non_shared_jet_pt = sum_sv0_non_shared_jet_pt + mevent->jet_pt[int(sv0_track_which_non_shared_jet[k])];
 					}
 					for (size_t k = 0; k < sv1_track_which_non_shared_jet.size(); k++) {
-						sum_sv1_non_shared_jet_pt = sum_sv1_non_shared_jet_pt + jet_pt[int(sv1_track_which_non_shared_jet[k])];
+						sum_sv1_non_shared_jet_pt = sum_sv1_non_shared_jet_pt + mevent->jet_pt[int(sv1_track_which_non_shared_jet[k])];
 					}
 					double avg_sv0_non_shared_jet_pt = sum_sv0_non_shared_jet_pt/ sv0_track_which_non_shared_jet.size();
 					double avg_sv1_non_shared_jet_pt = sum_sv1_non_shared_jet_pt / sv1_track_which_non_shared_jet.size();
@@ -912,7 +912,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									
 									if (nsharedjet_tracks_sv0[i] < nsharedjet_tracks_sv1[i]) {
 										h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(1), w);
-										h_pt_shared_jets_large_nsv2_fig2->Fill(jet_pt[jet_index], w);
+										h_pt_shared_jets_large_nsv2_fig2->Fill(mevent->jet_pt[jet_index], w);
 										h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2->Fill(avg_sv1_non_shared_jet_pt, jet_pt[jet_index]);
 										h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_fig2->Fill(avg_sv0_non_shared_jet_pt, jet_pt[jet_index]);
 										nsharedjets_sv1_fig2++;
@@ -1020,7 +1020,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									else
 									{
 									h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(0), w);		   // sv1 next to a shared jet and sv0 is away
-									h_pt_shared_jets_large_nsv2_semi_fig2->Fill(jet_pt[jet_index],w);
+									h_pt_shared_jets_large_nsv2_semi_fig2->Fill(mevent->jet_pt[jet_index],w);
 									h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2->Fill(avg_sv0_non_shared_jet_pt, jet_pt[jet_index]);
 									h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2->Fill(avg_sv1_non_shared_jet_pt, jet_pt[jet_index]);
 									nsharedjets_sv0_semi_fig2++;
@@ -1263,7 +1263,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									if (nsharedjet_tracks_sv1[i] < nsharedjet_tracks_sv0[i]) {
 										h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(1), w);
-										h_pt_shared_jets_large_nsv2_fig2->Fill(jet_pt[jet_index], w);
+										h_pt_shared_jets_large_nsv2_fig2->Fill(mevent->jet_pt[jet_index], w);
 										h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2->Fill(avg_sv0_non_shared_jet_pt, jet_pt[jet_index]);
 										h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_fig2->Fill(avg_sv1_non_shared_jet_pt, jet_pt[jet_index]);
 										nsharedjets_sv0_fig2++;
@@ -1364,7 +1364,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									else
 									{
 									h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(0), w);		   // sv0 next to a shared jet and sv1 is away
-									h_pt_shared_jets_large_nsv2_semi_fig2->Fill(jet_pt[jet_index],w);
+									h_pt_shared_jets_large_nsv2_semi_fig2->Fill(mevent->jet_pt[jet_index],w);
 									h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2->Fill(avg_sv1_non_shared_jet_pt, jet_pt[jet_index]);
 									h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2->Fill(avg_sv0_non_shared_jet_pt, jet_pt[jet_index]);
 									nsharedjets_sv1_semi_fig2++;
