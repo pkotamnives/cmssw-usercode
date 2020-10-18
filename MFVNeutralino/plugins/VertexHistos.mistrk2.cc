@@ -363,9 +363,9 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_dxy_err_poor_shared_tracks_large_nsv2 = fs->make<TH1F>("h_dxy_err_poor_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, track ratios >= 4; poor track d_{xy} err (cm);arb. units", 100, 0, 0.1);
 	h_dxy_err_good_shared_tracks_large_nsv2 = fs->make<TH1F>("h_dxy_err_good_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, track ratios >= 4; good track d_{xy} err (cm);arb. units", 100, 0, 0.1);
 
-	h_2D_sv_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5; # major tracks; # minor tracks", 20, 0, 20, 20, 0, 20);
-	h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, no shared tracks; # major tracks; # minor tracks", 20, 0, 20, 20, 0, 20);
-	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, no minor shared tarcks; # major tracks; # minor tracks", 20, 0, 20, 20, 0, 20);
+	h_2D_sv_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, no shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, no minor shared tarcks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
 
 
 	h_less_dphi_more_shared_tracks_large_nsv2_all_fig2 = fs->make<TH1F>("h_less_dphi_more_shared_tracks_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; min(dphi(SV,a shared jet)) most shared tracks ?", 2, 0, 2);
@@ -409,8 +409,8 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track d_{xy} significance;good track d_{xy} significance", 200, 0, 20, 400, 0, 40);
 	h_2D_poor_pt_good_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
-	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 100, 0, 1000, 100, 0, 1000);
-	h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;minor sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 100, 0, 1000, 100, 0, 1000);
+	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 20, 0, 2000, 20, 0, 2000);
+	h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;minor sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 20, 0, 2000, 20, 0, 2000);
 	h_pt_poor_shared_tracks_large_nsv2_fig2 = fs->make<TH1F>("h_pt_poor_shared_tracks_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; poor track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_pt_good_shared_tracks_large_nsv2_fig2 = fs->make<TH1F>("h_pt_good_shared_tracks_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; good track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_dxy_err_poor_shared_tracks_large_nsv2_fig2 = fs->make<TH1F>("h_dxy_err_poor_shared_tracks_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; poor track d_{xy} (cm);arb. units", 50, 0, 0.05);
@@ -421,7 +421,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_dPhi_sv_large_nsv2_fig2 = fs->make<TH1F>("h_dPhi_sv_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(phi of SV0, phi of SV1);arb. units", 31, 0, 3.16);
 	h_dEta_sv_large_nsv2_fig2 = fs->make<TH1F>("h_dEta_sv_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(eta of SV0, eta of SV1);arb. units", 600, 0, 6);
 	h_2D_dEta_dPhi_sv_large_nsv2_fig2 = fs->make<TH2F>("h_2D_dEta_dPhi_sv_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(eta of SV0, eta of SV1);delta(phi of SV0, phi of SV1)", 600, 0, 6, 31, 0, 3.16);
-	h_pt_shared_jets_large_nsv2_fig2 = fs->make<TH1F>("h_pt_shared_jets_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; shared jets p_{T} (GeV);arb. units", 200, 0, 200);
+	h_pt_shared_jets_large_nsv2_fig2 = fs->make<TH1F>("h_pt_shared_jets_large_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2; shared jets p_{T} (GeV);arb. units", 20, 0, 2000);
 
 
 	h_max_absdeltaphi0_large_sv_shared_jets_semi_fig2 = fs->make<TH1F>("h_max_absdeltaphi0_large_sv_shared_jets_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;max(dphi(each SV, each shared jet));arb. units", 31, 0, 3.16);
@@ -462,8 +462,8 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dxy_sig_good_dxy_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_dxy_sig_good_dxy_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track d_{xy} significance;good track d_{xy} significance", 200, 0, 20, 400, 0, 40);
 	h_2D_poor_pt_good_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
-	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 100, 0, 1000, 100, 0, 1000);
-	h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;minor sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 100, 0, 1000, 100, 0, 1000);
+	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 20, 0, 2000, 20, 0, 2000);
+	h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_minor_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;minor sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 20, 0, 2000, 20, 0, 2000);
 	h_pt_poor_shared_tracks_large_nsv2_semi_fig2 = fs->make<TH1F>("h_pt_poor_shared_tracks_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; poor track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_pt_good_shared_tracks_large_nsv2_semi_fig2 = fs->make<TH1F>("h_pt_good_shared_tracks_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; good track p_{T} (GeV);arb. units", 100, 0, 100);
 	h_dxy_err_poor_shared_tracks_large_nsv2_semi_fig2 = fs->make<TH1F>("h_dxy_err_poor_shared_tracks_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; poor track d_{xy} (cm);arb. units", 50, 0, 0.05);
@@ -474,7 +474,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_dPhi_sv_large_nsv2_semi_fig2 = fs->make<TH1F>("h_dPhi_sv_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;delta(phi of SV0, phi of SV1);arb. units", 31, 0, 3.16);
 	h_dEta_sv_large_nsv2_semi_fig2 = fs->make<TH1F>("h_dEta_sv_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;delta(eta of SV0, eta of SV1);arb. units", 600, 0, 6);
 	h_2D_dEta_dPhi_sv_large_nsv2_semi_fig2 = fs->make<TH2F>("h_2D_dEta_dPhi_sv_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;delta(eta of SV0, eta of SV1);delta(phi of SV0, phi of SV1)", 600, 0, 6, 31, 0, 3.16);
-	h_pt_shared_jets_large_nsv2_semi_fig2 = fs->make<TH1F>("h_pt_shared_jets_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; shared jets p_{T} (GeV);arb. units", 200, 0, 200);
+	h_pt_shared_jets_large_nsv2_semi_fig2 = fs->make<TH1F>("h_pt_shared_jets_large_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2; shared jets p_{T} (GeV);arb. units", 20, 0, 2000);
 
 	
 	h_ratio_nsharedjets_large_nsv2_fig1 = fs->make<TH1F>("h_ratio_nsharedjets_large_nsv2_fig1", "nsv = 2, absdeltaphi01 > 0.5, fig1;ratios of shared jets (>=1);arb. units", 50, 0, 10);
