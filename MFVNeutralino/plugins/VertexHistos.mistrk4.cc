@@ -311,7 +311,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	unsigned lumi = event.luminosityBlock();
 	unsigned long long evt = event.id().event();
 	//if ( 42000 <= evt && evt <= 42115 ){
-	std::cout << __LINE__ << std::endl;
+	
 	edm::Handle<MFVEvent> mevent;
 	event.getByToken(mevent_token, mevent);
 	edm::Handle<double> weight;
@@ -504,8 +504,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end());
 			}
 			sv1_track_which_temp_idx = {};
-			// std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index) << std::endl;
-
+			
 			while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
 				nsharedjets++;
 				it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
@@ -530,7 +529,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					it = p.second;
 
 				}
-				//std::cout << sv0_track_which_temp_idx.size() << "==" << nsharedjet_tracks_sv0.back() << std::endl;
+				
 				sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx); 
 				for (size_t k = 0; k < sv0_track_which_temp_idx.size(); k++) {
 					int track_index = sv0_track_which_temp_idx[k];
@@ -553,18 +552,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					it = p.second;
 
 				}
-				//std::cout << sv1_track_which_temp_idx.size() << "==" << nsharedjet_tracks_sv1.back() << std::endl;
+				
 				sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);  
 				for (size_t k = 0; k < sv1_track_which_temp_idx.size(); k++) {
 					int track_index = sv1_track_which_temp_idx[k];
 					sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end());
 				}
 				sv1_track_which_temp_idx = {};
-				//  std::cout << "shared-jet #" << nsharedjets << " has shared-jet ntracks from sv#0 =" << std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index) << ", shared-jet ntracks from sv#1 =" << std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index) << std::endl;
-
-			
-			//std::cout << "# of shared jets are " << nsharedjets << std::endl;
-			//std::cout << "sv#0 has ntracks="<< sv_track_which_jet[0].size() << ", sv#1 has ntracks="<< sv_track_which_jet[1].size() << std::endl;
+				
 			
 		        }	
 			
@@ -660,7 +655,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					double avg_sv1_non_shared_jet_pt = sum_sv1_non_shared_jet_pt / sv1_track_which_non_shared_jet.size();
 
                                         for (int i = 0; i < nsharedjets; i++) {				//start nsharedjet loop
-                                                std::cout << __LINE__ << std::endl;
+                                                
 						int jet_index = nsharedjet_jet_index[i];
 
 						double dphi_large_sv0_sharedjet = double(fabs(reco::deltaPhi(phi0, mevent->jet_phi[jet_index])));
@@ -689,7 +684,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_absdeltaphi_large_jet_shared_tracks_nsv2->Fill(absdelta_jet_track, w);
 									h_pt_good_shared_tracks_large_nsv2->Fill(sv1.track_pt(track_idx), w);
 									h_dxy_err_good_shared_tracks_large_nsv2->Fill(sv1.track_dxy_err(track_idx), w);
-									std::cout << "sv0>sv1 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
+									
 									absdeltaphi_min_sv1_shared_tracks.push_back(absdelta_min_sv1_track);
 								}
 								double min_dphi_sv1_track = *std::min_element(absdeltaphi_min_sv1_shared_tracks.begin(), absdeltaphi_min_sv1_shared_tracks.end());
@@ -698,8 +693,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								int min_sv1_track_idx = sv1_nsharedjets1_which_idx[min_dphi_sv1_track_idx];
 								
 
-								std::cout << "sv0>sv1 : phi1 is " << phi1 << " with min track phi " << sv1.track_phi[min_sv1_track_idx] << ", shj is at" << mevent->jet_phi[nsharedjet_jet_index[i]] << ", deltaPhi(sv1,trk) is " << double(fabs(reco::deltaPhi(phi1, sv1.track_phi[min_sv1_track_idx]))) << std::endl;
-
+								
 								std::vector<int> sv0_nsharedjets1_which_idx = sv0_sharedjet_which_idx[i];
 								std::vector<double> absdeltaphi_max_sv0_shared_tracks;
 								for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
@@ -708,7 +702,6 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									double absdelta_jet_track = double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx])));                                                                     h_absdeltaphi_large_jet_shared_tracks_nsv2->Fill(absdelta_jet_track, w);
 									h_pt_poor_shared_tracks_large_nsv2->Fill(sv0.track_pt(track_idx), w);
 									h_dxy_err_poor_shared_tracks_large_nsv2->Fill(sv0.track_dxy_err(track_idx), w);
-									std::cout << "sv0>sv1 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 									absdeltaphi_max_sv0_shared_tracks.push_back(absdelta_max_sv0_track);
 								}
 								double max_dphi_sv0_track = *std::max_element(absdeltaphi_max_sv0_shared_tracks.begin(), absdeltaphi_max_sv0_shared_tracks.end());
@@ -717,8 +710,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								int max_sv0_track_idx = sv0_nsharedjets1_which_idx[max_dphi_sv0_track_idx];
 								
 
-								std::cout << "sv0>sv1 : phi0 is " << phi0 << " with max track phi " << sv0.track_phi[max_sv0_track_idx] << ", shj is at" << mevent->jet_phi[nsharedjet_jet_index[i]] << ", detaPhi(sv0,trk) is " << double(fabs(reco::deltaPhi(phi0, sv0.track_phi[max_sv0_track_idx]))) << std::endl;
-
+								
 								AlgebraicVector3 mom_max(sv0.track_px[max_sv0_track_idx], sv0.track_py[max_sv0_track_idx], sv0.track_pz[max_sv0_track_idx]);
 								AlgebraicVector3 ref_max(sv0.track_vx[max_sv0_track_idx], sv0.track_vy[max_sv0_track_idx], sv0.track_vz[max_sv0_track_idx]);
 								AlgebraicVector3 mom_min(sv1.track_px[min_sv1_track_idx], sv1.track_py[min_sv1_track_idx], sv1.track_pz[min_sv1_track_idx]);
@@ -824,7 +816,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2->Fill(sum_pt_poor/ (sum_pt_poor+sum_pt_non_shared_poor), sum_pt_good/(sum_pt_good+sum_pt_non_shared_good));
 										h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2->Fill((sum_pt_poor* sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i]), (sum_pt_good* sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i]));
 
-									    
+										std::cout << "minor tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_track_which_idx_no_shared_track.size() << std::endl;
+										std::cout << "major tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_track_which_idx_no_shared_track.size() << std::endl;
+
 
 										
 										if (nsharedjet_tracks_sv0[i] == 1) {
@@ -964,7 +958,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2->Fill(sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor), sum_pt_good / (sum_pt_good + sum_pt_non_shared_good));
 									h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2->Fill((sum_pt_poor* sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i]), (sum_pt_good* sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i]));
 
-									
+									std::cout << "minor tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_track_which_idx_no_shared_track.size() << std::endl;
+									std::cout << "major tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_track_which_idx_no_shared_track.size() << std::endl;
+
 									
 									double min_dphi_jet_track = *std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end());
 									int min_dphi_jet_track_idx = std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end()) - absdeltaphi_min_jet_shared_tracks.begin();
@@ -1060,7 +1056,6 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_pt_good_shared_tracks_large_nsv2->Fill(sv0.track_pt(track_idx), w);
 									h_dxy_err_good_shared_tracks_large_nsv2->Fill(sv0.track_dxy_err(track_idx), w);
 									absdeltaphi_min_sv0_shared_tracks.push_back(absdelta_min_sv0_track);
-									std::cout << "sv1>sv0 : phi0 is " << phi0 << " with track phi " << sv0.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv0.track_phi[track_idx]))) << std::endl;
 								}
 								double min_dphi_sv0_track = *std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end());
 								int min_dphi_sv0_track_idx = std::min_element(absdeltaphi_min_sv0_shared_tracks.begin(), absdeltaphi_min_sv0_shared_tracks.end()) - absdeltaphi_min_sv0_shared_tracks.begin();
@@ -1068,7 +1063,6 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								int min_sv0_track_idx = sv0_nsharedjets1_which_idx[min_dphi_sv0_track_idx];
 								
 
-								std::cout << "sv1>sv0 : phi0 is " << phi0 << " with min track phi " << sv0.track_phi[min_sv0_track_idx] << ", shj is at" << mevent->jet_phi[nsharedjet_jet_index[i]] << ", deltaPhi(sv0,trk) is " << double(fabs(reco::deltaPhi(phi0, sv0.track_phi[min_sv0_track_idx]))) << std::endl;
 								std::vector<int> sv1_nsharedjets1_which_idx = sv1_sharedjet_which_idx[i];
 								std::vector<double> absdeltaphi_max_sv1_shared_tracks;
 								for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
@@ -1079,7 +1073,6 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_pt_poor_shared_tracks_large_nsv2->Fill(sv1.track_pt(track_idx), w);
 									h_dxy_err_poor_shared_tracks_large_nsv2->Fill(sv1.track_dxy_err(track_idx), w);
 									absdeltaphi_max_sv1_shared_tracks.push_back(absdelta_max_sv1_track);
-									std::cout << "sv1>sv0 : phi1 is " << phi1 << " with track phi " << sv1.track_phi[track_idx] << ", deltaPhi(jet,trk) is " << double(fabs(reco::deltaPhi(mevent->jet_phi[jet_index], sv1.track_phi[track_idx]))) << std::endl;
 								}
 								double max_dphi_sv1_track = *std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end());
 								int max_dphi_sv1_track_idx = std::max_element(absdeltaphi_max_sv1_shared_tracks.begin(), absdeltaphi_max_sv1_shared_tracks.end()) - absdeltaphi_max_sv1_shared_tracks.begin();
@@ -1088,10 +1081,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								int max_sv1_track_idx = sv1_nsharedjets1_which_idx[max_dphi_sv1_track_idx];
 								
 
-								std::cout << "sv1>sv0 : phi1 is " << phi1 << " with max track phi " << sv1.track_phi[max_sv1_track_idx] << ", shj is at" << mevent->jet_phi[nsharedjet_jet_index[i]] << ", deltaPhi(sv1,trk) is " << double(fabs(reco::deltaPhi(phi1, sv1.track_phi[max_sv1_track_idx]))) << std::endl;
-
-
-
+								
 
 
 								AlgebraicVector3 mom_max(sv1.track_px[max_sv1_track_idx], sv1.track_py[max_sv1_track_idx], sv1.track_pz[max_sv1_track_idx]);
@@ -1193,8 +1183,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2->Fill(sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor), sum_pt_good / (sum_pt_good + sum_pt_non_shared_good));
 										h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2->Fill((sum_pt_poor * sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i]), (sum_pt_good * sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i]));
 
+										std::cout << "minor tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_track_which_idx_no_shared_track.size() << std::endl;
+										std::cout << "major tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_track_which_idx_no_shared_track.size() << std::endl;
 
-										
 										
 										
 										if (nsharedjet_tracks_sv1[i] == 1) {
@@ -1330,6 +1321,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2->Fill(sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor), sum_pt_good / (sum_pt_good + sum_pt_non_shared_good));
 									h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2->Fill((sum_pt_poor * sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i]), (sum_pt_good * sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i]));
 
+									std::cout << "minor tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_track_which_idx_no_shared_track.size() << std::endl;
+									std::cout << "major tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_track_which_idx_no_shared_track.size() << std::endl;
 									
 									
 									double min_dphi_jet_track = *std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end());
