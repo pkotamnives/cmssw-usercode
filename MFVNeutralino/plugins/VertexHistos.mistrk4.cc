@@ -857,14 +857,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 											
 											std::cout << "minor tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_sharedjet_i_which_no_trk_idx.size() << std::endl;
-											for (unsigned int j = 0; j < sv0_sharedjet_i_which_idx.size(); j++) {
-												idx = sv0_sharedjet_i_which_idx[j];
+											for (unsigned int j = 0; j < sv0_sharedjet_i_which_trk_idx.size(); j++) {
+												idx = sv0_sharedjet_i_which_trk_idx[j];
 												std::cout << "minor's track pT = " << sv0.track_pt(idx) << std::endl;
 											}
 											
 											std::cout << "major tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_sharedjet_i_which_no_trk_idx.size() << std::endl;
-											for (unsigned int j = 0; j < sv1_sharedjet_i_which_idx.size(); j++) {
-												idx = sv1_sharedjet_i_which_idx[j];
+											for (unsigned int j = 0; j < sv1_sharedjet_i_which_trk_idx.size(); j++) {
+												idx = sv1_sharedjet_i_which_trk_idx[j];
 												std::cout << "major's track pT = " << sv1.track_pt(idx) << std::endl;
 											}
 											std::cout << ", sum pT minor tracks = " << sum_pt_poor + sum_pt_non_shared_poor << "sum pT major tracks = " << sum_pt_good + sum_pt_non_shared_good << std::endl;
@@ -1019,14 +1019,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										
 
 										std::cout << "minor tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_sharedjet_i_which_no_trk_idx.size() << std::endl;
-										for (unsigned int j = 0; j < sv1_sharedjet_i_which_idx.size(); j++) {
-											idx = sv1_sharedjet_i_which_idx[j];
+										for (unsigned int j = 0; j < sv1_sharedjet_i_which_trk_idx.size(); j++) {
+											idx = sv1_sharedjet_i_which_trk_idx[j];
 											std::cout << "minor's track pT = " << sv1.track_pt(idx) << std::endl;
 										}
 
 										std::cout << "major tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_sharedjet_i_which_no_trk_idx.size() << std::endl;
-										for (unsigned int j = 0; j < sv0_sharedjet_i_which_idx.size(); j++) {
-											idx = sv0_sharedjet_i_which_idx[j];
+										for (unsigned int j = 0; j < sv0_sharedjet_i_which_trk_idx.size(); j++) {
+											idx = sv0_sharedjet_i_which_trk_idx[j];
 											std::cout << "major's track pT = " << sv0.track_pt(idx) << std::endl;
 										}
 										std::cout << ", sum pT minor tracks = " << sum_pt_poor + sum_pt_non_shared_poor << "sum pT major tracks = " << sum_pt_good + sum_pt_non_shared_good << std::endl;
@@ -1264,14 +1264,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 											std::cout << "minor tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_sharedjet_i_which_no_trk_idx.size() << std::endl;
-											for (unsigned int j = 0; j < sv1_sharedjet_i_which_idx.size(); j++) {
-												idx = sv1_sharedjet_i_which_idx[j];
+											for (unsigned int j = 0; j < sv1_sharedjet_i_which_trk_idx.size(); j++) {
+												idx = sv1_sharedjet_i_which_trk_idx[j];
 												std::cout << "minor's track pT = " << sv1.track_pt(idx) << std::endl;
 											}
 
 											std::cout << "major tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_sharedjet_i_which_no_trk_idx.size() << std::endl;
-											for (unsigned int j = 0; j < sv0_sharedjet_i_which_idx.size(); j++) {
-												idx = sv0_sharedjet_i_which_idx[j];
+											for (unsigned int j = 0; j < sv0_sharedjet_i_which_trk_idx.size(); j++) {
+												idx = sv0_sharedjet_i_which_trk_idx[j];
 												std::cout << "major's track pT = " << sv0.track_pt(idx) << std::endl;
 											}
 											std::cout << ", sum pT minor tracks = " << sum_pt_poor + sum_pt_non_shared_poor << "sum pT major tracks = " << sum_pt_good + sum_pt_non_shared_good << std::endl;
@@ -1418,14 +1418,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 
 										std::cout << "minor tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_sharedjet_i_which_no_trk_idx.size() << std::endl;
-										for (unsigned int j = 0; j < sv0_sharedjet_i_which_idx.size(); j++) {
-											idx = sv0_sharedjet_i_which_idx[j];
+										for (unsigned int j = 0; j < sv0_sharedjet_i_which_trk_idx.size(); j++) {
+											idx = sv0_sharedjet_i_which_trk_idx[j];
 											std::cout << "minor's track pT = " << sv0.track_pt(idx) << std::endl;
 										}
 
 										std::cout << "major tracks = " << sv1_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv1[i] << ", not shared ones = " << sv1_sharedjet_i_which_no_trk_idx.size() << std::endl;
-										for (unsigned int j = 0; j < sv1_sharedjet_i_which_idx.size(); j++) {
-											idx = sv1_sharedjet_i_which_idx[j];
+										for (unsigned int j = 0; j < sv1_sharedjet_i_which_trk_idx.size(); j++) {
+											idx = sv1_sharedjet_i_which_trk_idx[j];
 											std::cout << "major's track pT = " << sv1.track_pt(idx) << std::endl;
 										}
 										std::cout << ", sum pT minor tracks = " << sum_pt_poor + sum_pt_non_shared_poor << "sum pT major tracks = " << sum_pt_good + sum_pt_non_shared_good << std::endl;
