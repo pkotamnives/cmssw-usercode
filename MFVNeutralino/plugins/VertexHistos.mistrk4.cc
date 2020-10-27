@@ -275,7 +275,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dz_sig_good_dz_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_dz_sig_good_dz_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track d_{z} significance;good track d_{z} significance", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_pt_good_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
-	h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} sig;good track avg p_{T} sig", 10, 0, 1000, 10, 0, 1000);
+	h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} sig;good track avg p_{T} sig", 21, 0, 210, 21, 0, 210);
 	h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;minor sv's sum p_{T} ratio(shared/minor tracks);major sv's sum p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;minor sv's avg p_{T} ratio(shared/minor tracks);major sv's avg p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 30, 0, 3000, 20, 0, 3000);
@@ -315,7 +315,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dz_sig_good_dz_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_dz_sig_good_dz_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track d_{z} significance;good track d_{z} significance", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_pt_good_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
-	h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} sig;good track avg p_{T} sig", 10, 0, 1000, 10, 0, 1000);
+	h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} sig;good track avg p_{T} sig", 21, 0, 210, 21, 0, 210);
 	h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;minor sv's sum p_{T} ratio(shared/minor tracks);major sv's sum p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;minor sv's avg p_{T} ratio(shared/minor tracks);major sv's avg p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 30, 0, 3000, 20, 0, 3000);
@@ -801,7 +801,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								}
 							}
 
-							for
+							
 
 
 
