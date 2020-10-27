@@ -721,8 +721,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						if (ratio_ntracks_nsv2 >= 4) {		// study sample with all sh jets
 
 							
-
-						
+                                                       
 							if ((dphi_large_sv0_sharedjet > dphi_large_sv1_sharedjet)) {		 // sv1 next to a shared jet and sv0 is away
 
 								
@@ -783,8 +782,11 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((miss_dist_max.value() > 0.025) && (miss_dist_min.value() > 0.025)) {		 // fig2  && semi-fig2
 
-									
+									if ((nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) && (nsharedjet_tracks_sv1[i] >= 5)){                                                                                  std::cout << "found :" << nsharedjet_tracks_sv1[i] << std::endl;}                                                                                                                        if ((nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) && (nsharedjet_tracks_sv0[i] >= 5)){                                                                                  std::cout << "found :" << nsharedjet_tracks_sv0[i] << std::endl;} 
+
+
 									if (nsharedjet_tracks_sv0[i] < nsharedjet_tracks_sv1[i]) {
+                                                                                
 										h_less_dphi_more_shared_tracks_large_nsv2_all_fig2->Fill(int(1), w);
 										h_pt_shared_jets_large_nsv2_fig2->Fill(mevent->jet_pt[jet_index], w);
 										h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2->Fill(avg_sv1_non_shared_jet_pt, mevent->jet_pt[jet_index]);
@@ -872,7 +874,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 										
 
-										if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) > 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) > 1) {
+										if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 											std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 											
 											std::cout << "minor tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_sharedjet_i_which_no_trk_idx.size() << std::endl;
@@ -1065,7 +1067,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									
 
-									if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) > 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) > 1) {
+									if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 										std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 
 										
@@ -1256,7 +1258,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((miss_dist_max.value() > 0.025) && (miss_dist_min.value() > 0.025)) {		 // fig2
 
-									
+								if ((nsharedjet_tracks_sv0[i] > nsharedjet_tracks_sv1[i]) && (nsharedjet_tracks_sv1[i] >= 5)){                                                                                  std::cout << "found :" << nsharedjet_tracks_sv1[i] << std::endl;}                                                                                                                        if ((nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) && (nsharedjet_tracks_sv0[i] >= 5)){                                                                                  std::cout << "found :" << nsharedjet_tracks_sv0[i] << std::endl;} 	
 
 
 									if (nsharedjet_tracks_sv1[i] < nsharedjet_tracks_sv0[i]) {
@@ -1340,7 +1342,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2->Fill((sum_pt_poor * sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i]), (sum_pt_good * sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i]));
 
 										
-										if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) > 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) > 1) {
+										if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 											std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 
 
@@ -1526,7 +1528,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2->Fill((sum_pt_poor * sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i]), (sum_pt_good * sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i]));
 
 									
-									if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) > 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) > 1) {
+									if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 										std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 
 										std::cout << "minor tracks = " << sv0_track_which_idx.size() << ", shared ones = " << nsharedjet_tracks_sv0[i] << ", not shared ones = " << sv0_sharedjet_i_which_no_trk_idx.size() << std::endl;
