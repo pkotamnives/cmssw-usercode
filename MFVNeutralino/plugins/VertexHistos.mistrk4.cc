@@ -788,7 +788,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							
 						}
 
-						if ((sum_pt_shared_sv0/(sum_pt_shared_sv0+sum_pt_no_shared_sv0)) >= (sum_pt_shared_sv1 / (sum_pt_shared_sv1 + sum_pt_no_shared_sv1))) {		 // sv0 is major vtx	sv1 got removed if equal 
+						if ((sum_pt_shared_sv0 / (sum_pt_shared_sv0 + sum_pt_no_shared_sv0)) >= (sum_pt_shared_sv1 / (sum_pt_shared_sv1 + sum_pt_no_shared_sv1))) {		 // sv0 is major vtx	sv1 got removed if equal 
 
 
 							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
@@ -832,7 +832,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								}
 							}
 
-							for
+							
 
 
 
@@ -863,7 +863,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								}
 							}
 
-							for
+							
 
 
 
@@ -894,7 +894,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								}
 							}
 
-							for
+						
 
 
 
