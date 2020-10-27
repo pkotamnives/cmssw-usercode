@@ -85,16 +85,30 @@ private:
 	TH2F* h_2D_pt_dxy_err_absdeltaphi0_large_sv;
 	TH2F* h_2D_pt_dxy_err_absdeltaphi1_large_sv;
 
+	//efficiency plots for all shared jets 
 	TH2F* h_2D_sv_tracks_large_nsv2;
 	TH2F* h_2D_sv_tracks_shared_jets_large_nsv2;
 	TH2F* h_2D_sv_tracks_no_shared_tracks_large_nsv2;
 	TH2F* h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2;
+
+	//efficiency plots for all nsharedjets=1 
+	
+	TH2F* h_2D_sv_tracks_shared_jets_nshj1_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2;
+
+	TH2F* h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_less_avg_sig_pt_shared_tracks_nshj1_large_nsv2;
+
 
 	TH1F* h_less_dphi_more_shared_tracks_large_nsv2_all_fig2;
 	TH1F* h_ratio_nsharedjets_large_nsv2_all_fig2;
 	TH1F* h_more_ratio_sum_major_sv_nsv2_all_fig2;
 	TH1F* h_more_ratio_avg_major_sv_nsv2_all_fig2;
 	TH1F* h_more_pT_avg_major_sv_nsv2_all_fig2;
+	TH1F* h_more_pT_sig_avg_major_sv_nsv2_all_fig2;
 
 	
 	TH1F* h_vertex_chi2dof_absdeltaphi0_large_nsv2_fig2;
@@ -124,6 +138,7 @@ private:
 	TH2F* h_2D_poor_dz_sig_good_dz_sig_large_sv_fig2;
 	TH2F* h_2D_poor_pt_good_pt_large_sv_fig2;
 	TH2F* h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2;
+	TH2F* h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2;
 	TH2F* h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2;
 	TH2F* h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2;
 	TH2F* h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2;
@@ -133,6 +148,7 @@ private:
 	TH1F* h_more_ratio_sum_major_sv_nsv2_fig2;
 	TH1F* h_more_ratio_avg_major_sv_nsv2_fig2;
 	TH1F* h_more_pT_avg_major_sv_nsv2_fig2;
+	TH1F* h_more_pT_sig_avg_major_sv_nsv2_fig2;
 
 
 	
@@ -163,6 +179,7 @@ private:
 	TH2F* h_2D_poor_dz_sig_good_dz_sig_large_sv_semi_fig2;
 	TH2F* h_2D_poor_pt_good_pt_large_sv_semi_fig2;
 	TH2F* h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2;
+	TH2F* h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2;
 	TH2F* h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2;
 	TH2F* h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2;
 	TH2F* h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2;
@@ -172,6 +189,7 @@ private:
 	TH1F* h_more_ratio_sum_major_sv_nsv2_semi_fig2;
 	TH1F* h_more_ratio_avg_major_sv_nsv2_semi_fig2;
 	TH1F* h_more_pT_avg_major_sv_nsv2_semi_fig2;
+	TH1F* h_more_pT_sig_avg_major_sv_nsv2_semi_fig2;
 
 	TH1F* h_ratio_nsharedjets_large_nsv2_fig1;
 	TH1F* h_dPhi_sv_large_nsv2_fig1;
@@ -221,12 +239,22 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
     h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, no shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdeltaphi01 > 0.5, no minor shared tarcks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
 
+	h_2D_sv_tracks_shared_jets_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+
+	h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{ratio sum pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{ratio avg pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{avg pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_avg_sig_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_avg_sig_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{avg sig pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+
 
 	h_less_dphi_more_shared_tracks_large_nsv2_all_fig2 = fs->make<TH1F>("h_less_dphi_more_shared_tracks_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; min(dphi(SV,a shared jet)) most shared tracks ?", 2, 0, 2);
 	h_ratio_nsharedjets_large_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_nsharedjets_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2;ratios of shared jets (>=1);arb. units", 50, 0, 10);
 	h_more_ratio_sum_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_sum_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more sum p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
 	h_more_ratio_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more avg p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
 	h_more_pT_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
+	h_more_pT_sig_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
 
 	
 	h_dPhi_good_tracks_its_sv_large_fig2 = fs->make<TH1F>("h_dPhi_good_tracks_its_sv_large_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(phi of good tracks, phi of major vertex);arb. units", 31, 0, 3.16);
@@ -247,6 +275,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dz_sig_good_dz_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_dz_sig_good_dz_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track d_{z} significance;good track d_{z} significance", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_pt_good_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
+	h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;poor track avg p_{T} sig;good track avg p_{T} sig", 10, 0, 1000, 10, 0, 1000);
 	h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;minor sv's sum p_{T} ratio(shared/minor tracks);major sv's sum p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;minor sv's avg p_{T} ratio(shared/minor tracks);major sv's avg p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 30, 0, 3000, 20, 0, 3000);
@@ -265,6 +294,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_more_ratio_sum_major_sv_nsv2_fig2 = fs->make<TH1F>("h_more_ratio_sum_major_sv_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, Fig2; more sum p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
 	h_more_ratio_avg_major_sv_nsv2_fig2 = fs->make<TH1F>("h_more_ratio_avg_major_sv_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, Fig2; more avg p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
 	h_more_pT_avg_major_sv_nsv2_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, Fig2; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
+	h_more_pT_sig_avg_major_sv_nsv2_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_fig2", "nsv = 2, absdeltaphi01 > 0.5, Fig2; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
 
 
 	h_dPhi_good_tracks_its_sv_large_semi_fig2 = fs->make<TH1F>("h_dPhi_good_tracks_its_sv_large_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;delta(phi of good tracks, phi of major vertex);arb. units", 31, 0, 3.16);
@@ -285,6 +315,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_poor_dz_sig_good_dz_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_dz_sig_good_dz_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track d_{z} significance;good track d_{z} significance", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_pt_good_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_pt_good_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track p_{T} (GeV);good track p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
 	h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} (GeV);good track avg p_{T} (GeV)", 100, 0, 100, 100, 0, 100);
+	h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;poor track avg p_{T} sig;good track avg p_{T} sig", 10, 0, 1000, 10, 0, 1000);
 	h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;minor sv's sum p_{T} ratio(shared/minor tracks);major sv's sum p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;minor sv's avg p_{T} ratio(shared/minor tracks);major sv's avg p_{T} ratio(shared/major tracks)", 200, 0, 2, 200, 0, 2);
 	h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2 = fs->make<TH2F>("h_2D_major_sv_nonshj_avg_pt_shj_pt_large_sv_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-fig2;major sv's non-shared jet avg p_{T} (GeV);shared jet p_{T} (GeV)", 30, 0, 3000, 20, 0, 3000);
@@ -303,6 +334,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_more_ratio_sum_major_sv_nsv2_semi_fig2 = fs->make<TH1F>("h_more_ratio_sum_major_sv_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2; more sum p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
 	h_more_ratio_avg_major_sv_nsv2_semi_fig2 = fs->make<TH1F>("h_more_ratio_avg_major_sv_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2; more avg p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
 	h_more_pT_avg_major_sv_nsv2_semi_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
+	h_more_pT_sig_avg_major_sv_nsv2_semi_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_semi_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
 
 	
 	h_ratio_nsharedjets_large_nsv2_fig1 = fs->make<TH1F>("h_ratio_nsharedjets_large_nsv2_fig1", "nsv = 2, absdeltaphi01 > 0.5, fig1;ratios of shared jets (>=1);arb. units", 50, 0, 10);
@@ -425,16 +457,6 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			if ((nsv == 2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
 				std::vector<int> sv0_track_which_idx = sv_track_which_idx[0];
 				std::vector<int> sv1_track_which_idx = sv_track_which_idx[1];
-				
-				if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
-					if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
-						h_2D_sv_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
-					}
-					else {
-						h_2D_sv_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
-
-					}
-				}
 				
 				if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
 					if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
@@ -675,6 +697,222 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						
 
 					}
+
+
+					if (nsharedjets == 1) {
+
+						if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
+							if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
+								h_2D_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+							}
+							else {
+								h_2D_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+
+							}
+						}
+
+						if ((sv0_track_which_idx_no_shared_track.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+							if (sv0_track_which_idx_no_shared_track.size() >= sv1_track_which_idx_no_shared_track.size()) {
+								h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
+							}
+							else {
+								h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+
+							}
+						}
+
+
+
+						if ((sv0_track_which_idx.size() - sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
+
+
+							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+
+								}
+							}
+
+							for 
+
+
+
+						}
+						else {
+
+							if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+
+								}
+							}
+						}
+
+
+						std::vector<int> sv1_sharedjet_1_which_trk_idx = sv1_sharedjet_which_idx[0];
+						std::vector<int> sv1_sharedjet_1_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[0];
+						std::vector<int> sv0_sharedjet_1_which_trk_idx = sv0_sharedjet_which_idx[0];
+						std::vector<int> sv0_sharedjet_1_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[0];
+
+						double sum_pt_shared_sv1 = 0.0;
+						double sum_pt_no_shared_sv1 = 0.0;
+						double sum_pt_shared_sv0 = 0.0;
+						double sum_pt_no_shared_sv0 = 0.0;
+						double sum_pt_sig_shared_sv1 = 0.0;
+						double sum_pt_sig_shared_sv0 = 0.0;
+						for (int j = 0; j < sv1_sharedjet_1_which_trk_idx.size(); j++) {
+							idx = sv1_sharedjet_1_which_trk_idx[j];
+							sum_pt_shared_sv1 = sum_pt_shared_sv1 + sv1.track_pt(idx);
+							sum_pt_sig_shared_sv1 = sum_pt_sig_shared_sv1 + (sv1.track_pt(idx) / sv1.track_pt_err[idx]);
+						}
+						for (int j = 0; j < sv1_sharedjet_1_which_no_trk_idx.size(); j++) {
+							idx = sv1_sharedjet_1_which_no_trk_idx[j];
+							sum_pt_no_shared_sv1 = sum_pt_no_shared_sv1 + sv1.track_pt(idx);
+							
+						}
+						for (int j = 0; j < sv0_sharedjet_1_which_trk_idx.size(); j++) {
+							idx = sv0_sharedjet_1_which_trk_idx[j];
+							sum_pt_shared_sv0 = sum_pt_shared_sv0 + sv0.track_pt(idx);
+							sum_pt_sig_shared_sv0 = sum_pt_sig_shared_sv0 + (sv0.track_pt(idx) / sv0.track_pt_err[idx]);
+						}
+						for (int j = 0; j < sv0_sharedjet_1_which_no_trk_idx.size(); j++) {
+							idx = sv0_sharedjet_1_which_no_trk_idx[j];
+							sum_pt_no_shared_sv0 = sum_pt_no_shared_sv0 + sv0.track_pt(idx);
+							
+						}
+
+						if ((sum_pt_shared_sv0/(sum_pt_shared_sv0+sum_pt_no_shared_sv0)) >= (sum_pt_shared_sv1 / (sum_pt_shared_sv1 + sum_pt_no_shared_sv1))) {		 // sv0 is major vtx	sv1 got removed if equal 
+
+
+							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+
+								}
+							}
+
+							for
+
+
+
+						}
+						else {
+
+							if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+
+								}
+							}
+						}
+
+						if (((sum_pt_shared_sv0* sv0_track_which_idx.size()) / ((sum_pt_shared_sv0 + sum_pt_no_shared_sv0)* sv0_sharedjet_1_which_trk_idx.size())) >= ((sum_pt_shared_sv1* sv1_track_which_idx.size()) / ((sum_pt_shared_sv1 + sum_pt_no_shared_sv1)* sv1_sharedjet_1_which_trk_idx.size()))) {		 // sv0 is major vtx	sv1 got removed if equal 
+
+
+							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+
+								}
+							}
+
+							for
+
+
+
+						}
+						else {
+
+							if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+
+								}
+							}
+						}
+
+						if ((sum_pt_shared_sv0  / (sv0_sharedjet_1_which_trk_idx.size())) >= (sum_pt_shared_sv1 / (sv1_sharedjet_1_which_trk_idx.size()))) {		 // sv0 is major vtx	sv1 got removed if equal 
+
+
+							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+
+								}
+							}
+
+							for
+
+
+
+						}
+						else {
+
+							if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+
+								}
+							}
+						}
+
+						if ((sum_pt_sig_shared_sv0 / (sv0_sharedjet_1_which_trk_idx.size())) >= (sum_pt_sig_shared_sv1 / (sv1_sharedjet_1_which_trk_idx.size()))) {		 // sv0 is major vtx	sv1 got removed if equal 
+
+
+							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_avg_pt_sig__shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_avg_pt_sig_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+
+								}
+							}
+
+							for
+
+
+
+						}
+						else {
+
+							if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
+								if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
+									h_2D_sv_tracks_no_less_avg_pt_sig_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+								}
+								else {
+									h_2D_sv_tracks_no_less_avg_pt_sig_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+
+								}
+							}
+						}
+						
+
+					}
 					
 
 					
@@ -805,6 +1043,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
 										std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
 										double sum_pt_good = 0;
+										double sum_pt_sig_good = 0;
 										for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 											int track_idx = sv1_sharedjet_i_which_trk_idx[j];
 											double absdelta_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[track_idx]))); //phi1
@@ -818,6 +1057,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											h_dxy_err_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy_err(track_idx), w);
 											h_dxy_sig_good_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy[track_idx] / sv1.track_dxy_err(track_idx), w);
 											sum_pt_good = sum_pt_good + sv1.track_pt(track_idx);
+											sum_pt_sig_good = sum_pt_sig_good + (sv1.track_pt(track_idx) / sv1.track_pt_err[track_idx]);
 
 											for (int k = 0; k < nsharedjet_tracks_sv0[i]; k++) {
 												int track_idx_poor = sv0_sharedjet_i_which_trk_idx[k];
@@ -840,6 +1080,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										std::vector<int> sv0_sharedjet_i_which_trk_idx = sv0_sharedjet_which_idx[i];
 										std::vector<int> sv0_sharedjet_i_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[i];
 										double sum_pt_poor = 0;
+										double sum_pt_sig_poor = 0;
 										for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
 											int track_idx = sv0_sharedjet_i_which_trk_idx[j];
 											double absdelta_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[track_idx]))); //phi0
@@ -851,13 +1092,15 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											h_dxy_err_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy_err(track_idx), w);
 											h_dxy_sig_poor_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy[track_idx] / sv0.track_dxy_err(track_idx), w);
 											sum_pt_poor = sum_pt_poor + sv0.track_pt(track_idx);
+											sum_pt_sig_poor = sum_pt_sig_poor + (sv0.track_pt(track_idx) / sv0.track_pt_err[track_idx]);
 
 								
 										}
 
 
 										h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv0[i], sum_pt_good / nsharedjet_tracks_sv1[i]);
-										
+										h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv0[i], sum_pt_sig_good / nsharedjet_tracks_sv1[i]);
+
 										double sum_pt_non_shared_poor = 0;
 										for (unsigned int j = 0; j < sv0_sharedjet_i_which_no_trk_idx.size(); j++) {
 											idx = sv0_sharedjet_i_which_no_trk_idx[j];
@@ -920,6 +1163,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										else {
 											h_more_pT_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
 											h_more_pT_avg_major_sv_nsv2_fig2->Fill(int(0), w);
+
+										}
+
+										if ((sum_pt_sig_good / (nsharedjet_tracks_sv1[i])) >= (sum_pt_sig_poor / (nsharedjet_tracks_sv0[i]))) {
+											h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(1), w);
+											h_more_pT_avg_major_sv_nsv2_fig2->Fill(int(1), w);
+										}
+										else {
+											h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
+											h_more_pT_sig_avg_major_sv_nsv2_fig2->Fill(int(0), w);
 
 										}
 
@@ -995,6 +1248,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									std::vector<int> sv0_sharedjet_i_which_trk_idx = sv0_sharedjet_which_idx[i];
 									std::vector<int> sv0_sharedjet_i_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[i];
 									double sum_pt_good = 0;
+									double sum_pt_sig_good = 0;
 									for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
 										int track_idx = sv0_sharedjet_i_which_trk_idx[j];
 										double absdelta_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[track_idx]))); //phi1
@@ -1009,6 +1263,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_dxy_sig_good_shared_tracks_large_nsv2_semi_fig2->Fill(sv0.track_dxy[track_idx] / sv0.track_dxy_err(track_idx), w);
 										absdeltaphi_max_jet_shared_tracks.push_back(absdelta_jet_track);
 										sum_pt_good = sum_pt_good + sv0.track_pt(track_idx);
+										sum_pt_sig_good = sum_pt_sig_good + (sv0.track_pt(track_idx)/ sv0.track_pt_err[track_idx]);
 
 										for (int k = 0; k < nsharedjet_tracks_sv1[i]; k++) {
 											int track_idx_poor = sv1_sharedjet_i_which_trk_idx[k];
@@ -1032,6 +1287,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									
 
 									double sum_pt_poor = 0;
+									double sum_pt_sig_poor = 0;
 									std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
 									std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
 									std::vector<double> absdeltaphi_min_jet_shared_tracks;
@@ -1048,9 +1304,11 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 										absdeltaphi_min_jet_shared_tracks.push_back(absdelta_jet_track);
 										sum_pt_poor = sum_pt_poor + sv1.track_pt(track_idx);
+										sum_pt_sig_poor = sum_pt_sig_poor + (sv1.track_pt(track_idx) / sv1.track_pt_err[track_idx]);
 									}
 
 									h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv1[i], sum_pt_good / nsharedjet_tracks_sv0[i]);
+									h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv1[i], sum_pt_sig_good / nsharedjet_tracks_sv0[i]);
 
 									double sum_pt_non_shared_poor = 0;
 									for (unsigned int j = 0; j < sv1_sharedjet_i_which_no_trk_idx.size(); j++) {
@@ -1117,6 +1375,18 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_more_pT_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 
 									}
+
+									if ((sum_pt_sig_good / (nsharedjet_tracks_sv0[i])) >= (sum_pt_sig_poor / (nsharedjet_tracks_sv1[i]))) {
+										h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(1), w);
+										h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(1), w);
+									}
+									else {
+										h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
+										h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
+
+									}
+
+									
 									
 									double min_dphi_jet_track = *std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end());
 									int min_dphi_jet_track_idx = std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end()) - absdeltaphi_min_jet_shared_tracks.begin();
@@ -1280,6 +1550,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										std::vector<int> sv0_sharedjet_i_which_trk_idx = sv0_sharedjet_which_idx[i];
 										std::vector<int> sv0_sharedjet_i_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[i];
 										double sum_pt_good = 0;
+										double sum_pt_sig_good = 0;
 										for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
 											int track_idx = sv0_sharedjet_i_which_trk_idx[j];
 											double absdelta_sv0_track = double(fabs(reco::deltaPhi(phi0, sv0.track_phi[track_idx]))); //phi0
@@ -1292,6 +1563,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											h_dxy_err_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy_err(track_idx), w);
 											h_dxy_sig_good_shared_tracks_large_nsv2_fig2->Fill(sv0.track_dxy[track_idx] / sv0.track_dxy_err(track_idx), w);
 											sum_pt_good = sum_pt_good + sv0.track_pt(track_idx);
+											sum_pt_sig_good = sum_pt_sig_good + (sv0.track_pt(track_idx) / sv0.track_pt_err[track_idx]);
                      						for (int k = 0; k < nsharedjet_tracks_sv1[i]; k++) {
 												int track_idx_poor = sv1_sharedjet_i_which_trk_idx[k];
 												h_2D_poor_dxy_sig_good_dxy_sig_large_sv_fig2->Fill(sv1.track_dxy[track_idx_poor] / sv1.track_dxy_err(track_idx_poor), sv0.track_dxy[track_idx] / sv0.track_dxy_err(track_idx));
@@ -1311,6 +1583,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
 										std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
 										double sum_pt_poor = 0;
+										double sum_pt_sig_poor = 0;
 										for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 											int track_idx = sv1_sharedjet_i_which_trk_idx[j];
 											double absdelta_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[track_idx]))); //phi1
@@ -1323,9 +1596,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											h_dxy_err_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy_err(track_idx), w);
 											h_dxy_sig_poor_shared_tracks_large_nsv2_fig2->Fill(sv1.track_dxy[track_idx] / sv1.track_dxy_err(track_idx), w);
 											sum_pt_poor = sum_pt_poor + sv1.track_pt(track_idx);
+											sum_pt_sig_poor = sum_pt_sig_poor + (sv1.track_pt(track_idx) / sv1.track_pt_err[track_idx]);
+
 										
 											}
 										h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv1[i], sum_pt_good / nsharedjet_tracks_sv0[i]);
+										h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv1[i], sum_pt_sig_good / nsharedjet_tracks_sv0[i]);
 
 										double sum_pt_non_shared_poor = 0;
 										for (unsigned int j = 0; j < sv1_sharedjet_i_which_no_trk_idx.size(); j++) {
@@ -1390,6 +1666,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										else {
 											h_more_pT_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
 											h_more_pT_avg_major_sv_nsv2_fig2->Fill(int(0), w);
+
+										}
+
+										if ((sum_pt_sig_good / (nsharedjet_tracks_sv0[i])) >= (sum_pt_sig_poor / (nsharedjet_tracks_sv1[i]))) {
+											h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(1), w);
+											h_more_pT_sig_avg_major_sv_nsv2_fig2->Fill(int(1), w);
+										}
+										else {
+											h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
+											h_more_pT_sig_avg_major_sv_nsv2_fig2->Fill(int(0), w);
 
 										}
 										
@@ -1458,6 +1744,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
 									std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
 									double sum_pt_good = 0;
+									double sum_pt_sig_good = 0;
 									for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 										int track_idx = sv1_sharedjet_i_which_trk_idx[j];
 										double absdelta_sv1_track = double(fabs(reco::deltaPhi(phi1, sv1.track_phi[track_idx]))); //phi1
@@ -1472,6 +1759,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_dxy_sig_good_shared_tracks_large_nsv2_semi_fig2->Fill(sv1.track_dxy[track_idx] / sv1.track_dxy_err(track_idx), w);
 										absdeltaphi_max_jet_shared_tracks.push_back(absdelta_jet_track);
 										sum_pt_good = sum_pt_good + sv1.track_pt(track_idx);
+										sum_pt_sig_good = sum_pt_sig_good + (sv1.track_pt(track_idx) / sv1.track_pt_err[track_idx]);
 										for (int k = 0; k < nsharedjet_tracks_sv0[i]; k++) {
 											int track_idx_poor = sv0_sharedjet_i_which_trk_idx[k];
 											h_2D_poor_dxy_sig_good_dxy_sig_large_sv_semi_fig2->Fill(sv0.track_dxy[track_idx_poor] / sv0.track_dxy_err(track_idx_poor), sv1.track_dxy[track_idx] / sv1.track_dxy_err(track_idx));
@@ -1494,6 +1782,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									
 
 									double sum_pt_poor = 0;
+									double sum_pt_sig_poor = 0;
 									std::vector<int> sv0_sharedjet_i_which_trk_idx = sv0_sharedjet_which_idx[i];
 									std::vector<int> sv0_sharedjet_i_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[i];
 									std::vector<double> absdeltaphi_min_jet_shared_tracks;
@@ -1510,9 +1799,11 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 										absdeltaphi_min_jet_shared_tracks.push_back(absdelta_jet_track);
 										sum_pt_poor = sum_pt_poor + sv0.track_pt(track_idx);
+										sum_pt_sig_poor = sum_pt_sig_poor + (sv0.track_pt(track_idx) / sv0.track_pt_err[track_idx]);
 									}
 									h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv0[i], sum_pt_good / nsharedjet_tracks_sv1[i]);
-									
+									h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv0[i], sum_pt_sig_good / nsharedjet_tracks_sv1[i]);
+
 									double sum_pt_non_shared_poor = 0;
 									for (unsigned int j = 0; j < sv0_sharedjet_i_which_no_trk_idx.size(); j++) {
 										idx = sv0_sharedjet_i_which_no_trk_idx[j];
@@ -1574,6 +1865,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									else {
 										h_more_pT_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
 										h_more_pT_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
+
+									}
+
+									if ((sum_pt_sig_good / (nsharedjet_tracks_sv1[i])) >= (sum_pt_sig_poor / (nsharedjet_tracks_sv0[i]))) {
+										h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(1), w);
+										h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(1), w);
+									}
+									else {
+										h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
+										h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 
 									}
 									
@@ -1646,7 +1947,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 						}
 
-
+						
 					
 					   }	//end nsharedjets loop
 					   
