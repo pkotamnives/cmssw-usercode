@@ -109,6 +109,10 @@ private:
 	TH1F* h_more_ratio_avg_major_sv_nsv2_all_fig2;
 	TH1F* h_more_pT_avg_major_sv_nsv2_all_fig2;
 	TH1F* h_more_pT_sig_avg_major_sv_nsv2_all_fig2;
+	TH1F* h_diff_pT_avg_major_minor_sv_nsv2_all_fig2;
+	TH1F* h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2;
+	TH1F* h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2;
+	TH1F* h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2;
 
 	
 	TH1F* h_vertex_chi2dof_absdeltaphi0_large_nsv2_fig2;
@@ -191,6 +195,7 @@ private:
 	TH1F* h_more_pT_avg_major_sv_nsv2_semi_fig2;
 	TH1F* h_more_pT_sig_avg_major_sv_nsv2_semi_fig2;
 
+
 	TH1F* h_ratio_nsharedjets_large_nsv2_fig1;
 	TH1F* h_dPhi_sv_large_nsv2_fig1;
 	TH1F* h_dEta_sv_large_nsv2_fig1;
@@ -242,21 +247,26 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_sv_tracks_shared_jets_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor's_{ratio sum pt} shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor's_{ratio avg pt} shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor's_{avg pt} shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_avg_pt_sig_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_avg_sig_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor's_{avg sig pt} shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
 
-	h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{ratio sum pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{ratio avg pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{avg pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_no_less_avg_pt_sig_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_avg_sig_pt_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no minor_{avg sig pt}'s shared tracks ; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	//start to apply the >= n ratio cut
 
-
-	h_less_dphi_more_shared_tracks_large_nsv2_all_fig2 = fs->make<TH1F>("h_less_dphi_more_shared_tracks_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; min(dphi(SV,a shared jet)) most shared tracks ?", 2, 0, 2);
-	h_ratio_nsharedjets_large_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_nsharedjets_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2;ratios of shared jets (>=1);arb. units", 50, 0, 10);
-	h_more_ratio_sum_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_sum_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more sum p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
-	h_more_ratio_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more avg p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
-	h_more_pT_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
-	h_more_pT_sig_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, semi-Fig2 && Fig2; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
-
+	h_less_dphi_more_shared_tracks_large_nsv2_all_fig2 = fs->make<TH1F>("h_less_dphi_more_shared_tracks_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; min(dphi(SV,a shared jet)) most shared tracks ?", 2, 0, 2);
+	h_ratio_nsharedjets_large_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_nsharedjets_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4;ratios of shared jets (>=1);arb. units", 50, 0, 10);
+	h_more_ratio_sum_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_sum_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; more sum p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
+	h_more_ratio_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; more avg p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
+	h_more_pT_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
+	h_more_pT_sig_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
 	
+	h_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; major4 shared avg p_{T} - minor4 shared avg p_{T}", 20, -100, 100);
+	h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; major4 ratio - minor4 ratio (shared avg p_{T}/SV all avg p_{T})", 40, -2, 2);
+	h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; \frac{major4 shared sum pT - minor4 shared sum pT}{major4 shared sum pT + minor4 shared sum pT}", 40, -2, 2);
+	h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios >= 4; \frac{major4 shared avg pT - minor4 shared avg pT}{major4 shared avg pT + minor4 shared avg pT}", 40, -2, 2);
+
+
 	h_dPhi_good_tracks_its_sv_large_fig2 = fs->make<TH1F>("h_dPhi_good_tracks_its_sv_large_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(phi of good tracks, phi of major vertex);arb. units", 31, 0, 3.16);
 	h_dPhi_poor_tracks_its_sv_large_fig2 = fs->make<TH1F>("h_dPhi_poor_tracks_its_sv_large_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(phi of poor tracks, phi of minor vertex);arb. units", 31, 0, 3.16);
 	h_dPhi_good_tracks_other_sv_large_fig2 = fs->make<TH1F>("h_dPhi_good_tracks_other_sv_large_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(phi of good tracks, phi of minor vertex);arb. units", 31, 0, 3.16);
@@ -1101,7 +1111,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 										h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv0[i], sum_pt_good / nsharedjet_tracks_sv1[i]);
 										h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv0[i], sum_pt_sig_good / nsharedjet_tracks_sv1[i]);
-
+										h_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill((sum_pt_good / nsharedjet_tracks_sv1[i]) - (sum_pt_poor / nsharedjet_tracks_sv0[i]), w);
+										
 										double sum_pt_non_shared_poor = 0;
 										for (unsigned int j = 0; j < sv0_sharedjet_i_which_no_trk_idx.size(); j++) {
 											idx = sv0_sharedjet_i_which_no_trk_idx[j];
@@ -1113,10 +1124,15 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											sum_pt_non_shared_good = sum_pt_non_shared_good + sv1.track_pt(idx);
 										}
 
+										
 										h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2->Fill(sum_pt_poor/ (sum_pt_poor+sum_pt_non_shared_poor), sum_pt_good/(sum_pt_good+sum_pt_non_shared_good));
 										h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2->Fill((sum_pt_poor* sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i]), (sum_pt_good* sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i]));
+										h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good* sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i]))-((sum_pt_poor * sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i])), w);
+										h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good) - (sum_pt_poor))/((sum_pt_good)+(sum_pt_poor)), w);
+										double avg_pT_good = sum_pt_good / nsharedjet_tracks_sv1[i];
+										double avg_pT_poor = sum_pt_poor / nsharedjet_tracks_sv0[i];
+										h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((avg_pt_good)-(avg_pt_poor)) / ((avg_pt_good)+(avg_pt_poor)), w);
 
-										
 
 										if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 											std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
@@ -1310,7 +1326,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv1[i], sum_pt_good / nsharedjet_tracks_sv0[i]);
 									h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv1[i], sum_pt_sig_good / nsharedjet_tracks_sv0[i]);
-
+									h_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill((sum_pt_good / nsharedjet_tracks_sv0[i]) - (sum_pt_poor / nsharedjet_tracks_sv1[i]), w);
+									
 									double sum_pt_non_shared_poor = 0;
 									for (unsigned int j = 0; j < sv1_sharedjet_i_which_no_trk_idx.size(); j++) {
 										idx = sv1_sharedjet_i_which_no_trk_idx[j];
@@ -1323,8 +1340,11 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									}
 									h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2->Fill(sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor), sum_pt_good / (sum_pt_good + sum_pt_non_shared_good));
 									h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2->Fill((sum_pt_poor* sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i]), (sum_pt_good* sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i]));
-
-									
+									h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good* sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i])) - ((sum_pt_poor * sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i])), w);
+									h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good)-(sum_pt_poor)) / ((sum_pt_good)+(sum_pt_poor)), w);
+									double avg_pT_good = sum_pt_good / nsharedjet_tracks_sv0[i];
+									double avg_pT_poor = sum_pt_poor / nsharedjet_tracks_sv1[i];
+									h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((avg_pt_good)-(avg_pt_poor)) / ((avg_pt_good)+(avg_pt_poor)), w);
 
 									if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 										std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
@@ -1603,7 +1623,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 											}
 										h_2D_poor_avg_pt_good_avg_pt_large_sv_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv1[i], sum_pt_good / nsharedjet_tracks_sv0[i]);
 										h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv1[i], sum_pt_sig_good / nsharedjet_tracks_sv0[i]);
-
+										h_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill((sum_pt_good / nsharedjet_tracks_sv0[i]) - (sum_pt_poor / nsharedjet_tracks_sv1[i]), w);
+										
 										double sum_pt_non_shared_poor = 0;
 										for (unsigned int j = 0; j < sv1_sharedjet_i_which_no_trk_idx.size(); j++) {
 											idx = sv1_sharedjet_i_which_no_trk_idx[j];
@@ -1617,8 +1638,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										
 										h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_fig2->Fill(sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor), sum_pt_good / (sum_pt_good + sum_pt_non_shared_good));
 										h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_fig2->Fill((sum_pt_poor * sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i]), (sum_pt_good * sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i]));
+										h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good* sv0_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv0[i])) - ((sum_pt_poor * sv1_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv1[i])), w);
+										h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good)-(sum_pt_poor)) / ((sum_pt_good)+(sum_pt_poor)), w);
+										double avg_pT_good = sum_pt_good / nsharedjet_tracks_sv0[i];
+										double avg_pT_poor = sum_pt_poor / nsharedjet_tracks_sv1[i];
+										h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((avg_pt_good)-(avg_pt_poor)) / ((avg_pt_good)+(avg_pt_poor)), w);
 
-										
 										if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 											std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
 
@@ -1804,7 +1829,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									}
 									h_2D_poor_avg_pt_good_avg_pt_large_sv_semi_fig2->Fill(sum_pt_poor / nsharedjet_tracks_sv0[i], sum_pt_good / nsharedjet_tracks_sv1[i]);
 									h_2D_poor_avg_pt_sig_good_avg_pt_sig_large_sv_semi_fig2->Fill(sum_pt_sig_poor / nsharedjet_tracks_sv0[i], sum_pt_sig_good / nsharedjet_tracks_sv1[i]);
-
+									h_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill((sum_pt_good / nsharedjet_tracks_sv1[i]) - (sum_pt_poor / nsharedjet_tracks_sv0[i]), w);
+									
 									double sum_pt_non_shared_poor = 0;
 									for (unsigned int j = 0; j < sv0_sharedjet_i_which_no_trk_idx.size(); j++) {
 										idx = sv0_sharedjet_i_which_no_trk_idx[j];
@@ -1818,7 +1844,11 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									
 									h_2D_minor_sv_major_sv_ratio_sum_pt_large_sv_semi_fig2->Fill(sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor), sum_pt_good / (sum_pt_good + sum_pt_non_shared_good));
 									h_2D_minor_sv_major_sv_ratio_avg_pt_large_sv_semi_fig2->Fill((sum_pt_poor * sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i]), (sum_pt_good * sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i]));
-
+									h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good* sv1_track_which_idx.size()) / ((sum_pt_good + sum_pt_non_shared_good) * nsharedjet_tracks_sv1[i])) - ((sum_pt_poor * sv0_track_which_idx.size()) / ((sum_pt_poor + sum_pt_non_shared_poor) * nsharedjet_tracks_sv0[i])), w);
+									h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->Fill(((sum_pt_good)-(sum_pt_poor)) / ((sum_pt_good)+(sum_pt_poor)), w);
+									double avg_pT_good = sum_pt_good / nsharedjet_tracks_sv1[i];
+									double avg_pT_poor = sum_pt_poor / nsharedjet_tracks_sv0[i];
+									h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->Fill(((avg_pt_good)-(avg_pt_poor)) / ((avg_pt_good)+(avg_pt_poor)), w);
 									
 									if (sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) < 0 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) < 0 || sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) == 1 || sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) == 1) {
 										std::cout << "found minor's ratio sum pT = " << sum_pt_poor / (sum_pt_poor + sum_pt_non_shared_poor) << "and major's ratio sum pT = " << sum_pt_good / (sum_pt_good + sum_pt_non_shared_good) << std::endl;
