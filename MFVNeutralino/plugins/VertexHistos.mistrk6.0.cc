@@ -1151,6 +1151,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									std::vector<double> absdeltaphi_max_jet_shared_tracks;
 									std::vector<int> sv0_sharedjet_i_which_trk_idx = sv0_sharedjet_which_idx[i];
 									std::vector<int> sv0_sharedjet_i_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[i];
+									std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
+									std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
 									double sum_pt_good = 0;
 									double sum_pt_sig_good = 0;
 									for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
@@ -1192,8 +1194,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 									double sum_pt_poor = 0;
 									double sum_pt_sig_poor = 0;
-									std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
-									std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
+									
 									std::vector<double> absdeltaphi_min_jet_shared_tracks;
 									for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 										int track_idx = sv1_sharedjet_i_which_trk_idx[j];
@@ -1378,6 +1379,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										
 										std::vector<int> sv0_sharedjet_i_which_trk_idx = sv0_sharedjet_which_idx[i];
 										std::vector<int> sv0_sharedjet_i_which_no_trk_idx = sv0_sharedjet_which_no_trk_idx[i];
+										std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
+										std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
 										double sum_pt_good = 0;
 										double sum_pt_sig_good = 0;
 										for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
@@ -1409,8 +1412,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										
 										
 
-										std::vector<int> sv1_sharedjet_i_which_trk_idx = sv1_sharedjet_which_idx[i];
-										std::vector<int> sv1_sharedjet_i_which_no_trk_idx = sv1_sharedjet_which_no_trk_idx[i];
+										
 										double sum_pt_poor = 0;
 										double sum_pt_sig_poor = 0;
 										for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
@@ -1810,18 +1812,18 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	}
  //  }
 
-	double_t diff_pT_avg = h_diff_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 100);
-	std::cout << "Int_diff_pT_avg = " << diff_pT_avg << std::endl;
-	double_t diff_ratio_pT_avg = h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2);
-	std::cout << "Int_diff_ratio_pT_avg = " << diff_ratio_pT_avg << std::endl;
-	double_t diff_pT_sum = h_diff_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 200);
-	std::cout << "Int_diff_pT_sum = " << diff_pT_sum << std::endl;
-	double_t diff_ratio_pT_sum = h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2);
-	std::cout << "Int_diff_ratio_pT_sum = " << diff_ratio_pT_sum << std::endl;
-	double_t ratio_diff_pT_avg = h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2);
-	std::cout << "Int_ratio_diff_pT_avg = " << ratio_diff_pT_avg <<  std::endl;
-	double_t ratio_diff_pT_sum = h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2);
-	std::cout << "Int_ratio_diff_pT_sum = " << ratio_diff_pT_sum << std::endl;
+	Double_t diff_pT_avg = h_diff_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 100, err_diff_pT_avg, "");
+	std::cout << "Int_diff_pT_avg = " << diff_pT_avg << " +- " << err_diff_pT_avg <<  std::endl;
+	Double_t diff_ratio_pT_avg = h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2, err_diff_ratio_pT_avg,"");
+	std::cout << "Int_diff_ratio_pT_avg = " << diff_ratio_pT_avg << " +- " << err_diff_ratio_pT_avg << std::endl;
+	Double_t diff_pT_sum = h_diff_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 200, err_diff_pT_sum,"");
+	std::cout << "Int_diff_pT_sum = " << diff_pT_sum << " +- " << err_diff_pT_sum << std::endl;
+	Double_t diff_ratio_pT_sum = h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2, err_diff_ratio_pT_sum,"");
+	std::cout << "Int_diff_ratio_pT_sum = " << diff_ratio_pT_sum << " +- " << err_diff_ratio_pT_sum << std::endl;
+	Double_t ratio_diff_pT_avg = h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2, err_ratio_diff_pT_avg,"");
+	std::cout << "Int_ratio_diff_pT_avg = " << ratio_diff_pT_avg << " +- " << err_ratio_diff_pT_avg << std::endl;
+	Double_t ratio_diff_pT_sum = h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2, err_ratio_diff_pT_sum, "");
+	std::cout << "Int_ratio_diff_pT_sum = " << ratio_diff_pT_sum << " +- " << err_ratio_diff_pT_sum << std::endl;
 	
   
 }
