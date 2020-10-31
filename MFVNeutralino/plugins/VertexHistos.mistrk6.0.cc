@@ -1826,7 +1826,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	Double_t err_ratio_diff_pT_avg;
 	Double_t ratio_diff_pT_avg = h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2, err_ratio_diff_pT_avg,"");
 	std::cout << "Int_ratio_diff_pT_avg = " << ratio_diff_pT_avg << " +- " << err_ratio_diff_pT_avg << std::endl;
-	Double_t err_ratio_diff_pT_avg;
+	Double_t err_ratio_diff_pT_sum;
 	Double_t ratio_diff_pT_sum = h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2->IntegralAndError(0, 2, err_ratio_diff_pT_sum, "");
 	std::cout << "Int_ratio_diff_pT_sum = " << ratio_diff_pT_sum << " +- " << err_ratio_diff_pT_sum << std::endl;
 	
