@@ -223,10 +223,10 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 
 	h_ratio_ntracks_large_nsv2_shared_jets = fs->make<TH1F>("h_ratio_ntracks_large_nsv2_shared_jets", "nsv = 2, absdPhi01 > 0.5, shared jets;ratios of shared tracks (>1);arb. units", 50, 0, 10);
 	
-	h_2D_sv_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_shared_jets_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_large_nsv2", "nsv = 2, absdPhi01 > 0.5, shared jets; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
-    h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no shared tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no minor tracks; # major tracks; # minor tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5; # vtx's more tracks; # vtx's less tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_shared_jets_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_large_nsv2", "nsv = 2, absdPhi01 > 0.5, shared jets; # vtx's more tracks; # vtx's less tracks", 50, 0, 50, 50, 0, 50);
+    h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no shared tracks; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no minor tracks;  # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
 
 	h_2D_sv_tracks_shared_jets_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no shared tracks; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
@@ -654,49 +654,37 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
 					std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
 
-					
-					
-					if ((sv0_track_which_idx_no_shared_track.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-						if (sv0_track_which_idx_no_shared_track.size() >= sv1_track_which_idx_no_shared_track.size()) {
-							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
-						}
-						else {
-							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+					if ((sv0_track_which_idx.size() - sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
+
+
+						if ((sv0_track_which_idx_no_shared_track.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
+							h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
 
 						}
+
 					}
-					
+					else {
 
+						if ((sv1_track_which_idx_no_shared_track.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
+							h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+						}
+
+					}
 					
 					if ((sv0_track_which_idx.size()- sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
 						
 						
 						if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-							if (sv0_track_which_idx.size() >= sv1_track_which_idx_no_shared_track.size()) {
 								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
-							}
-							else {
-								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
-
-							}
+							
 						}
-						
-						
 
 					}
 					else {
 						
 						if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {	  
-							if (sv1_track_which_idx.size() >= sv0_track_which_idx_no_shared_track.size()) {
 								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
-							}
-							else {
-								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
-
-							}
 						}
-						
-						
 
 					}
 
