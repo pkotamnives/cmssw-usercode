@@ -93,6 +93,9 @@ private:
 	TH2F* h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2;
 	TH2F* h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2;
 
+	TH2F* h_2D_poor_sv_tracks_shared_jets_nshj1_large_nsv2;
+	TH2F* h_2D_poor_sv_tracks_no_shared_tracks_nshj1_large_nsv2;
+	TH2F* h_2D_poor_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2;
 	TH2F* h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2;
 	TH2F* h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2;
 	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2;
