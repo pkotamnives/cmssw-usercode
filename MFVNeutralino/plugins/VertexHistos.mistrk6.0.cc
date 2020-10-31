@@ -262,7 +262,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	
 	h_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 shared avg p_{T} - minor1 shared avg p_{T}", 200, -100, 100);
 	h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 ratio - minor1 ratio (shared avg p_{T}/SV all avg p_{T})", 40, -2, 2);
-	h_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 shared sum p_{T} - minor1 shared sum p_{T}", 400, -200, 200);
+	h_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 shared sum p_{T} - minor1 shared sum p_{T}", 200, -1000, 1000);
 	h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 ratio - minor1 ratio (shared sum p_{T}/SV all sum p_{T})", 40, -2, 2);
 	h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; #frac{major1 shared sum pT - minor1 shared sum pT}{major1 shared sum pT + minor1 shared sum pT}", 40, -2, 2);
 	h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; #frac{major1 shared avg pT - minor1 shared avg pT}{major1 shared avg pT + minor1 shared avg pT}", 40, -2, 2);
@@ -658,7 +658,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 						if ((sv0_track_which_idx_no_shared_track.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-							h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
+							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
 
 						}
 
@@ -666,7 +666,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					else {
 
 						if ((sv1_track_which_idx_no_shared_track.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-							h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
 						}
 
 					}
