@@ -430,8 +430,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		double eta1 = atan2(sv1.y - bsy, sv1.z - bsz);
 
 		if ((nsv==2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
-			std::vector<int> sv0_track_which_idx = sv_track_which_idx[0];
-			std::vector<int> sv1_track_which_idx = sv_track_which_idx[1];
+			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
+			int idx0 = 0;
+			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
+			std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
+			int idx1 = 0;
+			std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
 			/*
 			if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
 				if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
@@ -457,8 +461,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		if (shared_jet) {
 
 			if ((nsv == 2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
-				std::vector<int> sv0_track_which_idx = sv_track_which_idx[0];
-				std::vector<int> sv1_track_which_idx = sv_track_which_idx[1];
+				std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
+				int idx0 = 0;
+				std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
+				std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
+				int idx1 = 0;
+				std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
 				
 				if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
 					if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
@@ -653,6 +661,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
 					std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
+					std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
+					int idx0 = 0;
+					std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
+					std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
+					int idx1 = 0;
+					std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
 
 					if ((sv0_track_which_idx.size() - sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
 
