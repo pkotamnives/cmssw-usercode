@@ -460,13 +460,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
 		if (shared_jet) {
 
+			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
+			int idx0 = 0;
+			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
+			std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
+			int idx1 = 0;
+			std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
+
 			if ((nsv == 2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
-				std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
-				int idx0 = 0;
-				std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
-				std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
-				int idx1 = 0;
-				std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
 				
 				if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
 					if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
@@ -501,7 +502,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			nsharedjet_tracks_sv0.push_back(std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index));
 
 			std::vector<int> sv0_track_which_jet = sv_track_which_jet[0];
-			std::vector<int> sv0_track_which_idx = sv_track_which_idx[0];
+			std::vector<int> sv0_track_which_jet_idx = sv_track_which_idx[0];
+
 			std::vector<int> sv0_track_which_idx_copy = sv_track_which_idx[0];
 			std::vector<int> sv0_track_which_idx_no_trk = sv_track_which_idx[0];
 			std::vector<int> sv0_track_which_temp_idx;
@@ -517,7 +519,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 				while (p.first != p.second)
 				{
-					sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);
+					sv0_track_which_temp_idx.push_back(sv0_track_which_jet_idx[p.first++->second]);
 				}
 				it = p.second;
 
@@ -536,7 +538,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			nsharedjet_tracks_sv1.push_back(std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index));
 
 			std::vector<int> sv1_track_which_jet = sv_track_which_jet[1];
-			std::vector<int> sv1_track_which_idx = sv_track_which_idx[1];
+			std::vector<int> sv1_track_which_jet_idx = sv_track_which_idx[1];
+
 			std::vector<int> sv1_track_which_idx_copy = sv_track_which_idx[1];
 			std::vector<int> sv1_track_which_idx_no_trk = sv_track_which_idx[1];
 			std::vector<int> sv1_track_which_temp_idx;
@@ -550,7 +553,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 				while (p.first != p.second)
 				{
-					sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);
+					sv1_track_which_temp_idx.push_back(sv1_track_which_jet_idx[p.first++->second]);
 				}
 				it = p.second;
 
@@ -586,7 +589,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					while (p.first != p.second)
 					{
-						sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);
+						sv0_track_which_temp_idx.push_back(sv0_track_which_jet_idx[p.first++->second]);
 					}
 					it = p.second;
 
@@ -618,7 +621,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					while (p.first != p.second)
 					{
-						sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);
+						sv1_track_which_temp_idx.push_back(sv1_track_which_jet_idx[p.first++->second]);
 					}
 					it = p.second;
 
