@@ -504,8 +504,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			std::vector<int> sv0_track_which_jet = sv_track_which_jet[0];
 			std::vector<int> sv0_track_which_jet_idx = sv_track_which_idx[0];
 
-			std::vector<int> sv0_track_which_idx_copy = sv_track_which_idx[0];
-			std::vector<int> sv0_track_which_idx_no_trk = sv_track_which_idx[0];
+			std::vector<int> sv0_track_which_idx_copy = sv0_track_which_idx;
+			std::vector<int> sv0_track_which_idx_no_trk = sv0_track_which_idx;
 			std::vector<int> sv0_track_which_temp_idx;
 			std::multimap<int, size_t> sv0_m_nshj1;
 
@@ -540,8 +540,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			std::vector<int> sv1_track_which_jet = sv_track_which_jet[1];
 			std::vector<int> sv1_track_which_jet_idx = sv_track_which_idx[1];
 
-			std::vector<int> sv1_track_which_idx_copy = sv_track_which_idx[1];
-			std::vector<int> sv1_track_which_idx_no_trk = sv_track_which_idx[1];
+			std::vector<int> sv1_track_which_idx_copy = sv1_track_which_idx;
+			std::vector<int> sv1_track_which_idx_no_trk = sv1_track_which_idx;
 			std::vector<int> sv1_track_which_temp_idx;
 			std::multimap<int, size_t> sv1_m_nshj1;
 
@@ -570,8 +570,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			
 			while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
 				nsharedjets++;
-				sv0_track_which_idx_copy = sv_track_which_idx[0];
-				sv1_track_which_idx_copy = sv_track_which_idx[1];
+				sv0_track_which_idx_copy = sv0_track_which_idx;
+				sv1_track_which_idx_copy = sv1_track_which_idx;
 				it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
 				idx = std::distance(sv_track_which_jet_copy[0].begin(), it);
 				jet_index = sv_track_which_jet_copy[0].at(idx);
