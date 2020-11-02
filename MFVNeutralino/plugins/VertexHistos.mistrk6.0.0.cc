@@ -430,8 +430,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		double eta1 = atan2(sv1.y - bsy, sv1.z - bsz);
 
 		if ((nsv==2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
-			std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
-			std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
+			
 			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
 			int idx0 = 0;
 			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
@@ -461,8 +460,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 		bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
 		if (shared_jet) {
-			std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
-			std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
+			
 			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
 			int idx0 = 0;
 			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
@@ -666,8 +664,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 				if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5) {	//start no split vertex 
 
-					std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
-					std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
+					
 					std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
 					std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
 					std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
