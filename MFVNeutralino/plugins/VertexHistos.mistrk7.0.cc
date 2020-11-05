@@ -784,14 +784,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 						double sum_pt_i_sv0 = 0;
 						std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
-						for (unsigned int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
-							idx = sv0_i_sharedjet_which_idx[j];
+						for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
+							int idx = sv0_i_sharedjet_which_idx[j];
 							sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx);
 						}
 						double sum_pt_i_sv1 = 0;
 						std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
-						for (unsigned int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
-							idx = sv1_i_sharedjet_which_idx[j];
+						for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
+							int idx = sv1_i_sharedjet_which_idx[j];
 							sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx);
 						}
 
@@ -2240,11 +2240,11 @@ h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 			double sum_pt_sv0 = 0.0;
 			double sum_pt_sv1 = 0.0;
 			for (unsigned int j = 0; j < sv0_track_which_idx.size(); j++) {
-				idx = sv0_track_which_idx[j];
+				int idx = sv0_track_which_idx[j];
 				sum_pt_sv0 = sum_pt_sv0 + sv0.track_pt(idx);
 			}
 			for (unsigned int j = 0; j < sv1_track_which_idx.size(); j++) {
-				idx = sv1_track_which_idx[j];
+				int idx = sv1_track_which_idx[j];
 				sum_pt_sv1 = sum_pt_sv1 + sv1.track_pt(idx);
 			}
 
@@ -2259,7 +2259,7 @@ h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 
 			}
 			
-			if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)){
+			if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5){
 				h_ratio_diff_pT_sum_sv_nsv2_large_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
 				if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
 					h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
