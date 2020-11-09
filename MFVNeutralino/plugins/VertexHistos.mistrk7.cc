@@ -70,6 +70,10 @@ private:
 		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv and need sv to be modified for sig
 	}
 	
+	TH1F* h_ratio_diff_pT_sum_sv_nsv2_no_shj;
+	TH1F* h_ratio_diff_pT_sum_sv_nsv2_large_no_shj;
+	TH1F* h_ratio_diff_pT_sum_major_minor_sv_nsv2_no_shj;
+	TH1F* h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj;
 	
 	TH1F* h_ratio_ntracks_large_nsv2_shared_jets;
 	//efficiency plots for all shared jets 
@@ -83,6 +87,15 @@ private:
 	TH2F* h_2D_sv_tracks_shared_jets_nshj1_large_nsv2;
 	TH2F* h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2;
 	TH2F* h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2;
+	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1;	  //repetitive 
+	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2;
+	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3;
+
+	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2;
+	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1;	  //repetitive 
+	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2;
+	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3;
 
 	TH2F* h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2;
 	TH2F* h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2;
@@ -221,12 +234,29 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 {
 	edm::Service<TFileService> fs;
 
+	h_ratio_diff_pT_sum_sv_nsv2_no_shj = fs->make<TH1F>("h_ratio_diff_pT_sum_sv_nsv2_no_shj", "nsv = 2, no shared jets; #frac{sv0 shared sum pT - sv1 shared sum pT}{sv0 shared sum pT + sv1 shared sum pT}", 40, -2, 2);
+	h_ratio_diff_pT_sum_sv_nsv2_large_no_shj = fs->make<TH1F>("h_ratio_diff_pT_sum_sv_nsv2_large_no_shj", "nsv = 2, absdeltaphi01 > 0.5, no shared jets; #frac{sv0 shared sum pT - sv1 shared sum pT}{sv0 shared sum pT + sv1 shared sum pT}", 40, -2, 2);
+	h_ratio_diff_pT_sum_major_minor_sv_nsv2_no_shj = fs->make<TH1F>("h_ratio_diff_pT_sum_major_minor_sv_nsv2_no_shj", "nsv = 2, no shared jets; #frac{major shared sum pT - minor shared sum pT}{major shared sum pT + minor shared sum pT}", 40, -2, 2);
+	h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj = fs->make<TH1F>("h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj", "nsv = 2, absdeltaphi01 > 0.5, no shared jets; #frac{major shared sum pT - minor shared sum pT}{major shared sum pT + minor shared sum pT}", 40, -2, 2);
+
+
 	h_ratio_ntracks_large_nsv2_shared_jets = fs->make<TH1F>("h_ratio_ntracks_large_nsv2_shared_jets", "nsv = 2, absdPhi01 > 0.5, shared jets;ratios of shared tracks (>1);arb. units", 50, 0, 10);
 	
 	h_2D_sv_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5; # vtx's more tracks; # vtx's less tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_shared_jets_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_large_nsv2", "nsv = 2, absdPhi01 > 0.5, shared jets; # vtx's more tracks; # vtx's less tracks", 50, 0, 50, 50, 0, 50);
     h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no shared tracks; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no minor tracks;  # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1 = fs->make<TH2F>("h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1", "nsv = 2, absdPhi01 > 0.5, nshj=1, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2", "nsv = 2, absdPhi01 > 0.5, nshj=2, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3 = fs->make<TH2F>("h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3", "nsv = 2, absdPhi01 > 0.5, nshj>=3, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+
+	h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2", "poor nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1 = fs->make<TH2F>("h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1", "poor nsv = 2, absdPhi01 > 0.5, nshj=1, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2 = fs->make<TH2F>("h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2", "poor nsv = 2, absdPhi01 > 0.5, nshj=2, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+	h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3 = fs->make<TH2F>("h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3", "poor nsv = 2, absdPhi01 > 0.5, nshj>=3, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
+
+
 
 	h_2D_sv_tracks_shared_jets_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
 	h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2", "nsv = 2, absdPhi01 > 0.5, nshj=1, no shared tracks; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
@@ -260,12 +290,12 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_more_pT_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
 	h_more_pT_sig_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
 	
-	h_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 shared avg p_{T} - minor1 shared avg p_{T}", 200, -100, 100);
-	h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 ratio - minor1 ratio (shared avg p_{T}/SV all avg p_{T})", 40, -2, 2);
-	h_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 shared sum p_{T} - minor1 shared sum p_{T}", 200, -1000, 1000);
-	h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major1 ratio - minor1 ratio (shared sum p_{T}/SV all sum p_{T})", 40, -2, 2);
-	h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; #frac{major1 shared sum pT - minor1 shared sum pT}{major1 shared sum pT + minor1 shared sum pT}", 40, -2, 2);
-	h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; #frac{major1 shared avg pT - minor1 shared avg pT}{major1 shared avg pT + minor1 shared avg pT}", 40, -2, 2);
+	h_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major shared avg p_{T} - minor shared avg p_{T}", 200, -100, 100);
+	h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major ratio - minor ratio (shared avg p_{T}/SV all avg p_{T})", 40, -2, 2);
+	h_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major shared sum p_{T} - minor shared sum p_{T}", 200, -1000, 1000);
+	h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_diff_ratio_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; major ratio - minor ratio (shared sum p_{T}/SV all sum p_{T})", 40, -2, 2);
+	h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_sum_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; #frac{major shared sum pT - minor shared sum pT}{major shared sum pT + minor shared sum pT}", 40, -2, 2);
+	h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2 = fs->make<TH1F>("h_ratio_diff_pT_avg_major_minor_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; #frac{major shared avg pT - minor shared avg pT}{major shared avg pT + minor shared avg pT}", 40, -2, 2);
 
 
 	h_dPhi_good_tracks_its_sv_large_fig2 = fs->make<TH1F>("h_dPhi_good_tracks_its_sv_large_fig2", "nsv = 2, absdeltaphi01 > 0.5, fig2;delta(phi of good tracks, phi of major vertex);arb. units", 31, 0, 3.16);
@@ -448,10 +478,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			}
 			*/
 			if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
-				h_2D_sv_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+				h_2D_sv_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 			}
 			else {
-				h_2D_sv_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+				h_2D_sv_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 			}
 			
@@ -471,10 +501,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				
 				if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
 					if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
-						h_2D_sv_tracks_shared_jets_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+						h_2D_sv_tracks_shared_jets_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 					}
 					else {
-						h_2D_sv_tracks_shared_jets_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+						h_2D_sv_tracks_shared_jets_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 					}
 				}
@@ -675,7 +705,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 						if ((sv0_track_which_idx_no_shared_track.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
+							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 						}
 
@@ -683,7 +713,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					else {
 
 						if ((sv1_track_which_idx_no_shared_track.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size(),w);
 						}
 
 					}
@@ -692,7 +722,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						
 						
 						if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 							
 						}
 
@@ -700,7 +730,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					else {
 						
 						if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {	  
-								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 						}
 
 					}
@@ -729,6 +759,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					double avg_sv0_non_shared_jet_pt = sum_sv0_non_shared_jet_pt/ sv0_track_which_non_shared_jet.size();
 					double avg_sv1_non_shared_jet_pt = sum_sv1_non_shared_jet_pt / sv1_track_which_non_shared_jet.size();
 
+					std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
+					std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
+
                                         for (int i = 0; i < nsharedjets; i++) {				//start nsharedjet loop
 
 
@@ -744,23 +777,60 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						else { ratio_ntracks_nsv2 = nsharedjet_tracks_sv1[i] / nsharedjet_tracks_sv0[i]; }
 						h_ratio_ntracks_large_nsv2_shared_jets->Fill(ratio_ntracks_nsv2);
 
+						// all w/ sum pt 
+
+						std::vector<int> sv1_diff; 
+						std::vector<int> sv0_diff;
+
+						double sum_pt_i_sv0 = 0;
+						std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
+						for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
+							int idx = sv0_i_sharedjet_which_idx[j];
+							sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx);
+						}
+						double sum_pt_i_sv1 = 0;
+						std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
+						for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
+							int idx = sv1_i_sharedjet_which_idx[j];
+							sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx);
+						}
+
+						if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
+							std::set_difference(sv1_sum_pt_track_which_idx.begin(), sv1_sum_pt_track_which_idx.end(), sv1_i_sharedjet_which_idx.begin(), sv1_i_sharedjet_which_idx.end(),
+								std::inserter(sv1_diff, sv1_diff.begin())); 
+							
+							std::cout << "sum pt sv0>=sv1 :" << "ntracks sv1 = " << sv1_sum_pt_track_which_idx.size() << " removed by " << nsharedjet_tracks_sv1[i] << "-> ntracks sum pt sv1 = " << sv1_diff.size() << std::endl;
+							sv1_sum_pt_track_which_idx = sv1_diff;
+						}
+						else {
+							std::set_difference(sv0_sum_pt_track_which_idx.begin(), sv0_sum_pt_track_which_idx.end(), sv0_i_sharedjet_which_idx.begin(), sv0_i_sharedjet_which_idx.end(),
+								std::inserter(sv0_diff, sv0_diff.begin()));
+							
+							std::cout << "sum pt sv1>sv0 :" << "ntracks sv0 = " << sv0_sum_pt_track_which_idx.size() << " removed by " << nsharedjet_tracks_sv0[i] << "-> ntracks sum pt sv0 = " << sv0_diff.size() << std::endl;
+							sv0_sum_pt_track_which_idx = sv0_diff;
+
+						}
+
+
+						
+
 						if (nsharedjets == 1) {
 
 							if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
 								if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-									h_2D_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+									h_2D_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 								}
 								else {
-									h_2D_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+									h_2D_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 								}
 							}
 							else {
 								if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-									h_2D_poor_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+									h_2D_poor_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 								}
 								else {
-									h_2D_poor_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+									h_2D_poor_sv_tracks_shared_jets_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 								}
 
@@ -768,19 +838,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 							if ((sv0_track_which_idx_no_shared_track.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
 								if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-									h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
+									h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size(),w);
 								}
 								else {
-									h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+									h_2D_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 								}
 							}
 							else {
 								if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-									h_2D_poor_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size());
+									h_2D_poor_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size(),w);
 								}
 								else {
-									h_2D_poor_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size());
+									h_2D_poor_sv_tracks_no_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 								}
 
@@ -791,19 +861,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 							if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
 								if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 								}
 								else {
-									h_2D_poor_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+									h_2D_poor_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 								}
 							}
 							else {
 								if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+									h_2D_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 								}
 								else {
-									h_2D_poor_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+									h_2D_poor_sv_tracks_no_minor_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 
 								}
@@ -850,19 +920,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
 								else {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 
@@ -873,19 +943,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 								else {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 
@@ -897,20 +967,20 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 
 								}
 								else {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
@@ -920,19 +990,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 								else {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
@@ -943,20 +1013,20 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 
 								}
 								else {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 
@@ -967,19 +1037,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 								else {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
@@ -990,20 +1060,20 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 
 								}
 								else {
 									if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
-										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
@@ -1013,19 +1083,19 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 								else {
 									if (nsharedjet_tracks_sv1[i] > nsharedjet_tracks_sv0[i]) {
-										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
@@ -1034,84 +1104,84 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							if (nsharedjet_tracks_sv0[i] >= nsharedjet_tracks_sv1[i]) {
 								if ((sum_pt_shared_sv0 / (sum_pt_shared_sv0 + sum_pt_no_shared_sv0)) >= (sum_pt_shared_sv1 / (sum_pt_shared_sv1 + sum_pt_no_shared_sv1))){
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 
 								if (((sum_pt_shared_sv0 * sv0_track_which_idx.size()) / ((sum_pt_shared_sv0 + sum_pt_no_shared_sv0) * sv0_sharedjet_1_which_trk_idx.size())) >= ((sum_pt_shared_sv1 * sv1_track_which_idx.size()) / ((sum_pt_shared_sv1 + sum_pt_no_shared_sv1) * sv1_sharedjet_1_which_trk_idx.size()))) {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 
 								if ((sum_pt_shared_sv0 / (sv0_sharedjet_1_which_trk_idx.size())) >= (sum_pt_shared_sv1 / (sv1_sharedjet_1_which_trk_idx.size()))) {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
 
 								if ((sum_pt_shared_sv0) >= (sum_pt_shared_sv1)) {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 
 									}
 								}
@@ -1123,84 +1193,84 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 								if ((sum_pt_shared_sv1 / (sum_pt_shared_sv1 + sum_pt_no_shared_sv1)) >= (sum_pt_shared_sv0 / (sum_pt_shared_sv0 + sum_pt_no_shared_sv0))) {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
 
 								if (((sum_pt_shared_sv1 * sv1_track_which_idx.size()) / ((sum_pt_shared_sv1 + sum_pt_no_shared_sv1) * sv1_sharedjet_1_which_trk_idx.size())) >= ((sum_pt_shared_sv0 * sv0_track_which_idx.size()) / ((sum_pt_shared_sv0 + sum_pt_no_shared_sv0) * sv0_sharedjet_1_which_trk_idx.size()))) {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_ratio_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
 
 								if ((sum_pt_shared_sv1 / (sv1_sharedjet_1_which_trk_idx.size())) >= (sum_pt_shared_sv0 / (sv0_sharedjet_1_which_trk_idx.size()))) {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_avg_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
 
 								if ((sum_pt_shared_sv1) >= (sum_pt_shared_sv0)) {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx_no_shared_track.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size());
+										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
 
 									}
 
 								}
 								else {
 									if ((sv1_track_which_idx.size() >= 5) && (sv0_track_which_idx.size() >= 5)) {
-										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 									}
 									else {
-										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
+										h_2D_poor_sv_tracks_no_minor_less_sum_pt_shared_tracks_nshj1_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
 
 									}
 								}
@@ -2013,16 +2083,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(1), w);
 									}
 									else {
-										h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
-										h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
+h_more_pT_sig_avg_major_sv_nsv2_all_fig2->Fill(int(0), w);
+h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 
 									}
-									
+
 									double min_dphi_jet_track = *std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end());
 									int min_dphi_jet_track_idx = std::min_element(absdeltaphi_min_jet_shared_tracks.begin(), absdeltaphi_min_jet_shared_tracks.end()) - absdeltaphi_min_jet_shared_tracks.begin();
 
 									int min_sv0_track_idx = sv0_sharedjet_i_which_trk_idx[min_dphi_jet_track_idx];
-									
+
 
 
 
@@ -2064,43 +2134,143 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									}
 
 
-									
+
 									h_2D_pt_dxy_err_absdeltaphi0_large_sv_semi_fig2->Fill(sv1.track_pt(max_sv1_track_idx), sv1.track_dxy_err(max_sv1_track_idx));
 									h_2D_pt_dxy_err_absdeltaphi1_large_sv_semi_fig2->Fill(sv0.track_pt(min_sv0_track_idx), sv0.track_dxy_err(min_sv0_track_idx));
 
 									h_vertex_chi2dof_absdeltaphi0_large_nsv2_semi_fig2->Fill(sv1.chi2dof(), w);
 									}
-								    
-									
 
-								
 
-								
+
+
+
+
 
 							}
 
 						}
 
-						
-					
+
+
 					   }	//end nsharedjets loop
 
+					   
+					   if ((sv0_sum_pt_track_which_idx.size() >= 5) && (sv1_sum_pt_track_which_idx.size() >= 5)) {
+						   
+							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+
+					   }
+					   else {
+							   h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+					   }
+
+					   if (nsharedjets == 1) {
+
+						   if ((sv0_sum_pt_track_which_idx.size() >= 5) && (sv1_sum_pt_track_which_idx.size() >= 5)) {
+
+							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+
+						   }
+						   else {
+							   h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj1->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+						   }
+
+					   }
+
+					   if (nsharedjets == 2) {
+
+						   if ((sv0_sum_pt_track_which_idx.size() >= 5) && (sv1_sum_pt_track_which_idx.size() >= 5)) {
+
+							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+
+						   }
+						   else {
+							   h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_nshj2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+						   }
+
+					   }
+
+					   if (nsharedjets >= 3) {
+
+						   if ((sv0_sum_pt_track_which_idx.size() >= 5) && (sv1_sum_pt_track_which_idx.size() >= 5)) {
+
+							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+
+						   }
+						   else {
+							   h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2_more_nshj3->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+						   }
+
+					   }
+
+					   
+
+					   
+					   
+
 					}   //end no split vertex 
-				
+
 				}	//end nsv=2
-		
-                         
 
 
-		
 
-           }
+
+
+
+		   }
 		else {	   // no shared jets
 
-		   h_lspdist2d_nsv2_no_shared_jets->Fill(mevent->lspdist2d(), w);
-		   h_lspdist3d_nsv2_no_shared_jets->Fill(mevent->lspdist3d(), w);
-		   h_absdeltaphi01_genlsp_nsv2_no_shared_jets->Fill(std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
-		   if (nsv == 2) {
+		
+
+
+
+
+		h_lspdist2d_nsv2_no_shared_jets->Fill(mevent->lspdist2d(), w);
+		h_lspdist3d_nsv2_no_shared_jets->Fill(mevent->lspdist3d(), w);
+		h_absdeltaphi01_genlsp_nsv2_no_shared_jets->Fill(std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
+		if (nsv == 2) {
+			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
+			int idx0 = 0;
+			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
+			std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
+			int idx1 = 0;
+			std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
+
+			double sum_pt_sv0 = 0.0;
+			double sum_pt_sv1 = 0.0;
+			for (unsigned int j = 0; j < sv0_track_which_idx.size(); j++) {
+				int idx = sv0_track_which_idx[j];
+				sum_pt_sv0 = sum_pt_sv0 + sv0.track_pt(idx);
+			}
+			for (unsigned int j = 0; j < sv1_track_which_idx.size(); j++) {
+				int idx = sv1_track_which_idx[j];
+				sum_pt_sv1 = sum_pt_sv1 + sv1.track_pt(idx);
+			}
+
+			//let sv0 be like a major vtx 
+			h_ratio_diff_pT_sum_sv_nsv2_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1)/(sum_pt_sv0 + sum_pt_sv1),w);
+			
+			if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
+				h_ratio_diff_pT_sum_major_minor_sv_nsv2_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
+			}
+			else {
+				h_ratio_diff_pT_sum_major_minor_sv_nsv2_no_shj->Fill((sum_pt_sv1 - sum_pt_sv0) / (sum_pt_sv1 + sum_pt_sv0), w);
+
+			}
+			
+			if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5){
+				h_ratio_diff_pT_sum_sv_nsv2_large_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
+				if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
+					h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
+				}
+				else {
+					h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj->Fill((sum_pt_sv1 - sum_pt_sv0) / (sum_pt_sv1 + sum_pt_sv0), w);
+
+				}
+
+			}	
+
 			   h_nsharedjets_nsv2_shared_jets->Fill((int)0, w);
 			   if ((reco::deltaPhi(phi0, phi1)) > 0.5) { h_nsharedjets_large_nsv2_shared_jets->Fill((int)0, w); }
 		   }
