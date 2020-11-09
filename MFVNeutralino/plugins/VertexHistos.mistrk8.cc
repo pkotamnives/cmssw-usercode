@@ -813,7 +813,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						}
 						double sum_pt_i_no_sv1 = 0;
 						std::vector<int> sv1_i_sharedjet_which_no_idx = sv1_sharedjet_which_no_trk_idx[i];
-						for (unsigned int j = 0; j < sv0_i_sharedjet_which_no_idx.size(); j++) {
+						for (unsigned int j = 0; j < sv1_i_sharedjet_which_no_idx.size(); j++) {
 							int idx = sv1_i_sharedjet_which_no_idx[j];
 							sum_pt_i_no_sv1 = sum_pt_i_no_sv1 + sv1.track_pt(idx);
 						}
