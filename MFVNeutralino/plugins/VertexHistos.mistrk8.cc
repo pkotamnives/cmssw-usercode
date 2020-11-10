@@ -884,7 +884,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						std::vector<int> sv1_diff3;
 						std::vector<int> sv0_diff3;
 
-						h_diff_pT_ratio_sum_sv0_sv1_sv_nsv2->Fill((sum_pt_i_sv0 / (sum_pt_i_sv0 + sum_pt_i_no_sv0)) - (sum_pt_i_sv1 / (sum_pt_i_sv1 + sum_pt_i_no_sv1)), w);
+						h_diff_ratio_pT_sum_sv0_sv1_sv_nsv2->Fill((sum_pt_i_sv0 / (sum_pt_i_sv0 + sum_pt_i_no_sv0)) - (sum_pt_i_sv1 / (sum_pt_i_sv1 + sum_pt_i_no_sv1)), w);
 
 						if ((sum_pt_i_sv0 / (sum_pt_i_sv0 + sum_pt_i_no_sv0)) >= (sum_pt_i_sv1 / (sum_pt_i_sv1 + sum_pt_i_no_sv1))) {
 							h_diff_ratio_pT_sum_dPhi_shj_sv_large_nsv2->Fill(dphi_large_sv0_sharedjet, w);
@@ -905,7 +905,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						std::vector<int> sv1_diff4;
 						std::vector<int> sv0_diff4;
 
-						h_diff_pT_ratio_avg_sv0_sv1_sv_nsv2->Fill(((sum_pt_i_sv0* sv0_track_which_idx.size()) / ((sum_pt_i_sv0 + sum_pt_i_no_sv0) * nsharedjet_tracks_sv0[i])) - ((sum_pt_i_sv1 * sv1_track_which_idx.size()) / ((sum_pt_i_sv1 + sum_pt_i_no_sv1) * nsharedjet_tracks_sv1[i])), w);
+						h_diff_ratio_pT_avg_sv0_sv1_sv_nsv2->Fill(((sum_pt_i_sv0* sv0_track_which_idx.size()) / ((sum_pt_i_sv0 + sum_pt_i_no_sv0) * nsharedjet_tracks_sv0[i])) - ((sum_pt_i_sv1 * sv1_track_which_idx.size()) / ((sum_pt_i_sv1 + sum_pt_i_no_sv1) * nsharedjet_tracks_sv1[i])), w);
 
 						if (((sum_pt_i_sv0* sv0_track_which_idx.size()) /((sum_pt_i_sv0 + sum_pt_i_no_sv0)* nsharedjet_tracks_sv0[i])) >= ((sum_pt_i_sv1* sv1_track_which_idx.size()) /((sum_pt_i_sv1 + sum_pt_i_no_sv1)* nsharedjet_tracks_sv1[i]))) {
 							h_diff_ratio_pT_avg_dPhi_shj_sv_large_nsv2->Fill(dphi_large_sv0_sharedjet, w);
