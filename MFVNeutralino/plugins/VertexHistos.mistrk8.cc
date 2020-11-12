@@ -526,10 +526,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			}
 
 			
-			int njets_sv0 = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
-			int njets_sv1 = std::set<double>(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()).size();
-			h_sv_njets_large_nsv2_no_shj->Fill(njets_sv0, w);
-			h_sv_njets_large_nsv2_no_shj->Fill(njets_sv1, w);
+			
 			
 			
 		}
@@ -2312,12 +2309,13 @@ h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 					   if ((sv0_sum_pt_track_which_idx.size() >= 5) && (sv1_sum_pt_track_which_idx.size() >= 5)) {
 						   
 							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
-							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv0, w);
-							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv1, w);
+							   
 
 					   }
 					   else {
 							   h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv0, w);
+							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv1, w);
 					   }
 
 					   if (nsharedjets == 1) {
@@ -2362,11 +2360,12 @@ h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 					   if ((sv0_ratio_sum_pt_track_which_idx.size() >= 5) && (sv1_ratio_sum_pt_track_which_idx.size() >= 5)) {
 
 						   h_2D_sv_tracks_no_less_ratio_sum_pt_shared_tracks_large_nsv2->Fill(sv0_ratio_sum_pt_track_which_idx.size(), sv1_ratio_sum_pt_track_which_idx.size(), w);
-						   h_sv_njets_no_less_ratio_sum_pt_shared_tracks_large_nsv2->Fill(njets_ratio_sum_pT_sv0, w);
-						   h_sv_njets_no_less_ratio_sum_pt_shared_tracks_large_nsv2->Fill(njets_ratio_sum_pT_sv1, w);
+						   
 					   }
 					   else {
 						   h_2D_poor_sv_tracks_no_less_ratio_sum_pt_shared_tracks_large_nsv2->Fill(sv0_ratio_sum_pt_track_which_idx.size(), sv1_ratio_sum_pt_track_which_idx.size(), w);
+						   h_sv_njets_no_less_ratio_sum_pt_shared_tracks_large_nsv2->Fill(njets_ratio_sum_pT_sv0, w);
+						   h_sv_njets_no_less_ratio_sum_pt_shared_tracks_large_nsv2->Fill(njets_ratio_sum_pT_sv1, w);
 					   }
 
 					   if ((sv0_avg_pt_track_which_idx.size() >= 5) && (sv1_avg_pt_track_which_idx.size() >= 5)) {
@@ -2443,6 +2442,10 @@ h_more_pT_sig_avg_major_sv_nsv2_semi_fig2->Fill(int(0), w);
 			}
 			
 			if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5){
+				int njets_sv0 = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
+				int njets_sv1 = std::set<double>(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()).size();
+				h_sv_njets_large_nsv2_no_shj->Fill(njets_sv0, w);
+				h_sv_njets_large_nsv2_no_shj->Fill(njets_sv1, w);
 				h_ratio_diff_pT_sum_sv_nsv2_large_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
 				if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
 					h_ratio_diff_pT_sum_major_minor_sv_nsv2_large_no_shj->Fill((sum_pt_sv0 - sum_pt_sv1) / (sum_pt_sv0 + sum_pt_sv1), w);
