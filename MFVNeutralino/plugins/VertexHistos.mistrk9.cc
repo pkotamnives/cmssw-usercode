@@ -91,9 +91,6 @@ private:
 
 	//efficiency plots for all nsharedjets=1 
 	
-	TH2F* h_2D_sv_tracks_shared_jets_nshj1_small_nsv2;
-	TH2F* h_2D_sv_tracks_no_shared_tracks_nshj1_small_nsv2;
-	TH2F* h_2D_sv_tracks_no_minor_shared_tracks_nshj1_small_nsv2;
 	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_small_nsv2;
 	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_small_nsv2_nshj1;	  //repetitive 
 	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_small_nsv2_nshj2;
@@ -147,17 +144,18 @@ private:
 
 	
 
-	TH1F * h_lspdist2d_nsv2_shared_jets;
-	TH1F * h_lspdist3d_nsv2_shared_jets;
-	TH1F * h_absdeltaphi01_genlsp_nsv2_shared_jets;
-	TH1F * h_lspdist2d_nsv2_no_shared_jets;
-	TH1F * h_lspdist3d_nsv2_no_shared_jets;
-	TH1F * h_absdeltaphi01_genlsp_nsv2_no_shared_jets;
+	TH1F* h_lspdist2d_nsv2_shared_jets;
+	TH1F* h_lspdist3d_nsv2_shared_jets;
+	TH1F* h_absdeltaphi01_genlsp_nsv2_shared_jets;
+	TH1F* h_lspdist2d_nsv2_no_shared_jets;
+	TH1F* h_lspdist3d_nsv2_no_shared_jets;
+	TH1F* h_absdeltaphi01_genlsp_nsv2_no_shared_jets;
 
-	TH1F * h_nsharedjets_nsv2_shared_jets;
-	TH1F * h_nsharedjets_small_nsv2_shared_jets;
-	TH1F * h_svdist2d_small_absdeltaphi01_nsv2_shared_jets;
-	TH1F * h_svdist3d_small_absdeltaphi01_nsv2_shared_jets;
+	TH1F* h_nsharedjets_nsv2_shared_jets;
+	TH1F* h_nsharedjets_small_nsv2_shared_jets;
+	TH2F* h_2D_nsharedjets_svdist3d_small_nsv2_shared_jets;
+	TH1F* h_svdist2d_small_absdeltaphi01_nsv2_shared_jets;
+	TH1F* h_svdist3d_small_absdeltaphi01_nsv2_shared_jets;
 };
 
 const char* MFVVertexHistos::sv_index_names[MFVVertexHistos::sv_num_indices] = { "all" };
@@ -232,6 +230,8 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
     h_nsharedjets_nsv2_shared_jets = fs->make<TH1F>("h_nsharedjets_nsv2_shared_jets", "nsv = 2;# of shared jets;arb. units", 10, 0, 10);		
         	
 	h_nsharedjets_small_nsv2_shared_jets = fs->make<TH1F>("h_nsharedjets_small_nsv2_shared_jets", "nsv = 2, absdeltaphi01 <= 0.5;# of shared jets;arb. units", 10, 0, 10);
+	h_2D_nsharedjets_svdist3d_small_nsv2_shared_jets = fs->make<TH2F>("h_2D_nsharedjets_svdist3d_small_nsv2_shared_jets", "nsv = 2, absdPhi01 <= 0.5; # of shared jets; # dist3d(sv #0, #1) (cm)", 10, 0, 10, 500, 0, 1);
+	h_2D_nsharedjets_svdist3d_large_nsv2_shared_jets = fs->make<TH2F>("h_2D_nsharedjets_svdist3d_large_nsv2_shared_jets", "nsv = 2, absdPhi01 > 0.5; # of shared jets; # dist3d(sv #0, #1) (cm)", 50, 0, 50, 50, 0, 50);
 	h_svdist2d_small_absdeltaphi01_nsv2_shared_jets = fs->make<TH1F>("h_svdist2d_small_absdeltaphi01_nsv2_shared_jets", "nsv = 2, absdeltaphi01 <= 0.5 ;dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);
 	h_svdist3d_small_absdeltaphi01_nsv2_shared_jets = fs->make<TH1F>("h_svdist3d_small_absdeltaphi01_nsv2_shared_jets", "nsv = 2, absdeltaphi01 <= 0.5 ;dist3d(sv #0, #1) (cm);arb. units", 500, 0, 1);
 	}
@@ -593,6 +593,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					
 
 					h_nsharedjets_small_nsv2_shared_jets->Fill(nsharedjets, w);
+					h_2D_nsharedjets_svdist3d_small_nsv2_shared_jets->Fill(nsharedjets, svdist3d, w);
 					h_svdist2d_small_absdeltaphi01_nsv2_shared_jets->Fill(svdist2d, w);
 					h_svdist3d_small_absdeltaphi01_nsv2_shared_jets->Fill(svdist3d, w);
 
@@ -860,6 +861,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					   
 
 					}   //end no split vertex 
+				else {
+				h_2D_nsharedjets_svdist3d_large_nsv2_shared_jets->Fill(nsharedjets, svdist3d, w);
+				}
 
 				}	//end nsv=2
 
@@ -923,10 +927,17 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 				}
 
-			}	
+				h_nsharedjets_small_nsv2_shared_jets->Fill((int)0, w);
+				h_2D_nsharedjets_svdist3d_small_nsv2_shared_jets->Fill((int)0, svdist3d, w);
 
-			   h_nsharedjets_nsv2_shared_jets->Fill((int)0, w);
-			   if ((reco::deltaPhi(phi0, phi1)) <= 0.5) { h_nsharedjets_small_nsv2_shared_jets->Fill((int)0, w); }
+			}
+			else {
+				h_2D_nsharedjets_svdist3d_large_nsv2_shared_jets->Fill((int)0, svdist3d, w);
+			}
+
+			h_nsharedjets_nsv2_shared_jets->Fill((int)0, w);
+			
+			   
 		   }
 
 		  
