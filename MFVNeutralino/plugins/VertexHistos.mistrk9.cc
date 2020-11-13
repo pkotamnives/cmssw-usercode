@@ -154,6 +154,7 @@ private:
 	TH1F* h_nsharedjets_nsv2_shared_jets;
 	TH1F* h_nsharedjets_small_nsv2_shared_jets;
 	TH2F* h_2D_nsharedjets_svdist3d_small_nsv2_shared_jets;
+	TH2F* h_2D_nsharedjets_svdist3d_large_nsv2_shared_jets;
 	TH1F* h_svdist2d_small_absdeltaphi01_nsv2_shared_jets;
 	TH1F* h_svdist3d_small_absdeltaphi01_nsv2_shared_jets;
 };
