@@ -236,11 +236,6 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 
 	//start to apply the >= n ratio cut
 
-	h_less_dphi_more_shared_tracks_large_nsv2_all_fig2 = fs->make<TH1F>("h_less_dphi_more_shared_tracks_large_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; min(dphi(SV,a shared jet)) most shared tracks ?", 2, 0, 2);
-	h_more_ratio_sum_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_sum_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; more sum p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
-	h_more_ratio_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_ratio_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; more avg p_{T} ratio(shared/SV's tracks) is major SV ?", 2, 0, 2);
-	h_more_pT_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; more avg p_{T} shared tracks is major SV ?", 2, 0, 2);
-	h_more_pT_sig_avg_major_sv_nsv2_all_fig2 = fs->make<TH1F>("h_more_pT_sig_avg_major_sv_nsv2_all_fig2", "nsv = 2, absdeltaphi01 > 0.5, shared ratios > 1; more avg p_{T} sig shared tracks is major SV ?", 2, 0, 2);
 	
 	h_diff_pT_avg_sv0_sv1_sv_nsv2 = fs->make<TH1F>("h_diff_pT_avg_sv0_sv1_sv_nsv2", "nsv = 2, absdeltaphi01 > 0.5; sv0 shared avg p_{T} - sv1 shared avg p_{T}", 200, -100, 100);
 	h_diff_ratio_pT_avg_sv0_sv1_sv_nsv2 = fs->make<TH1F>("h_diff_ratio_pT_avg_sv0_sv1_sv_nsv2", "nsv = 2, absdeltaphi01 > 0.5; sv0 ratio - sv1 ratio (shared avg p_{T}/SV all avg p_{T})", 40, -2, 2);
