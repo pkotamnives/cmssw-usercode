@@ -879,7 +879,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         }
       }
     }
+
   }
+
 
   //////////////////////////////////////////////////////////////////////
   // Put the output.
