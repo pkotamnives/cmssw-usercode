@@ -275,9 +275,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			double min_svdist2d_nsv3 = *std::min_element(svdist2d_vec.begin(), svdist2d_vec.end());
 			int min_svdist2d_nsv3_idx = std::min_element(svdist2d_vec.begin(), svdist2d_vec.end()) - svdist2d_vec.begin();
 
-			less_tracks_vec.push_back(int(sv1.ntracks());
-			less_tracks_vec.push_back(int(sv2.ntracks());
-			less_tracks_vec.push_back(int(sv2.ntracks());
+			less_tracks_vec.push_back(int(sv1.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
 
 
 			h_dphi_genlsp_nsv3->Fill(std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
@@ -325,9 +325,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			phi_vec.push_back(phi1);
 			phi_vec.push_back(phi2);
 			phi_vec.push_back(phi3);
-			less_tracks_vec.push_back(int(sv1.ntracks());
-			less_tracks_vec.push_back(int(sv2.ntracks());
-			less_tracks_vec.push_back(int(sv3.ntracks());
+			less_tracks_vec.push_back(int(sv1.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
+			less_tracks_vec.push_back(int(sv3.ntracks()));
 
 			
 			for (int i = 0; i < nsv; ++i) {
@@ -353,10 +353,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			phi_vec.push_back(phi2);
 			phi_vec.push_back(phi3);
 			phi_vec.push_back(phi4);
-			less_tracks_vec.push_back(int(sv1.ntracks());
-			less_tracks_vec.push_back(int(sv2.ntracks());
-			less_tracks_vec.push_back(int(sv3.ntracks());
-			less_tracks_vec.push_back(int(sv4.ntracks());
+			less_tracks_vec.push_back(int(sv1.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
+			less_tracks_vec.push_back(int(sv3.ntracks()));
+			less_tracks_vec.push_back(int(sv4.ntracks()));
 
 
 			for (int i = 0; i < nsv; ++i) {
