@@ -881,6 +881,59 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     }
 
   }
+  
+  // Peace's scratch 
+  edm::Handle<pat::JetCollection> jets;
+  typedef std::vector<reco::TrackRef> jet_which_track_ref;
+  std::vector<int> jet_which_jet_idx;
+  for (int jjet = 0, njjet = int(jets->size()); jjet < njjet; ++jjet) {
+	  const pat::Jet& jet = jets->at(jjet);
+
+	  const size_t ijet = int(jets->size()) - 1;
+	  assert(ijet <= 255);  
+	  jet_which_jet_idx.push_back(jjet);
+	  std::vector<int> jet_jjet_which_track_ref;
+	
+	  for (size_t idau = 0, ndau = jet.numberOfDaughters(); idau < ndau; ++idau) {
+		  // handle both regular aod and miniaod: in the latter
+		  // getPFConstituents() doesn't work because the daughters are
+		  // pat::PackedCandidates. Since we don't care about track
+		  // identities e.g. to compare with vertices we don't use
+		  // TrackRefGetter here, but could
+		  const reco::Candidate* dau = jet.daughter(idau);
+		  if (dau->charge() == 0)
+			  continue;
+
+		  const reco::Track * tk = 0;
+		  const reco::PFCandidate * pf = dynamic_cast<const reco::PFCandidate*>(dau);
+		  if (pf) {
+			  const reco::TrackRef& r = pf->trackRef();
+			  if (r.isNonnull())
+				  tk = &*r;
+		  }
+		  else {
+			  const pat::PackedCandidate* pk = dynamic_cast<const pat::PackedCandidate*>(dau);
+			  if (pk && pk->charge() && pk->hasTrackDetails())
+				  tk = &pk->pseudoTrack();
+		  }
+		  if (tk) {
+			  assert(abs(tk->charge()) == 1);
+			  jet_jjet_which_track_ref.push_back(*tk);	  // not sure how to store address of tk
+			  }
+	  }
+	  jet_which_track_ref.push_back(jet_jjet_which_track_ref);
+	  
+  }
+
+  for (size_t ivt = 0, nvt = vertices.size(); ivt < nvt; ++ivt) {
+	  const reco::Vertex& v = vertices->at(ivt);
+	  tracks[ivt] = vertex_track_set(*v[ivt]);
+	  for (auto tk : tracks[ivt])
+		  if (tk.key() ==
+
+	  
+
+  }
 
 
   //////////////////////////////////////////////////////////////////////
