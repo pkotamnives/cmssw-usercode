@@ -883,6 +883,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   }
   
   // Peace's scratch 
+  /*
   edm::Handle<pat::JetCollection> jets;
   typedef std::vector<reco::TrackRef> jet_which_track_ref;
   std::vector<int> jet_which_jet_idx;
@@ -934,6 +935,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  
 
   }
+  */
 
 
   //////////////////////////////////////////////////////////////////////
