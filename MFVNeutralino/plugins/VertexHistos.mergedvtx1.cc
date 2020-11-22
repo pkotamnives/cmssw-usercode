@@ -135,12 +135,12 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_dphi_genlsp = fs->make<TH1F>("h_dphi_genlsp", "nsv >= 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
 	h_2D_sv0lsp0_sv0lsp1 = fs->make<TH2F>("h_2D_sv0lsp0_sv0lsp1", "nsv >= 2; dist2d(gen vtx #0, sv #0) (cm); dist2d(gen vtx #1, sv #0) (cm)", 1000, 0, 1.0, 1000, 0, 1.0);
 	h_2D_sv1lsp0_sv1lsp1 = fs->make<TH2F>("h_2D_sv1lsp0_sv1lsp1", "nsv >= 2; dist2d(gen vtx #0, sv #1) (cm); dist2d(gen vtx #1, sv #1) (cm)", 1000, 0, 1.0, 1000, 0, 1.0);
-	h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0  fs->make<TH2F>("h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0", "nsv >= 2, split-vertex pair w/ svdist2d <= 0.01 cm; dist2d(gen vtx #0, sv w/ less tracks) (cm); dist2d(gen vtx #1, sv w/ less tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
-	h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1  fs->make<TH2F>("h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1", "nsv >= 2, split-vertex pair w/ 0.01 < svdist2d < 0.02 cm; dist2d(gen vtx #0, sv w/ less tracks) (cm); dist2d(gen vtx #1, sv w/ less tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
-	h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range2  fs->make<TH2F>("h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range2", "nsv >= 2, split-vertex pair w/  0.02 cm <= svdist2d; dist2d(gen vtx #0, sv w/ less tracks) (cm); dist2d(gen vtx #1, sv w/ less tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
-	h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0  fs->make<TH2F>("h_2D_more_svlsp0_less_svlsp1_split_sv_pair_range0", "nsv >= 2, split-vertex pair w/ svdist2d <= 0.01 cm; dist2d(gen vtx #0, sv w/ more tracks) (cm); dist2d(gen vtx #1, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
-	h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1  fs->make<TH2F>("h_2D_more_svlsp0_less_svlsp1_split_sv_pair_range1", "nsv >= 2, split-vertex pair w/ 0.01 < svdist2d < 0.02 cm; dist2d(gen vtx #0, sv w/ more tracks) (cm); dist2d(gen vtx #1, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
-	h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range2  fs->make<TH2F>("h_2D_more_svlsp0_less_svlsp1_split_sv_pair_range2", "nsv >= 2, split-vertex pair w/  0.02 cm <= svdist2d; dist2d(gen vtx #0, sv w/ more tracks) (cm); dist2d(gen vtx #1, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
+	h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0 = fs->make<TH2F>("h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0", "nsv >= 2, split-vertex pair w/ svdist2d <= 0.01 cm; dist2d(gen vtx #0, sv w/ less tracks) (cm); dist2d(gen vtx #1, sv w/ less tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
+	h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1 = fs->make<TH2F>("h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1", "nsv >= 2, split-vertex pair w/ 0.01 < svdist2d < 0.02 cm; dist2d(gen vtx #0, sv w/ less tracks) (cm); dist2d(gen vtx #1, sv w/ less tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
+	h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range2 = fs->make<TH2F>("h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range2", "nsv >= 2, split-vertex pair w/  0.02 cm <= svdist2d; dist2d(gen vtx #0, sv w/ less tracks) (cm); dist2d(gen vtx #1, sv w/ less tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
+	h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0 = fs->make<TH2F>("h_2D_more_svlsp0_less_svlsp1_split_sv_pair_range0", "nsv >= 2, split-vertex pair w/ svdist2d <= 0.01 cm; dist2d(gen vtx #0, sv w/ more tracks) (cm); dist2d(gen vtx #1, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
+	h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1 = fs->make<TH2F>("h_2D_more_svlsp0_less_svlsp1_split_sv_pair_range1", "nsv >= 2, split-vertex pair w/ 0.01 < svdist2d < 0.02 cm; dist2d(gen vtx #0, sv w/ more tracks) (cm); dist2d(gen vtx #1, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
+	h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range2 = fs->make<TH2F>("h_2D_more_svlsp0_less_svlsp1_split_sv_pair_range2", "nsv >= 2, split-vertex pair w/  0.02 cm <= svdist2d; dist2d(gen vtx #0, sv w/ more tracks) (cm); dist2d(gen vtx #1, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 1.0);
 
 
 	//nsv=2
@@ -254,15 +254,15 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		double eta1 = atan2(sv1.y - bsy, sv1.z - bsz);
 
 
-		const double lsp0_z = mevent->gen_lsp_decay[2];
-		const double lsp0_x = mevent->gen_lsp_decay[0] - mevent->bsx_at_z(lsp0_z);
-		const double lsp0_y = mevent->gen_lsp_decay[1] - mevent->bsy_at_z(lsp0_z);
-		const double lsp0_z = lsp0_z - mevent->bsz;
+		double lsp0_z = mevent->gen_lsp_decay[2];
+		double lsp0_x = mevent->gen_lsp_decay[0] - mevent->bsx_at_z(lsp0_z);
+		double lsp0_y = mevent->gen_lsp_decay[1] - mevent->bsy_at_z(lsp0_z);
+		lsp0_z = lsp0_z - mevent->bsz;
 
-		const double lsp1_z = mevent->gen_lsp_decay[3];
-		const double lsp1_x = mevent->gen_lsp_decay[3] - mevent->bsx_at_z(lsp1_z);
-		const double lsp1_y = mevent->gen_lsp_decay[4] - mevent->bsy_at_z(lsp1_z);
-		const double lsp1_z = lsp1_z - mevent->bsz;
+		double lsp1_z = mevent->gen_lsp_decay[5];
+		double lsp1_x = mevent->gen_lsp_decay[3] - mevent->bsx_at_z(lsp1_z);
+		double lsp1_y = mevent->gen_lsp_decay[4] - mevent->bsy_at_z(lsp1_z);
+		lsp1_z = lsp1_z - mevent->bsz;
 
 		std::vector<double> dphi_vec;
 		std::vector<double> sv_x_vec;
@@ -301,7 +301,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
 
 					}
-					else if (0.01 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y)) < 0.02) {
+					else if (0.01 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y)) && double(mag(sv0.x - sv1.x, sv0.y - sv1.y)) < 0.02) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
 
@@ -376,7 +376,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
 
 					}
-					else if (0.01 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y)) < 0.02) {
+					else if (0.01 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y)) && double(mag(sv0.x - sv1.x, sv0.y - sv1.y)) < 0.02) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
 
@@ -400,7 +400,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
 
 					}
-					else if (0.01 < double(mag(sv0.x - sv2.x, sv0.y - sv2.y)) < 0.02) {
+					else if (0.01 < double(mag(sv0.x - sv2.x, sv0.y - sv2.y)) && double(mag(sv0.x - sv2.x, sv0.y - sv2.y)) < 0.02) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y)), double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
 
@@ -424,7 +424,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
 
 					}
-					else if (0.01 < double(mag(sv1.x - sv2.x, sv1.y - sv2.y)) < 0.02) {
+					else if (0.01 < double(mag(sv1.x - sv2.x, sv1.y - sv2.y)) && double(mag(sv1.x - sv2.x, sv1.y - sv2.y)) < 0.02) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y)), double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
 
@@ -478,7 +478,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i])), w);
 
 							}
-							else if (0.01 < double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j])) < 0.02) {
+							else if (0.01 < double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j])) && double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j])) < 0.02) {
 								h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j])), double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j])), w);
 								h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i])), w);
 
