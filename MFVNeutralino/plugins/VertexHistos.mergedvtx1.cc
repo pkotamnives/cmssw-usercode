@@ -298,6 +298,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		std::vector<double> dphi_vec;
 		std::vector<double> sv_x_vec;
 		std::vector<double> sv_y_vec;
+		std::vector<double> sv_z_vec;
 		std::vector<double> phi_vec;
 		std::vector<double> svdist2d_vec;
 		std::vector<int> less_tracks_vec;
@@ -547,6 +548,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			sv_y_vec.push_back(double(sv1.y));
 			sv_y_vec.push_back(double(sv2.y));
 			sv_y_vec.push_back(double(sv3.y));
+			sv_z_vec.push_back(double(sv0.z));
+			sv_z_vec.push_back(double(sv1.z));
+			sv_z_vec.push_back(double(sv2.z));
+			sv_z_vec.push_back(double(sv3.z));
 
 			
 			for (int i = 0; i < nsv; ++i) {
