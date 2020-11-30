@@ -347,10 +347,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z),w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)),w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 						
 					}
@@ -361,10 +361,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 					}
 
@@ -375,10 +375,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 
 						if (0.1 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z))) {
@@ -386,10 +386,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 							if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 							}
 							else {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 							}
 						}
 
@@ -461,10 +461,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 					}
 					else if (0.01 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)) && double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)) < 0.02) {
@@ -474,10 +474,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 					}
 
@@ -488,10 +488,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 
 						if (0.1 < double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z))) {
@@ -499,10 +499,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 							if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 							}
 							else {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 							}
 						}
 
@@ -523,10 +523,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 					}
 					else if (0.01 < double(mag(sv0.x - sv2.x, sv0.y - sv2.y, sv0.z - sv2.z)) && double(mag(sv0.x - sv2.x, sv0.y - sv2.y, sv0.z - sv2.z)) < 0.02) {
@@ -536,10 +536,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 					}
 
@@ -550,10 +550,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 						}
 
 						if (0.1 < double(mag(sv0.x - sv2.x, sv0.y - sv2.y, sv0.z - sv2.z))) {
@@ -561,10 +561,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
 							if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 							}
 							else {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 							}
 
 						}
@@ -586,10 +586,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 
 						if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 						}
 					}
 					else if (0.01 < double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)) && double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)) < 0.02) {
@@ -599,10 +599,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 
 						if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 						}
 					}
 
@@ -613,10 +613,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 
 						if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), w);
 						}
 						else {
-							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), w);
+							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 						}
 
 						if (0.1 < double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z))) {
@@ -624,10 +624,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 
 							if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)), w);
 							}
 							else {
-								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z), w);
+								h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)), w);
 							}
 
 						}
@@ -683,10 +683,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 
 								if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
-									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j]), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i]), w);
+									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), w);
 								}
 								else {
-									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j]), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]), w);
+									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range0->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 								}
 
 							}
@@ -697,10 +697,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 
 									if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
-										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j]), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i]), w);
+										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), w);
 									}
 									else {
-										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j]), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]), w);
+										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 									}
 
 							}
@@ -712,10 +712,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 
 								if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
-									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j]), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i]), w);
+									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), w);
 								}
 								else {
-									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j]), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]), w);
+									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 								}
 
 								if (0.1 < double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j]))) {
@@ -723,10 +723,10 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 
 									if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
-										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j]), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i]), w);
+										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), w);
 									}
 									else {
-										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j]), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]), w);
+										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 									}
 
 								}
