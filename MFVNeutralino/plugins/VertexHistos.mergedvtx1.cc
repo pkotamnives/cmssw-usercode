@@ -535,7 +535,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_less_svlsp0_less_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y, lsp1_z - sv2.z)), w);
 						h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)), w);
 
-						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) {
+						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
 							h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y, lsp0_z - sv2.z)), double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)), w);
 						}
 						else {
@@ -690,7 +690,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								}
 
 							}
-							else if (0.01 < double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j]) && double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j])) < 0.02) {
+							else if (0.01 < double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j])) && double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j])) < 0.02) {
 								h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j])), double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j])), w);
 								h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i])), w);
 								h_2D_less_svlsp0_less_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), w);
