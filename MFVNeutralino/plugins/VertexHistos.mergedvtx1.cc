@@ -19,11 +19,13 @@
 #include <map>
 #include <algorithm>
 #include "RecoVertex/VertexTools/interface/VertexDistance3D.h"
+#include "RecoVertex/VertexTools/interface/VertexDistance.h"
 #include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
 class MFVVertexHistos : public edm::EDAnalyzer {
 public:
 	explicit MFVVertexHistos(const edm::ParameterSet&);
 	void analyze(const edm::Event&, const edm::EventSetup&);
+
 
 private:
 	const edm::EDGetTokenT<MFVEvent> mevent_token;
@@ -38,9 +40,10 @@ private:
 	void fill(TH1F** hs, const int, const double val, const double weight) const { hs[sv_all]->Fill(val, weight); }
 	void fill(TH2F** hs, const int, const double val, const double val2, const double weight) const { hs[sv_all]->Fill(val, val2, weight); }
 
+	VertexDistance vertex_dist_z;
 	VertexDistance3D vertex_dist_3d;
 	VertexDistanceXY vertex_dist_2d;
-	VertexDistance vertex_dist_z;
+	
 	
 	
 	TH1F* h_lspdist2d;
@@ -331,9 +334,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdistz_split_sv_pair_nsv2->Fill(double(mag(sv0.z - sv1.z)), w);
 
 					
-					Measurement1D miss_dist01 = vertex_dist_3d.distance(sv0->reco::Vertex(), sv1->reco::Vertex());
-					Measurement1D miss_dist01_2d = vertex_dist_2d.distance(sv0->reco::Vertex(), sv1->reco::Vertex());
-					Measurement1D miss_dist01_z = vertex_dist_z.distance(sv0->reco::Vertex(), sv1->reco::Vertex());
+					Measurement1D miss_dist01 = vertex_dist_3d.distance(sv0, sv1);
+					Measurement1D miss_dist01_2d = vertex_dist_2d.distance(sv0, sv1);
+					Measurement1D miss_dist01_z = vertex_dist_z.distance(sv0, sv1);
 
 					// just to check values from miss vs. mag 
 					if (miss_dist01.value() != double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z))) {
@@ -477,9 +480,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdist3d_split_sv_pair_nsv3->Fill(double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)), w);
 					h_svdistz_split_sv_pair_nsv3->Fill(double(mag(sv0.z - sv1.z)), w);
 
-					Measurement1D miss_dist01 = vertex_dist_3d.distance(sv0->reco::Vertex(), sv1->reco::Vertex());
-					Measurement1D miss_dist01_2d = vertex_dist_2d.distance(sv0->reco::Vertex(), sv1->reco::Vertex());
-					Measurement1D miss_dist01_z = vertex_dist_z.distance(sv0->reco::Vertex(), sv1->reco::Vertex());
+					Measurement1D miss_dist01 = vertex_dist_3d.distance(sv0, sv1);
+					Measurement1D miss_dist01_2d = vertex_dist_2d.distance(sv0, sv1);
+					Measurement1D miss_dist01_z = vertex_dist_z.distance(sv0, sv1);
 
 					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
@@ -565,9 +568,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdist3d_split_sv_pair_nsv3->Fill(double(mag(sv0.x - sv2.x, sv0.y - sv2.y, sv0.z - sv2.z)), w);
 					h_svdistz_split_sv_pair_nsv3->Fill(double(mag(sv0.z - sv2.z)), w);
 
-					Measurement1D miss_dist02 = vertex_dist_3d.distance(sv0->reco::Vertex(), sv2->reco::Vertex());
-					Measurement1D miss_dist02_2d = vertex_dist_2d.distance(sv0->reco::Vertex(), sv2->reco::Vertex());
-					Measurement1D miss_dist02_z = vertex_dist_z.distance(sv0->reco::Vertex(), sv2->reco::Vertex());
+					Measurement1D miss_dist02 = vertex_dist_3d.distance(sv0, sv2);
+					Measurement1D miss_dist02_2d = vertex_dist_2d.distance(sv0, sv2);
+					Measurement1D miss_dist02_z = vertex_dist_z.distance(sv0, sv2);
 
 					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
@@ -654,9 +657,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdist3d_split_sv_pair_nsv3->Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)), w);
 					h_svdistz_split_sv_pair_nsv3->Fill(double(mag(sv1.z - sv2.z)), w);
 
-					Measurement1D miss_dist12 = vertex_dist_3d.distance(sv1->reco::Vertex(), sv2->reco::Vertex());
-					Measurement1D miss_dist12_2d = vertex_dist_2d.distance(sv1->reco::Vertex(), sv2->reco::Vertex());
-					Measurement1D miss_dist12_z = vertex_dist_z.distance(sv1->reco::Vertex(), sv2->reco::Vertex());
+					Measurement1D miss_dist12 = vertex_dist_3d.distance(sv1, sv2);
+					Measurement1D miss_dist12_2d = vertex_dist_2d.distance(sv1, sv2);
+					Measurement1D miss_dist12_z = vertex_dist_z.distance(sv1, sv2);
 
 					if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
 						if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < 0.0085) {
@@ -780,9 +783,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_svdist3d_split_sv_pair_nsv4->Fill(double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j])), w);
 							h_svdistz_split_sv_pair_nsv4->Fill(double(mag(sv_z_vec[i] - sv_z_vec[j])), w);
 
-							Measurement1D miss_distij = vertex_dist_3d.distance(auxes->at(i)->reco::Vertex(), auxes->at(j)->reco::Vertex());
-							Measurement1D miss_distij_2d = vertex_dist_2d.distance(auxes->at(i)->reco::Vertex(), auxes->at(j)->reco::Vertex());
-							Measurement1D miss_distij_z = vertex_dist_z.distance(auxes->at(i)->reco::Vertex(), auxes->at(j)->reco::Vertex());
+							Measurement1D miss_distij = vertex_dist_3d.distance(auxes->at(i), auxes->at(j));
+							Measurement1D miss_distij_2d = vertex_dist_2d.distance(auxes->at(i), auxes->at(j));
+							Measurement1D miss_distij_z = vertex_dist_z.distance(auxes->at(i), auxes->at(j));
 
 							if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
 								if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < 0.0085) {
