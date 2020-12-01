@@ -481,7 +481,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					VertexDistance3D vertex_dist01_3d;
 					VertexDistanceXY vertex_dist01_2d;
-					VertexDistance vertex_dist01_z;
+					VertexDistance3D vertex_dist01_z;
 
 					Measurement1D miss_dist01 = vertex_dist01_3d.distance(sv0, sv1);
 					Measurement1D miss_dist01_2d = vertex_dist01_2d.distance(sv0, sv1);
