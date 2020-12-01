@@ -33,7 +33,7 @@ private:
 	const int max_ntrackplots;
 	const bool do_scatterplots;
 
-	reco::Vertex recoZVertexOnly(MFVVertexAux& sv) const {
+	reco::Vertex recoZVertexOnly(const MFVVertexAux) const {
 		reco::Vertex::Error e;
 		e(0, 0) = 0; e(0, 1) = 0; e(0, 2) = 0;
 		e(1, 1) = 0; e(1, 2) = 0;
@@ -77,6 +77,7 @@ private:
 	TH2F* h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3;
 
 	TH1F* h_close_more_svlsp_svdist3d;
+	TH1F* h_close_more_svlsp_svdist3d_err;
 	TH1F* h_close_more_svlsp_svdist3d_3dsigma;
 	TH1F* h_close_more_svlsp_svdist2d;
 	TH1F* h_close_more_svlsp_svdist2d_2dsigma;
@@ -164,6 +165,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3 = fs->make<TH2F>("h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3", "nsv >= 2, split-vertex pair w/  0.1 cm <= svdist3d; dist3d(gen vtx, sv w/ less tracks) (cm); dist3d(gen vtx, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 0.1);
 
 	h_close_more_svlsp_svdist3d = fs->make<TH1F>("h_close_more_svlsp_svdist3d", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; svdist3d (cm)", 100, 0, 1);
+	h_close_more_svlsp_svdist3d_err = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; svdist3d (cm)", 100, 0, 0.1);
 	h_close_more_svlsp_svdist3d_3dsigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_3dsigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; #frac{svdist3d}{sig svdist3d}", 100, 0, 10);
 	h_close_more_svlsp_svdist2d = fs->make<TH1F>("h_close_more_svlsp_svdist2d", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; svdist2d (cm)", 100, 0, 1);
 	h_close_more_svlsp_svdist2d_2dsigma = fs->make<TH1F>("h_close_more_svlsp_svdist2d_2dsigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; #frac{svdist2d}{sig svdist2d}", 100, 0, 10);
@@ -358,6 +360,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
 						}
 					}
 					else {
@@ -368,6 +372,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
 						}
 					}
 
@@ -503,6 +509,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
 						}
 					}
 					else {
@@ -513,6 +521,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
 						}
 					}
 
@@ -595,6 +605,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist02.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist02_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist02_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist02.error(), w);
 						}
 					}
 					else {
@@ -605,6 +617,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist02.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist02_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist02_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist02.error(), w);
 						}
 					}
 
@@ -688,6 +702,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist12.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist12_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist12_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist12.error(), w);
 						}
 					}
 					else {
@@ -698,6 +714,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist12.significance(), w);
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist12_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist12_z.significance(), w);
+
+							h_close_more_svlsp_svdist3d_err->Fill(miss_dist12.error(), w);
 						}
 					}
 
@@ -820,6 +838,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_distij.significance(), w);
 									h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_distij_2d.significance(), w);
 									h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_distij_z.significance(), w);
+
+									h_close_more_svlsp_svdist3d_err->Fill(miss_distij.error(), w);
 								}
 							}
 							else {
@@ -830,6 +850,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_distij.significance(), w);
 									h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_distij_2d.significance(), w);
 									h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_distij_z.significance(), w);
+
+									h_close_more_svlsp_svdist3d_err->Fill(miss_distij.error(), w);
 								}
 							}
 
