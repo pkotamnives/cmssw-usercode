@@ -33,7 +33,7 @@ private:
 	const int max_ntrackplots;
 	const bool do_scatterplots;
 
-	reco::Vertex recoZVertexOnly(const MFVVertexAux) const {
+	reco::Vertex recoZVertexOnly(const MFVVertexAux sv) const {
 		reco::Vertex::Error e;
 		e(0, 0) = 0; e(0, 1) = 0; e(0, 2) = 0;
 		e(1, 1) = 0; e(1, 2) = 0;
