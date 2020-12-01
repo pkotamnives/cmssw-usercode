@@ -332,7 +332,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					
 					VertexDistance3D vertex_dist01_3d;
 					VertexDistanceXY vertex_dist01_2d;
-					VertexDistance vertex_dist01_z;
+					VertexDistance3D vertex_dist01_z;
 					Measurement1D miss_dist01 = vertex_dist01_3d.distance(sv0, sv1);
 					Measurement1D miss_dist01_2d = vertex_dist01_2d.distance(sv0, sv1);
 					Measurement1D miss_dist01_z = vertex_dist01_z.distance(sv0, sv1);
@@ -573,7 +573,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					VertexDistance3D vertex_dist02_3d;
 					VertexDistanceXY vertex_dist02_2d;
-					VertexDistance vertex_dist02_z;
+					VertexDistance3D vertex_dist02_z;
 
 					Measurement1D miss_dist02 = vertex_dist02_3d.distance(sv0, sv2);
 					Measurement1D miss_dist02_2d = vertex_dist02_2d.distance(sv0, sv2);
@@ -666,7 +666,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					VertexDistance3D vertex_dist12_3d;
 					VertexDistanceXY vertex_dist12_2d;
-					VertexDistance vertex_dist12_z;
+					VertexDistance3D vertex_dist12_z;
 
 					Measurement1D miss_dist12 = vertex_dist12_3d.distance(sv1, sv2);
 					Measurement1D miss_dist12_2d = vertex_dist12_2d.distance(sv1, sv2);
@@ -785,7 +785,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 			VertexDistance3D vertex_distij_3d;
 			VertexDistanceXY vertex_distij_2d;
-			VertexDistance vertex_distij_z;
+			VertexDistance3D vertex_distij_z;
 
 			
 			for (int i = 0; i < nsv; ++i) {
