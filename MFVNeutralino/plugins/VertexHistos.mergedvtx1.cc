@@ -36,30 +36,30 @@ private:
 	void fill(TH1F** hs, const int, const double val, const double weight) const { hs[sv_all]->Fill(val, weight); }
 	void fill(TH2F** hs, const int, const double val, const double val2, const double weight) const { hs[sv_all]->Fill(val, val2, weight); }
 
-	Measurement1D miss_dist(const reco::Vertex& sv, const AlgebraicVector3& ref, const AlgebraicVector3& mom) {
+	Measurement1D miss_dist(const reco::Vertex& sv1, const reco::Vertex& sv2, const AlgebraicVector3& mom) {
 		// miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
 		// to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
 		AlgebraicVector3 n = ROOT::Math::Unit(mom);
-		AlgebraicVector3 d(sv.x() - ref(0),
-			sv.y() - ref(1),
-			sv.z() - ref(2));
+		AlgebraicVector3 d(sv1.x() - sv2.x(),
+			sv1.y() - sv2.y(),
+			sv1.z() - sv2.z());
 		AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
 		double n_dot_d = ROOT::Math::Dot(n, d);
 		double val = ROOT::Math::Mag(n_cross_d);
 		AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
 			2 * d(1) - 2 * n_dot_d * n(1),
 			2 * d(2) - 2 * n_dot_d * n(2));
-		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv
+		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv1.covariance() + sv2.covariance())) / 2 / val);
 	}
 
-	Measurement1D miss_dist_2D(const reco::Vertex & sv, const AlgebraicVector3 & ref, const AlgebraicVector3 & mom) {
+	Measurement1D miss_dist_2D(const reco::Vertex & sv1, const reco::Vertex& sv2, const AlgebraicVector3 & mom) {
 		// miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
 		// to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
 		AlgebraicVector3 n = ROOT::Math::Unit(mom);
 		n(2) = 0.0;
-		AlgebraicVector3 d(sv.x() - ref(0),
-			sv.y() - ref(1),
-			sv.z() - ref(2));
+		AlgebraicVector3 d(sv1.x() - sv2.x(),
+			sv1.y() - sv2.y(),
+			sv1.z() - sv2.z());
 		d(2) = 0.0;
 		AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
 		double n_dot_d = ROOT::Math::Dot(n, d);
@@ -67,7 +67,27 @@ private:
 		AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
 			2 * d(1) - 2 * n_dot_d * n(1),
 			2 * d(2) - 2 * n_dot_d * n(2));
-		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv and need sv to be modified for sig
+		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv1.covariance() + sv2.covariance())) / 2 / val);
+	}
+
+	Measurement1D miss_dist_Z(const reco::Vertex& sv1, const reco::Vertex& sv2, const AlgebraicVector3& mom) {
+		// miss distance is magnitude of (jet direction (= n) cross (tv - sv) ( = d))
+		// to calculate uncertainty, use |n X d|^2 = (|n||d|)^2 - (n . d)^2
+		AlgebraicVector3 n = ROOT::Math::Unit(mom);
+		n(0) = 0.0;
+		n(1) = 0.0;
+		AlgebraicVector3 d(sv1.x() - sv2.x(),
+			sv1.y() - sv2.y(),
+			sv1.z() - sv2.z());
+		d(0) = 0.0;
+		d(1) = 0.0;
+		AlgebraicVector3 n_cross_d = ROOT::Math::Cross(n, d);
+		double n_dot_d = ROOT::Math::Dot(n, d);
+		double val = ROOT::Math::Mag(n_cross_d);
+		AlgebraicVector3 jac(2 * d(0) - 2 * n_dot_d * n(0),
+			2 * d(1) - 2 * n_dot_d * n(1),
+			2 * d(2) - 2 * n_dot_d * n(2));
+		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv1.covariance() + sv2.covariance())) / 2 / val);
 	}
 	
 	
@@ -96,6 +116,13 @@ private:
 	TH2F* h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1;
 	TH2F* h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2;
 	TH2F* h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3;
+
+	TH1F* h_close_more_svlsp_svdist3d;
+	TH1F* h_close_more_svlsp_svdist3d_3dsigma;
+	TH1F* h_close_more_svlsp_svdist2d;
+	TH1F* h_close_more_svlsp_svdist2d_2dsigma;
+	TH1F* h_close_more_svlsp_svdistdz;
+	TH1F* h_close_more_svlsp_svdistdz_dzsigma;
 
 	TH1F* h_dphi_genlsp_nsv2;
 	TH1F* h_dphi_sv0sv1_nsv2;
@@ -176,6 +203,13 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1 = fs->make<TH2F>("h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1", "nsv >= 2, split-vertex pair w/ 0.01 < svdist3d < 0.02 cm; dist3d(gen vtx, sv w/ less tracks) (cm); dist3d(gen vtx, sv w/ more tracks) (cm)", 100, 0, 0.1, 100, 0, 0.1);
 	h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2 = fs->make<TH2F>("h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range2", "nsv >= 2, split-vertex pair w/  0.02 cm <= svdist3d; dist3d(gen vtx, sv w/ less tracks) (cm); dist3d(gen vtx, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 0.1);
 	h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3 = fs->make<TH2F>("h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range3", "nsv >= 2, split-vertex pair w/  0.1 cm <= svdist3d; dist3d(gen vtx, sv w/ less tracks) (cm); dist3d(gen vtx, sv w/ more tracks) (cm)", 100, 0, 1.0, 100, 0, 0.1);
+
+	h_close_more_svlsp_svdist3d = fs->make<TH1F>("h_close_more_svlsp_svdist3d", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; svdist3d (cm)", 100, 0, 1);
+	h_close_more_svlsp_svdist3d_3dsigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_3dsigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; #frac{svdist3d}{sig svdist3d}", 100, 0, 10);
+	h_close_more_svlsp_svdist2d = fs->make<TH1F>("h_close_more_svlsp_svdist2d", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; svdist2d (cm)", 100, 0, 1);
+	h_close_more_svlsp_svdist2d_2dsigma = fs->make<TH1F>("h_close_more_svlsp_svdist2d_2dsigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; #frac{svdist2d}{sig svdist2d}", 100, 0, 10);
+	h_close_more_svlsp_svdistdz = fs->make<TH1F>("h_close_more_svlsp_svdistdz", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; svdistdz (cm)", 100, 0, 1);
+	h_close_more_svlsp_svdistdz_dzsigma = fs->make<TH1F>("h_close_more_svlsp_svdist2d_dzsigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5; #frac{svdistdz}{sig svdistdz}", 100, 0, 10);
 
 
 	//nsv=2
@@ -309,6 +343,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		std::vector<double> sv_x_vec;
 		std::vector<double> sv_y_vec;
 		std::vector<double> sv_z_vec;
+		std::vector<AlgebraicVector3> mom_sv_vec;
 		std::vector<double> phi_vec;
 		std::vector<double> svdist2d_vec;
 		std::vector<int> less_tracks_vec;
@@ -334,12 +369,46 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			double dphi01 = std::abs(reco::deltaPhi(phi0,phi1));
 			h_dphi_sv0sv1_nsv2->Fill(dphi01, w);
 			h_2D_less_tracks_dphi01_nsv2->Fill(int(sv1.ntracks()),dphi01, w);
+			AlgebraicVector3 mom_sv0(sv0.px(), sv0.py(), sv0.pz());
+			AlgebraicVector3 mom_sv1(sv1.px(), sv1.py(), sv1.pz());
+
 			if (dphi01 <= 0.5) {
 				h_2D_more_tracks_less_tracks_small_nsv2->Fill(int(sv0.ntracks()), int(sv1.ntracks()), w);
 				
 					h_svdist2d_split_sv_pair_nsv2->Fill(double(mag(sv0.x - sv1.x, sv0.y - sv1.y)),w);
 					h_svdist3d_split_sv_pair_nsv2->Fill(double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)), w);
 					h_svdistz_split_sv_pair_nsv2->Fill(double(mag(sv0.z - sv1.z)), w);
+
+					Measurement1D miss_dist01 = miss_dist(sv1, sv0, mom_sv0);
+					Measurement1D miss_dist01_2d = miss_dist_2D(sv1, sv0, mom_sv0);
+					Measurement1D miss_dist01_z = miss_dist_Z(sv1, sv0, mom_sv0);
+
+					// just to check values from miss vs. mag 
+					if (miss_dist01.value() != double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z))) {
+						std::cout << miss_dist01.value() << " miss is not mag " << double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z) << std::endl;
+					}
+
+					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
+						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+						}
+					}
+					else {
+						if (double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+						}
+					}
+
 					if (double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)) <= 0.01) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
@@ -406,6 +475,11 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			double dphi01 = std::abs(reco::deltaPhi(phi0, phi1));
 			double dphi02 = std::abs(reco::deltaPhi(phi0, phi2));
 			double dphi12 = std::abs(reco::deltaPhi(phi1, phi2));
+
+			AlgebraicVector3 mom_sv0(sv0.px(), sv0.py(), sv0.pz());
+			AlgebraicVector3 mom_sv1(sv1.px(), sv1.py(), sv1.pz());
+			AlgebraicVector3 mom_sv2(sv2.px(), sv2.py(), sv2.pz());
+
 			dphi_vec.push_back(dphi01);
 			dphi_vec.push_back(dphi02);
 			dphi_vec.push_back(dphi12);
@@ -454,6 +528,32 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdist2d_split_sv_pair_nsv3->Fill(double(mag(sv0.x - sv1.x, sv0.y - sv1.y)), w);
 					h_svdist3d_split_sv_pair_nsv3->Fill(double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)), w);
 					h_svdistz_split_sv_pair_nsv3->Fill(double(mag(sv0.z - sv1.z)), w);
+
+					Measurement1D miss_dist01 = miss_dist(sv1, sv0, mom_sv0);
+					Measurement1D miss_dist01_2d = miss_dist_2D(sv1, sv0, mom_sv0);
+					Measurement1D miss_dist01_z = miss_dist_Z(sv1, sv0, mom_sv0);
+
+					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
+						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+						}
+					}
+					else {
+						if (double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
+						}
+					}
+
 					if (double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)) <= 0.01) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
@@ -516,6 +616,32 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdist2d_split_sv_pair_nsv3->Fill(double(mag(sv0.x - sv2.x, sv0.y - sv2.y)), w);
 					h_svdist3d_split_sv_pair_nsv3->Fill(double(mag(sv0.x - sv2.x, sv0.y - sv2.y, sv0.z - sv2.z)), w);
 					h_svdistz_split_sv_pair_nsv3->Fill(double(mag(sv0.z - sv2.z)), w);
+
+					Measurement1D miss_dist02 = miss_dist(sv2, sv0, mom_sv0);
+					Measurement1D miss_dist02_2d = miss_dist_2D(sv2, sv0, mom_sv0);
+					Measurement1D miss_dist02_z = miss_dist_Z(sv2, sv0, mom_sv0);
+
+					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
+						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist02.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist02_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist02_z.significance(), w);
+						}
+					}
+					else {
+						if (double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist02.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist02_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist02_z.significance(), w);
+						}
+					}
+
 					if (double(mag(sv0.x - sv2.x, sv0.y - sv2.y, sv0.z - sv2.z)) <= 0.01) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y)), double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y)), double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y)), w);
@@ -579,6 +705,33 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					h_svdist2d_split_sv_pair_nsv3->Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y)), w);
 					h_svdist3d_split_sv_pair_nsv3->Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)), w);
 					h_svdistz_split_sv_pair_nsv3->Fill(double(mag(sv1.z - sv2.z)), w);
+
+					Measurement1D miss_dist12 = miss_dist(sv2, sv1, mom_sv1);
+					Measurement1D miss_dist12_2d = miss_dist_2D(sv2, sv1, mom_sv1);
+					Measurement1D miss_dist12_z = miss_dist_Z(sv2, sv1, mom_sv1);
+
+					if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
+						if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist12.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist12_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist12_z.significance(), w);
+						}
+					}
+					else {
+						if (double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)) < 0.0085) {
+							h_close_more_svlsp_svdist3d->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist2d->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y)), w);
+							h_close_more_svlsp_svdistdz->Fill(double(mag(sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_dist12.significance(), w);
+							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist12_2d.significance(), w);
+							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist12_z.significance(), w);
+						}
+					}
+
+
 					if (double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)) <= 0.01) {
 						h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv2.x, lsp0_y - sv2.y)), double(mag(lsp1_x - sv2.x, lsp1_y - sv2.y)), w);
 						h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y)), double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y)), w);
@@ -650,6 +803,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			phi_vec.push_back(phi1);
 			phi_vec.push_back(phi2);
 			phi_vec.push_back(phi3);
+
+			AlgebraicVector3 mom_sv0(sv0.px(), sv0.py(), sv0.pz());
+			AlgebraicVector3 mom_sv1(sv1.px(), sv1.py(), sv1.pz());
+			AlgebraicVector3 mom_sv2(sv2.px(), sv2.py(), sv2.pz());
+			AlgebraicVector3 mom_sv3(sv3.px(), sv3.py(), sv3.pz());
+			mom_sv_vec.push_back(mom_sv0);
+			mom_sv_vec.push_back(mom_sv1);
+			mom_sv_vec.push_back(mom_sv2);
+			mom_sv_vec.push_back(mom_sv3);
+
 			less_tracks_vec.push_back(int(sv1.ntracks()));
 			less_tracks_vec.push_back(int(sv2.ntracks()));
 			less_tracks_vec.push_back(int(sv3.ntracks()));
@@ -676,6 +839,32 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_svdist2d_split_sv_pair_nsv4->Fill(double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j])), w);
 							h_svdist3d_split_sv_pair_nsv4->Fill(double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j])), w);
 							h_svdistz_split_sv_pair_nsv4->Fill(double(mag(sv_z_vec[i] - sv_z_vec[j])), w);
+
+							Measurement1D miss_distij = miss_dist(auxes->at(j), auxes->at(i), mom_sv_vec[i]);
+							Measurement1D miss_distij_2d = miss_dist_2D(auxes->at(j), auxes->at(i), mom_sv_vec[i]);
+							Measurement1D miss_distij_z = miss_dist_Z(auxes->at(j), auxes->at(i), mom_sv_vec[i]);
+
+							if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
+								if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < 0.0085) {
+									h_close_more_svlsp_svdist3d->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist2d->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i])), w);
+									h_close_more_svlsp_svdistdz->Fill(double(mag(sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_distij.significance(), w);
+									h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_distij_2d.significance(), w);
+									h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_distij_z.significance(), w);
+								}
+							}
+							else {
+								if (double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])) < 0.0085) {
+									h_close_more_svlsp_svdist3d->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist2d->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i])), w);
+									h_close_more_svlsp_svdistdz->Fill(double(mag(sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_3dsigma->Fill(miss_distij.significance(), w);
+									h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_distij_2d.significance(), w);
+									h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_distij_z.significance(), w);
+								}
+							}
+
 							if (double(mag(sv_x_vec[i] - sv_x_vec[j], sv_y_vec[i] - sv_y_vec[j], sv_z_vec[i] - sv_z_vec[j])) <= 0.01) {
 								h_2D_less_svlsp0_less_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j])), double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j])), w);
 								h_2D_more_svlsp0_more_svlsp1_split_sv_pair_range0->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i])), w);
