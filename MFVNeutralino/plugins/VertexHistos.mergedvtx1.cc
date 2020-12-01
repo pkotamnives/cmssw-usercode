@@ -33,6 +33,14 @@ private:
 	const int max_ntrackplots;
 	const bool do_scatterplots;
 
+	reco::Vertex recoZVertexOnly(MFVVertexAux& sv) const {
+		reco::Vertex::Error e;
+		e(0, 0) = 0; e(0, 1) = 0; e(0, 2) = 0;
+		e(1, 1) = 0; e(1, 2) = 0;
+		e(2, 2) = sv.czz;
+		return reco::Vertex(reco::Vertex::Point(0, 0, sv.z), e, sv.chi2, sv.ndof(), sv.ntracks());
+	}
+
 	enum sv_index { sv_all, sv_num_indices };
 	static const char* sv_index_names[sv_num_indices];
 
@@ -335,7 +343,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					VertexDistance3D vertex_dist01_z;
 					Measurement1D miss_dist01 = vertex_dist01_3d.distance(sv0, sv1);
 					Measurement1D miss_dist01_2d = vertex_dist01_2d.distance(sv0, sv1);
-					Measurement1D miss_dist01_z = vertex_dist01_z.distance(sv0, sv1);
+					Measurement1D miss_dist01_z = vertex_dist01_z.distance(recoZVertexOnly(sv0), recoZVertexOnly(sv1));;
 
 					// just to check values from miss vs. mag 
 					if (miss_dist01.value() != double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z))) {
@@ -485,7 +493,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					Measurement1D miss_dist01 = vertex_dist01_3d.distance(sv0, sv1);
 					Measurement1D miss_dist01_2d = vertex_dist01_2d.distance(sv0, sv1);
-					Measurement1D miss_dist01_z = vertex_dist01_z.distance(sv0, sv1);
+					Measurement1D miss_dist01_z = vertex_dist01_z.distance(recoZVertexOnly(sv0), recoZVertexOnly(sv1));
 
 					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
@@ -577,7 +585,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					Measurement1D miss_dist02 = vertex_dist02_3d.distance(sv0, sv2);
 					Measurement1D miss_dist02_2d = vertex_dist02_2d.distance(sv0, sv2);
-					Measurement1D miss_dist02_z = vertex_dist02_z.distance(sv0, sv2);
+					Measurement1D miss_dist02_z = vertex_dist02_z.distance(recoZVertexOnly(sv0), recoZVertexOnly(sv2));
 
 					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
 						if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
@@ -670,7 +678,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 					Measurement1D miss_dist12 = vertex_dist12_3d.distance(sv1, sv2);
 					Measurement1D miss_dist12_2d = vertex_dist12_2d.distance(sv1, sv2);
-					Measurement1D miss_dist12_z = vertex_dist12_z.distance(sv1, sv2);
+					Measurement1D miss_dist12_z = vertex_dist12_z.distance(recoZVertexOnly(sv1), recoZVertexOnly(sv1));
 
 					if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
 						if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < 0.0085) {
@@ -802,7 +810,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 							Measurement1D miss_distij = vertex_distij_3d.distance(auxes->at(i), auxes->at(j));
 							Measurement1D miss_distij_2d = vertex_distij_2d.distance(auxes->at(i), auxes->at(j));
-							Measurement1D miss_distij_z = vertex_distij_z.distance(auxes->at(i), auxes->at(j));
+							Measurement1D miss_distij_z = vertex_distij_z.distance(recoZVertexOnly(auxes->at(i)), recoZVertexOnly(auxes->at(j)));
 
 							if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
 								if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < 0.0085) {
