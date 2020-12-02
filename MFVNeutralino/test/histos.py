@@ -18,12 +18,12 @@ SimpleTriggerResults.setup_endpath(process, weight_src='mfvWeight')
 
 common = cms.Sequence(process.mfvSelectedVerticesSeq * process.mfvWeight)
 
-#process.mfvEventHistosNoCuts = process.mfvEventHistos.clone()
-#process.pSkimSel = cms.Path(common * process.mfvEventHistosNoCuts) # just trigger for now
+process.mfvEventHistosNoCuts = process.mfvEventHistos.clone()
+process.pSkimSel = cms.Path(common * process.mfvEventHistosNoCuts) # just trigger for now
 
-#process.mfvEventHistosPreSel = process.mfvEventHistos.clone()
-#process.mfvAnalysisCutsPreSel = process.mfvAnalysisCuts.clone(apply_vertex_cuts = False)
-#process.pEventPreSel = cms.Path(common * process.mfvAnalysisCutsPreSel * process.mfvEventHistosPreSel)
+process.mfvEventHistosPreSel = process.mfvEventHistos.clone()
+process.mfvAnalysisCutsPreSel = process.mfvAnalysisCuts.clone(apply_vertex_cuts = False)
+process.pEventPreSel = cms.Path(common * process.mfvAnalysisCutsPreSel * process.mfvEventHistosPreSel)
 
 nm1s = []
 #nm1s = [
@@ -56,14 +56,27 @@ for ntk in ntks:
         EX3 = 'ntracks01_0 = 5, ntracks01_1 = 4, '
 
     exec '''
+process.EX1mfvAnalysisCutsOnlyOneVtx = process.mfvAnalysisCuts.clone(EX2min_nvertex = 1, max_nvertex = 1)
 process.EX1mfvAnalysisCutsFullSel    = process.mfvAnalysisCuts.clone(EX2EX3)
+process.EX1mfvAnalysisCutsSigReg     = process.mfvAnalysisCuts.clone(EX2EX3min_svdist2d = 0.04)
+
+process.EX1mfvEventHistosOnlyOneVtx = process.mfvEventHistos.clone()
 process.EX1mfvEventHistosFullSel    = process.mfvEventHistos.clone()
+process.EX1mfvEventHistosSigReg     = process.mfvEventHistos.clone()
+
+process.EX1mfvVertexHistosPreSel     = process.mfvVertexHistos.clone(EX2)
+process.EX1mfvVertexHistosOnlyOneVtx = process.mfvVertexHistos.clone(EX2)
 process.EX1mfvVertexHistosFullSel    = process.mfvVertexHistos.clone(EX2)
+process.EX1mfvVertexHistosSigReg     = process.mfvVertexHistos.clone(EX2)
+
+process.EX1pPreSel     = cms.Path(common * process.mfvAnalysisCutsPreSel                                              * process.EX1mfvVertexHistosPreSel)
+process.EX1pOnlyOneVtx = cms.Path(common * process.EX1mfvAnalysisCutsOnlyOneVtx * process.EX1mfvEventHistosOnlyOneVtx * process.EX1mfvVertexHistosOnlyOneVtx)
 '''.replace('EX1', EX1).replace('EX2', EX2).replace('EX3', EX3)
 
     if 2 in nvs:
         exec '''
 process.EX1pFullSel    = cms.Path(common * process.EX1mfvAnalysisCutsFullSel    * process.EX1mfvEventHistosFullSel    * process.EX1mfvVertexHistosFullSel)
+process.EX1pSigReg     = cms.Path(common * process.EX1mfvAnalysisCutsSigReg     * process.EX1mfvEventHistosSigReg     * process.EX1mfvVertexHistosSigReg)
 '''.replace('EX1', EX1)
 
     for name, cut in nm1s:
@@ -110,15 +123,15 @@ if __name__ == '__main__' and hasattr(sys, 'argv') and 'submit' in sys.argv:
     from JMTucker.Tools.MetaSubmitter import *
 
     if use_btag_triggers :
-        samples = pick_samples(dataset, qcd=True, ttbar=False, all_signal=True, data=False, bjet=True) # no data currently; no sliced ttbar since inclusive is used
-        pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier(), half_mc_modifier())
+        samples = pick_samples(dataset, qcd=True, ttbar=False, span_signal=True, data=False, bjet=True) # no data currently; no sliced ttbar since inclusive is used
+        pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier())
     else :
         samples = pick_samples(dataset, span_signal=True, all_signal=False, data=False)
         pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier())
 
     set_splitting(samples, dataset, 'histos', data_json=json_path('ana_2017p8.json'))
 
-    cs = CondorSubmitter('Histos_mistrk7001_' + version,
+    cs = CondorSubmitter('Histos_mergedvtx2_' + version,
                          ex = year,
                          dataset = dataset,
                          pset_modifier = pset_modifier,
