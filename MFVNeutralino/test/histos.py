@@ -3,7 +3,7 @@ from JMTucker.Tools.BasicAnalyzer_cfg import *
 is_mc = True # for blinding
 
 from JMTucker.MFVNeutralino.NtupleCommon import ntuple_version_use as version, dataset, use_btag_triggers
-sample_files(process, 'qcdht2000_2017' if is_mc else 'JetHT2017B', dataset, 1)
+sample_files(process, 'mfv_stopdbardbar_tau001000um_M1600_2017' if is_mc else 'JetHT2017B', dataset, 1)
 tfileservice(process, 'histos.root')
 cmssw_from_argv(process)
 
@@ -25,10 +25,11 @@ process.mfvEventHistosPreSel = process.mfvEventHistos.clone()
 process.mfvAnalysisCutsPreSel = process.mfvAnalysisCuts.clone(apply_vertex_cuts = False)
 process.pEventPreSel = cms.Path(common * process.mfvAnalysisCutsPreSel * process.mfvEventHistosPreSel)
 
-nm1s = [
-    ('Bsbs2ddist', 'min_bsbs2ddist = 0'),
-    ('Bs2derr',    'max_rescale_bs2derr = 1e9'),
-    ]
+nm1s = []
+#nm1s = [
+#    ('Bsbs2ddist', 'min_bsbs2ddist = 0'),
+#    ('Bs2derr',    'max_rescale_bs2derr = 1e9'),
+#    ]
 
 ntks = [5,3,4,7,8,9]
 nvs = [0,1,2]
@@ -122,15 +123,15 @@ if __name__ == '__main__' and hasattr(sys, 'argv') and 'submit' in sys.argv:
     from JMTucker.Tools.MetaSubmitter import *
 
     if use_btag_triggers :
-        samples = pick_samples(dataset, qcd=True, ttbar=False, all_signal=True, data=False, bjet=True) # no data currently; no sliced ttbar since inclusive is used
-        pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier(), half_mc_modifier())
+        samples = pick_samples(dataset, qcd=True, ttbar=False, span_signal=True, data=False, bjet=True) # no data currently; no sliced ttbar since inclusive is used
+        pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier())
     else :
-        samples = pick_samples(dataset, span_signal=False, all_signal=False, data=False)
+        samples = pick_samples(dataset, span_signal=True, all_signal=False, data=False)
         pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier())
 
     set_splitting(samples, dataset, 'histos', data_json=json_path('ana_2017p8.json'))
 
-    cs = CondorSubmitter('Histos' + version,
+    cs = CondorSubmitter('Histos_mergedvtx2_' + version,
                          ex = year,
                          dataset = dataset,
                          pset_modifier = pset_modifier,
