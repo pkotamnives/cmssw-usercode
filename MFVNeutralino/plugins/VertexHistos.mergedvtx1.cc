@@ -381,7 +381,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(),w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(),w);
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
 
@@ -411,7 +411,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
@@ -567,7 +567,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
@@ -598,7 +598,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist01_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist01_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), miss_dist01.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist01.error(), w);
@@ -701,7 +701,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist02_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist02_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), miss_dist02.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), miss_dist02.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist02.error(), w);
@@ -732,7 +732,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist02_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist02_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), miss_dist02.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), miss_dist02.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist02.error(), w);
@@ -836,7 +836,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist12_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist12_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)), miss_dist12.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)), miss_dist12.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist12.error(), w);
@@ -867,7 +867,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_dist12_2d.significance(), w);
 							h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_dist12_z.significance(), w);
 
-							h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)), miss_dist12.significance(), w);
+							h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv1.x - sv2.x, sv1.y - sv2.y, sv1.z - sv2.z)), miss_dist12.significance(), w);
 
 
 							h_close_more_svlsp_svdist3d_err->Fill(miss_dist12.error(), w);
@@ -1010,7 +1010,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_distij_2d.significance(), w);
 									h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_distij_z.significance(), w);
 
-									h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), miss_distij.significance(), w);
+									h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), miss_distij.significance(), w);
 
 
 									h_close_more_svlsp_svdist3d_err->Fill(miss_distij.error(), w);
@@ -1041,7 +1041,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 									h_close_more_svlsp_svdist2d_2dsigma->Fill(miss_distij_2d.significance(), w);
 									h_close_more_svlsp_svdistdz_dzsigma->Fill(miss_distij_z.significance(), w);
 
-									h_close_more_svlsp_svdist3d_sigdist3d - Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), miss_distij.significance(), w);
+									h_close_more_svlsp_svdist3d_sigdist3d->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), miss_distij.significance(), w);
 
 									h_close_more_svlsp_svdist3d_err->Fill(miss_distij.error(), w);
 
