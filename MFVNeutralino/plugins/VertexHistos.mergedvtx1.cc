@@ -94,9 +94,35 @@ private:
 	TH1F* h_close_more_svlsp_svdist3d_less_4sigma;
 	TH1F* h_close_more_svlsp_svdist3d_err_less_4sigma;
 	TH1F* h_close_more_svlsp_lspdist3d_less_4sigma;
+	TH1F* h_close_more_svlsp_svdist3d_more_8sigma;
+	TH1F* h_close_more_svlsp_svdist3d_err_more_8sigma;
+	TH1F* h_close_more_svlsp_lspdist3d_more_8sigma;
 	TH1F* h_close_more_svlsp_svdist3d_more_10sigma;
 	TH1F* h_close_more_svlsp_svdist3d_err_more_10sigma;
 	TH1F* h_close_more_svlsp_lspdist3d_more_10sigma;
+	TH1F* h_close_more_svlsp_svdist3d_more_4sigma;
+	TH1F* h_close_more_svlsp_svdist3d_err_more_4sigma;
+	TH1F* h_close_more_svlsp_lspdist3d_more_4sigma;
+
+	TH1F* h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_less_4sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_err_less_4sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_lspdist3d_less_4sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_more_4sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_svdist3d_err_more_4sigma_small_dlsp;
+	TH1F* h_close_more_svlsp_lspdist3d_more_4sigma_small_dlsp;
+
 
 	TH1F* h_dphi_genlsp_nsv2;
 	TH1F* h_dphi_sv0sv1_nsv2;
@@ -196,9 +222,35 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	h_close_more_svlsp_svdist3d_less_4sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_less_4sigma", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d (cm)", 1000, 0, 0.1);
 	h_close_more_svlsp_svdist3d_err_less_4sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_less_4sigma", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d err (cm)", 100, 0, 0.01);
 	h_close_more_svlsp_lspdist3d_less_4sigma = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_less_4sigma", " nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
-	h_close_more_svlsp_svdist3d_more_10sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_10sigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma; svdist3d (cm)", 10000, 0, 1);
-	h_close_more_svlsp_svdist3d_err_more_10sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_10sigma", "nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma; svdist3d err (cm)", 100, 0, 0.01);
-	h_close_more_svlsp_lspdist3d_more_10sigma = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_10sigma", " nsv >= 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_more_10sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_10sigma", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma; svdist3d (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_err_more_10sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_10sigma", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_more_10sigma = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_10sigma", " nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_more_8sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_8sigma", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma; svdist3d (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_err_more_8sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_8sigma", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_more_8sigma = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_8sigma", " nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_more_4sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_4sigma", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d (cm)", 1000, 0, 0.1);
+	h_close_more_svlsp_svdist3d_err_more_4sigma = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_4sigma", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_more_4sigma = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_4sigma", " nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+
+	h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma; svdist3d (cm)", 1000, 0, 0.1);
+	h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp", " nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 10 sigma; svdist3d (cm)", 1000, 0, 0.1);
+	h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 10 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp", " nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 10 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_less_4sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_less_4sigma_small_dlsp", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d (cm)", 1000, 0, 0.1);
+	h_close_more_svlsp_svdist3d_err_less_4sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_less_4sigma_small_dlsp", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_less_4sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_less_4sigma_small_dlsp", " nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma; svdist3d (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp", " nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d > 10 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma; svdist3d (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp", "nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp", " nsv > 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 8 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+	h_close_more_svlsp_svdist3d_more_4sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_more_4sigma_small_dlsp", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d (cm)", 1000, 0, 0.1);
+	h_close_more_svlsp_svdist3d_err_more_4sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_svdist3d_err_more_4sigma_small_dlsp", "nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma; svdist3d err (cm)", 100, 0, 0.01);
+	h_close_more_svlsp_lspdist3d_more_4sigma_small_dlsp = fs->make<TH1F>("h_close_more_svlsp_lspdist3d_more_4sigma_small_dlsp", " nsv = 2, dist3d(gen vtx, sv w/ more tracks) < 85 um, svdPhi < 0.5, svdist3d < 4 sigma;dist3d(gen vtx #0, #1) (cm)", 10000, 0, 1);
+
 
 	//nsv=2
 	h_dphi_genlsp_nsv2 = fs->make<TH1F>("h_dphi_genlsp_nsv2", "nsv = 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
@@ -410,12 +462,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							if (miss_dist01.significance() > 10) {
-								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
-								h_close_more_svlsp_svdist3d_err_more_10sigma->Fill(miss_dist01.error(), w);
-								h_close_more_svlsp_lspdist3d_more_10sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist01.significance() > 4) {
+								h_close_more_svlsp_svdist3d_more_4sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_4sigma->Fill(miss_dist01.error(), w);
+								h_close_more_svlsp_lspdist3d_more_4sigma->Fill(mevent->lspdist3d(), w);
 
 							}
+							
 						}
 					}
 					else {
@@ -446,13 +500,16 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							if (miss_dist01.significance() > 10) {
-								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
-								h_close_more_svlsp_svdist3d_err_more_10sigma->Fill(miss_dist01.error(), w);
-								h_close_more_svlsp_lspdist3d_more_10sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist01.significance() > 4) {
+								h_close_more_svlsp_svdist3d_more_4sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_4sigma->Fill(miss_dist01.error(), w);
+								h_close_more_svlsp_lspdist3d_more_4sigma->Fill(mevent->lspdist3d(), w);
 
 							}
+							
 						}
+
 					}
 
 					if (double(mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z)) <= 0.01) {
@@ -605,14 +662,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							/*
-							if (miss_dist01.significance() < 4) {
-								h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
-								h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_dist01.error(), w);
-								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist01.significance() > 8) {
+								h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_dist01.error(), w);
+								h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							*/
+							
 
 							if (miss_dist01.significance() > 10) {
 								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
@@ -648,13 +705,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							/*
-							if (miss_dist01.significance() < 4) {
-								h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
-								h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_dist01.error(), w);
-								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist01.significance() > 8) {
+								h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_dist01.error(), w);
+								h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 							}
-							*/
+						
 
 							if (miss_dist01.significance() > 10) {
 								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
@@ -762,13 +819,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							/*
-							if (miss_dist02.significance() < 4) {
-								h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
-								h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_dist02.error(), w);
-								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist02.significance() > 8) {
+								h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_dist02.error(), w);
+								h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 							}
-							*/
+							
 
 							if (miss_dist02.significance() > 10) {
 								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
@@ -804,13 +861,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							/*
-							if (miss_dist02.significance() < 4) {
-								h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
-								h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_dist02.error(), w);
-								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist02.significance() > 8) {
+								h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_dist02.error(), w);
+								h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 							}
-							*/
+							
 
 							if (miss_dist02.significance() > 10) {
 								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
@@ -919,13 +976,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							/*
-							if (miss_dist12.significance() < 4) {
-								h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
-								h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_dist12.error(), w);
-								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist12.significance() > 8) {
+								h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_dist12.error(), w);
+								h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 							}
-							*/
+							
 
 							if (miss_dist12.significance() > 10) {
 								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
@@ -961,13 +1018,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 							}
 
-							/*
-							if (miss_dist12.significance() < 4) {
-								h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
-								h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_dist12.error(), w);
-								h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+							
+							if (miss_dist12.significance() > 8) {
+								h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+								h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_dist12.error(), w);
+								h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 							}
-							*/
+							
 
 							if (miss_dist12.significance() > 10) {
 								h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
@@ -1115,13 +1172,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 									}
 
-									/*
-									if (miss_distij.significance() < 4) {
-										h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
-										h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_distij.error(), w);
-										h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+									
+									if (miss_distij.significance() > 8) {
+										h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+										h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_distij.error(), w);
+										h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 									}
-									*/
+									
 
 									if (miss_distij.significance() > 10) {
 										h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
@@ -1157,13 +1214,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 										h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
 									}
 
-									/*
-									if (miss_distij.significance() < 4) {
-										h_close_more_svlsp_svdist3d_less_4sigma->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
-										h_close_more_svlsp_svdist3d_err_less_4sigma->Fill(miss_distij.error(), w);
-										h_close_more_svlsp_lspdist3d_less_4sigma->Fill(mevent->lspdist3d(), w);
+									
+									if (miss_distij.significance() > 8) {
+										h_close_more_svlsp_svdist3d_more_8sigma->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+										h_close_more_svlsp_svdist3d_err_more_8sigma->Fill(miss_distij.error(), w);
+										h_close_more_svlsp_lspdist3d_more_8sigma->Fill(mevent->lspdist3d(), w);
 									}
-									*/
+									
 
 									if (miss_distij.significance() > 10) {
 										h_close_more_svlsp_svdist3d_more_10sigma->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
@@ -1194,12 +1251,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								h_2D_less_svlsp0_less_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), w);
 								h_2D_more_svlsp0_more_svlsp1_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
 
-									if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
-										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), w);
-									}
-									else {
-										h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
-									}
+								if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
+									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp0_x - sv_x_vec[j], lsp0_y - sv_y_vec[j], lsp0_z - sv_z_vec[j])), double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])), w);
+								}
+								else {
+									h_2D_less_svlsp_more_svlsp_dist3d_split_sv_pair_range1->Fill(double(mag(lsp1_x - sv_x_vec[j], lsp1_y - sv_y_vec[j], lsp1_z - sv_z_vec[j])), double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])), w);
+								}
 
 							}
 
@@ -1230,7 +1287,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 								}
 
 							}
-						
+
 					}
 				}
 			}
@@ -1242,7 +1299,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			double phi2 = atan2(sv2.y - bsy, sv2.x - bsx);
 			const MFVVertexAux & sv3 = auxes->at(3);
 			double phi3 = atan2(sv3.y - bsy, sv3.x - bsx);
-			const MFVVertexAux& sv4 = auxes->at(4);
+			const MFVVertexAux & sv4 = auxes->at(4);
 			double phi4 = atan2(sv4.y - bsy, sv4.x - bsx);
 			phi_vec.push_back(phi0);
 			phi_vec.push_back(phi1);
@@ -1253,7 +1310,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			less_tracks_vec.push_back(int(sv2.ntracks()));
 			less_tracks_vec.push_back(int(sv3.ntracks()));
 			less_tracks_vec.push_back(int(sv4.ntracks()));
-			
+
 
 
 			for (int i = 0; i < nsv; ++i) {
@@ -1266,7 +1323,488 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			}
 
 		}
+
+	}
+
+		else {
+
+
+
+		bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
+
+		double sv0lsp0 = mag(sv0.x - lsp0_x, sv0.y - lsp0_y);
+		double sv0lsp1 = mag(sv0.x - lsp1_x, sv0.y - lsp1_y);
+
+		double sv1lsp0 = mag(sv1.x - lsp0_x, sv1.y - lsp0_y);
+		double sv1lsp1 = mag(sv1.x - lsp1_x, sv1.y - lsp1_y);
+
 		
+
+		if (nsv == 2) {
+
+			
+			double dphi01 = std::abs(reco::deltaPhi(phi0, phi1));
+			
+
+			if (dphi01 <= 0.5) {
+				
+				VertexDistance3D vertex_dist01_3d;
+				VertexDistanceXY vertex_dist01_2d;
+				VertexDistance3D vertex_dist01_z;
+				Measurement1D miss_dist01 = vertex_dist01_3d.distance(sv0, sv1);
+				Measurement1D miss_dist01_2d = vertex_dist01_2d.distance(sv0, sv1);
+				Measurement1D miss_dist01_z = vertex_dist01_z.distance(recoZVertexOnly(sv0), recoZVertexOnly(sv1));;
+
+				
+
+				if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
+					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
+					
+
+						/*
+						if (miss_dist01.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(),w);
+						}
+						*/
+
+						if (miss_dist01.significance() < 4) {
+							h_close_more_svlsp_svdist3d_less_4sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_4sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_4sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist01.significance() > 4) {
+							h_close_more_svlsp_svdist3d_more_4sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_4sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_more_4sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+
+					}
+				}
+				else {
+					if (double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) < 0.0085) {
+						
+
+						/*
+						if (miss_dist01.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma->Fill(mevent->lspdist3d(), w);
+						}
+						*/
+
+						if (miss_dist01.significance() < 4) {
+							h_close_more_svlsp_svdist3d_less_4sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_4sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_4sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist01.significance() > 4) {
+							h_close_more_svlsp_svdist3d_more_4sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_4sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_more_4sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+
+					}
+
+				}
+
+
+			}
+		}
+
+		if (nsv == 3) {
+			const MFVVertexAux& sv2 = auxes->at(2);
+			double phi2 = atan2(sv2.y - bsy, sv2.x - bsx);
+			double eta2 = atan2(sv2.y - bsy, sv2.z - bsz);
+
+			double dphi01 = std::abs(reco::deltaPhi(phi0, phi1));
+			double dphi02 = std::abs(reco::deltaPhi(phi0, phi2));
+			double dphi12 = std::abs(reco::deltaPhi(phi1, phi2));
+
+			dphi_vec.push_back(dphi01);
+			dphi_vec.push_back(dphi02);
+			dphi_vec.push_back(dphi12);
+			double max_dphi_nsv3 = *std::max_element(dphi_vec.begin(), dphi_vec.end());
+			double min_dphi_nsv3 = *std::min_element(dphi_vec.begin(), dphi_vec.end());
+			int min_dphi_nsv3_idx = std::min_element(dphi_vec.begin(), dphi_vec.end()) - dphi_vec.begin();
+
+			double svdist2d_01 = svdist2d;
+			double svdist2d_02 = mag(sv0.x - sv2.x, sv0.y - sv2.y);
+			double svdist2d_12 = mag(sv1.x - sv2.x, sv1.y - sv2.y);
+
+			svdist2d_vec.push_back(svdist2d_01);
+			svdist2d_vec.push_back(svdist2d_02);
+			svdist2d_vec.push_back(svdist2d_12);
+			double max_svdist2d_nsv3 = *std::max_element(svdist2d_vec.begin(), svdist2d_vec.end());
+			double min_svdist2d_nsv3 = *std::min_element(svdist2d_vec.begin(), svdist2d_vec.end());
+			int min_svdist2d_nsv3_idx = std::min_element(svdist2d_vec.begin(), svdist2d_vec.end()) - svdist2d_vec.begin();
+
+			less_tracks_vec.push_back(int(sv1.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
+
+
+			if (dphi01 <= 0.5) {
+				
+				VertexDistance3D vertex_dist01_3d;
+				VertexDistanceXY vertex_dist01_2d;
+				VertexDistance3D vertex_dist01_z;
+
+				Measurement1D miss_dist01 = vertex_dist01_3d.distance(sv0, sv1);
+				Measurement1D miss_dist01_2d = vertex_dist01_2d.distance(sv0, sv1);
+				Measurement1D miss_dist01_z = vertex_dist01_z.distance(recoZVertexOnly(sv0), recoZVertexOnly(sv1));
+
+				if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
+					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
+						
+
+						if (miss_dist01.significance() < 8) {
+							h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+						if (miss_dist01.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist01.significance() > 8) {
+							h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+
+						if (miss_dist01.significance() > 10) {
+							h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+					}
+				}
+				else {
+					if (double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) < 0.0085) {
+						
+
+						if (miss_dist01.significance() < 8) {
+							h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+						if (miss_dist01.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist01.significance() > 8) {
+							h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist01.significance() > 10) {
+							h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv1.x - sv0.x, sv1.y - sv0.y, sv1.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_dist01.error(), w);
+							h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+					}
+				}
+
+
+			}
+
+			if (dphi02 <= 0.5) {
+				
+
+				VertexDistance3D vertex_dist02_3d;
+				VertexDistanceXY vertex_dist02_2d;
+				VertexDistance3D vertex_dist02_z;
+
+				Measurement1D miss_dist02 = vertex_dist02_3d.distance(sv0, sv2);
+				Measurement1D miss_dist02_2d = vertex_dist02_2d.distance(sv0, sv2);
+				Measurement1D miss_dist02_z = vertex_dist02_z.distance(recoZVertexOnly(sv0), recoZVertexOnly(sv2));
+
+				if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z))) {
+					if (double(mag(lsp0_x - sv0.x, lsp0_y - sv0.y, lsp0_z - sv0.z)) < 0.0085) {
+						
+
+						if (miss_dist02.significance() < 8) {
+							h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+						if (miss_dist02.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist02.significance() > 8) {
+							h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist02.significance() > 10) {
+							h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+					}
+				}
+				else {
+					if (double(mag(lsp1_x - sv0.x, lsp1_y - sv0.y, lsp1_z - sv0.z)) < 0.0085) {
+
+						if (miss_dist02.significance() < 8) {
+							h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+						if (miss_dist02.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist02.significance() > 8) {
+							h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist02.significance() > 10) {
+							h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv0.x, sv2.y - sv0.y, sv2.z - sv0.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_dist02.error(), w);
+							h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+					}
+				}
+
+			}
+
+			if (dphi12 <= 0.5) {
+				
+
+				VertexDistance3D vertex_dist12_3d;
+				VertexDistanceXY vertex_dist12_2d;
+				VertexDistance3D vertex_dist12_z;
+
+				Measurement1D miss_dist12 = vertex_dist12_3d.distance(sv1, sv2);
+				Measurement1D miss_dist12_2d = vertex_dist12_2d.distance(sv1, sv2);
+				Measurement1D miss_dist12_z = vertex_dist12_z.distance(recoZVertexOnly(sv1), recoZVertexOnly(sv1));
+
+				if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
+					if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < 0.0085) {
+						
+
+						if (miss_dist12.significance() < 8) {
+							h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+						if (miss_dist12.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist12.significance() > 8) {
+							h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist12.significance() > 10) {
+							h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+					}
+				}
+				else {
+					if (double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z)) < 0.0085) {
+						
+
+						if (miss_dist12.significance() < 8) {
+							h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+						if (miss_dist12.significance() < 10) {
+							h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist12.significance() > 8) {
+							h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+						}
+
+
+						if (miss_dist12.significance() > 10) {
+							h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv2.x - sv1.x, sv2.y - sv1.y, sv2.z - sv1.z)), w);
+							h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_dist12.error(), w);
+							h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+						}
+					}
+				}
+
+			}
+
+
+
+
+		}
+
+		if (nsv == 4) {
+			const MFVVertexAux& sv2 = auxes->at(2);
+			double phi2 = atan2(sv2.y - bsy, sv2.x - bsx);
+			const MFVVertexAux & sv3 = auxes->at(3);
+			double phi3 = atan2(sv3.y - bsy, sv3.x - bsx);
+			phi_vec.push_back(phi0);
+			phi_vec.push_back(phi1);
+			phi_vec.push_back(phi2);
+			phi_vec.push_back(phi3);
+
+
+			less_tracks_vec.push_back(int(sv1.ntracks()));
+			less_tracks_vec.push_back(int(sv2.ntracks()));
+			less_tracks_vec.push_back(int(sv3.ntracks()));
+			sv_x_vec.push_back(double(sv0.x));
+			sv_x_vec.push_back(double(sv1.x));
+			sv_x_vec.push_back(double(sv2.x));
+			sv_x_vec.push_back(double(sv3.x));
+			sv_y_vec.push_back(double(sv0.y));
+			sv_y_vec.push_back(double(sv1.y));
+			sv_y_vec.push_back(double(sv2.y));
+			sv_y_vec.push_back(double(sv3.y));
+			sv_z_vec.push_back(double(sv0.z));
+			sv_z_vec.push_back(double(sv1.z));
+			sv_z_vec.push_back(double(sv2.z));
+			sv_z_vec.push_back(double(sv3.z));
+
+			VertexDistance3D vertex_distij_3d;
+			VertexDistanceXY vertex_distij_2d;
+			VertexDistance3D vertex_distij_z;
+
+
+			for (int i = 0; i < nsv; ++i) {
+				for (int j = 0; j < nsv; ++j) {
+					if (i < j) {
+						double dphi = std::abs(reco::deltaPhi(phi_vec[i], phi_vec[j]));
+						
+						Measurement1D miss_distij = vertex_distij_3d.distance(auxes->at(i), auxes->at(j));
+						Measurement1D miss_distij_2d = vertex_distij_2d.distance(auxes->at(i), auxes->at(j));
+						Measurement1D miss_distij_z = vertex_distij_z.distance(recoZVertexOnly(auxes->at(i)), recoZVertexOnly(auxes->at(j)));
+
+						if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i]))) {
+							if (double(mag(lsp0_x - sv_x_vec[i], lsp0_y - sv_y_vec[i], lsp0_z - sv_z_vec[i])) < 0.0085) {
+								
+
+								if (miss_distij.significance() < 8) {
+									h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+								}
+
+								if (miss_distij.significance() < 10) {
+									h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+								}
+
+
+								if (miss_distij.significance() > 8) {
+									h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+								}
+
+
+								if (miss_distij.significance() > 10) {
+									h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+								}
+
+							}
+						}
+						else {
+							if (double(mag(lsp1_x - sv_x_vec[i], lsp1_y - sv_y_vec[i], lsp1_z - sv_z_vec[i])) < 0.0085) {
+
+								if (miss_distij.significance() < 8) {
+									h_close_more_svlsp_svdist3d_less_8sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_less_8sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_less_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+								}
+
+								if (miss_distij.significance() < 10) {
+									h_close_more_svlsp_svdist3d_less_10sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_less_10sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_less_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+								}
+
+
+								if (miss_distij.significance() > 8) {
+									h_close_more_svlsp_svdist3d_more_8sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_more_8sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_more_8sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+								}
+
+
+								if (miss_distij.significance() > 10) {
+									h_close_more_svlsp_svdist3d_more_10sigma_small_dlsp->Fill(double(mag(sv_x_vec[j] - sv_x_vec[i], sv_y_vec[j] - sv_y_vec[i], sv_z_vec[j] - sv_z_vec[i])), w);
+									h_close_more_svlsp_svdist3d_err_more_10sigma_small_dlsp->Fill(miss_distij.error(), w);
+									h_close_more_svlsp_lspdist3d_more_10sigma_small_dlsp->Fill(mevent->lspdist3d(), w);
+
+								}
+							}
+						}
+
+
+					}
+				}
+			}
+
+		}
+
+		
+
 	}
  }
 	
