@@ -330,11 +330,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   auto try_seed_vertex = [&]() {
     std::vector<reco::TransientTrack> ttks(n_tracks_per_seed_vertex);
     for (int i = 0; i < n_tracks_per_seed_vertex; ++i)
-      ttks[i] = seed_tracks[itks[i]];
+      ttks[i] = seed_tracks[itks[i]];	// pk: how can we have the value of itks[i]?(the loop below) where seed_tracks is a vector of "TransientTrack"
 
     TransientVertex seed_vertex = kv_reco->vertex(ttks);
     if (seed_vertex.isValid() && seed_vertex.normalisedChiSquared() < max_seed_vertex_chi2) {
-      vertices->push_back(reco::Vertex(seed_vertex));
+      vertices->push_back(reco::Vertex(seed_vertex));	   // pk: collect seed vertices
 
       if (verbose || histos) {
         const reco::Vertex& v = vertices->back();
@@ -369,7 +369,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   };
 
   // ha
-  for (size_t itk = 0; itk < ntk; ++itk) {
+  for (size_t itk = 0; itk < ntk; ++itk) {	 // pk: loop trough all possible 2-track or 3-track or 4-track seed vertices in ntk but the order is stil preserved?
     itks[0] = itk;
     for (size_t jtk = itk+1; jtk < ntk; ++jtk) {
       itks[1] = jtk;
@@ -422,10 +422,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   track_set discarded_tracks;
   int n_resets = 0;
   int n_onetracks = 0;
-  std::vector<reco::Vertex>::iterator v[2];
+  std::vector<reco::Vertex>::iterator v[2];	   // pk: v[2] is an iterator?
   size_t ivtx[2];
   for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
-    track_set tracks[2];
+    track_set tracks[2];			// pk: tracks[2] isn't defined anywhere	and what is track_set
     ivtx[0] = v[0] - vertices->begin();
     tracks[0] = vertex_track_set(*v[0]);
 
@@ -475,11 +475,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         std::pair<track_set, track_set> vpeff_tracks(tracks[0], tracks[1]);
         auto it = std::find(vpeffs_tracks.begin(), vpeffs_tracks.end(), vpeff_tracks);
         if (it != vpeffs_tracks.end()) {
-          vpeffs->at(it - vpeffs_tracks.begin()).inc_weight();
+          vpeffs->at(it - vpeffs_tracks.begin()).inc_weight();			 // pk: what is vertexerpaireff? why is it zero when equal? like shared jets alg.?
           vpeff = 0;
         }
         else {
-          vpeffs->push_back(VertexerPairEff());
+          vpeffs->push_back(VertexerPairEff());		
           vpeff = &vpeffs->back();
           vpeff->set_vertices(*v[0], *v[1]);
           vpeffs_tracks.push_back(vpeff_tracks);
@@ -781,7 +781,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   if (verbose)
     printf("fun2! before merge loop, # vertices = %lu\n", vertices->size());
 
-  if (verbose) {
+  if (verbose) {	 //pk: change to merge_anyway_sig > 0 ||   merge_anyway_dist > 0
     for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
       ivtx[0] = v[0] - vertices->begin();
 
@@ -809,11 +809,15 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         for (int i = 0; i < 2; ++i)
           for (auto tk : vertex_track_set(*v[i]))
             ttks.push_back(tt_builder->build(tk));
+
+	
+
       
         reco::VertexCollection new_vertices;
         for (const TransientVertex& tv : kv_reco_dropin(ttks))
           new_vertices.push_back(reco::Vertex(tv));
       
+
         if (verbose) {
           printf("      got %lu new vertices out of the av fit\n", new_vertices.size());
           printf("      these track sets:");
