@@ -888,7 +888,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  h_merged_vertex_mass->Fill(double(new_vertices[0].p4().mass()));
 
 				  const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
-				  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(new_vertices[0], fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
+				  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(*new_vertices[0], *fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
 				  double dBV = dBV_Meas1D.value();
 				  double bs2derr = dBV_Meas1D.error();
 
@@ -941,10 +941,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
       if (!merge) { //until the last one in vertices 
 		  h_non_merged_vertex_chi2->Fill(double(v[0]->normalizedChi2()));
 		  h_non_merged_vertex_ntracks->Fill(double(v[0]->nTracks()));
-		  h_non_merged_vertex_mass->Fill(double(v[0]->p4()->mass()));
+		  h_non_merged_vertex_mass->Fill(double(v[0]->p4().mass()));
 
 		  const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
-		  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(v[0], fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
+		  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(*v[0], *fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
 		  double dBV = dBV_Meas1D.value();
 		  double bs2derr = dBV_Meas1D.error();
 
