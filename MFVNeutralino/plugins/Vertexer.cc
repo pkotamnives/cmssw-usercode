@@ -849,13 +849,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         if (verbose)
           printf("   vertex dist (2d? %i) %7.3f  sig %7.3f\n", use_2d_vertex_dist, v_dist.value(), v_dist.significance());
 		
-		v0x = *v[0].x() - bsx;
-		v0y = *v[0].y() - bsy;
-		v0z = *v[0].z() - bsz;
+		v0x = v[0]->x() - bsx;
+		v0y = v[0]->y() - bsy;
+		v0z = v[0]->z() - bsz;
 		phi0 = atan2(v0y, v0x);
-		v1x = *v[1].x() - bsx;
-		v1y = *v[1].y() - bsy;
-		v1z = *v[1].z() - bsz;
+		v1x = v[1]->x() - bsx;
+		v1y = v[1]->y() - bsy;
+		v1z = v[1]->z() - bsz;
 		phi1 = atan2(v1y, v1x);
 
 		if (reco::deltaPhi(phi0, phi1) < 0.5)
@@ -883,9 +883,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  for (const TransientVertex& tv : kv_reco_dropin(ttks))
 			  {
 				  new_vertices.push_back(reco::Vertex(tv));
-				  h_merged_vertex_chi2->Fill(double(new_vertices[0].normalizedChi2()));
-				  h_merged_vertex_ntracks->Fill(double(new_vertices[0].nTracks()));
-				  h_merged_vertex_mass->Fill(double(new_vertices[0].p4().mass()));
+				  h_merged_vertex_chi2->Fill(double(new_vertices[0]->normalizedChi2()));
+				  h_merged_vertex_ntracks->Fill(double(new_vertices[0]->nTracks()));
+				  h_merged_vertex_mass->Fill(double(new_vertices[0]->p4()->mass()));
 
 				  const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
 				  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(new_vertices[0], fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
