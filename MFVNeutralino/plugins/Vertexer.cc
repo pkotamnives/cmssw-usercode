@@ -939,9 +939,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 
       if (!merge) { //until the last one in vertices 
-		  h_non_merged_vertex_chi2->Fill(double(v[0].normalizedChi2()));
-		  h_non_merged_vertex_ntracks->Fill(double(v[0].nTracks()));
-		  h_non_merged_vertex_mass->Fill(double(v[0].p4().mass()));
+		  h_non_merged_vertex_chi2->Fill(double(v[0]->normalizedChi2()));
+		  h_non_merged_vertex_ntracks->Fill(double(v[0]->nTracks()));
+		  h_non_merged_vertex_mass->Fill(double(v[0]->p4()->mass()));
 
 		  const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
 		  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(v[0], fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
@@ -951,7 +951,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  h_non_merged_vertex_dBV->Fill(dBV);
 		  h_non_merged_vertex_bs2derr->Fill(bs2derr);
 
-		  for (auto it = v[0].tracks_begin(), ite = v[0].tracks_end(); it != ite; ++it) {
+		  for (auto it = v[0]->tracks_begin(), ite = v[0]->tracks_end(); it != ite; ++it) {
 			  
 			  reco::TransientTrack seed_track;
 			  seed_track = tt_builder->build(*it.operator*());
@@ -981,13 +981,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			if (verbose)
 				printf("  new vertex dist (2d? %i) %7.3f  sig %7.3f\n", use_2d_vertex_dist, nv_dist.value(), nv_dist.significance());
 
-			nv0x = nv[0].position().x() - bsx;
-			nv0y = nv[0].position().y() - bsy;
-			nv0z = nv[0].position().z() - bsz;
+			nv0x = nv[0]->x() - bsx;
+			nv0y = nv[0]->y() - bsy;
+			nv0z = nv[0]->z() - bsz;
 			nvphi0 = atan2(nv0y, nv0x);
-			nv1x = nv[1].position().x() - bsx;
-			nv1y = nv[1].position().y() - bsy;
-			nv1z = nv[1].position().z() - bsz;
+			nv1x = nv[1]->x() - bsx;
+			nv1y = nv[1]->y() - bsy;
+			nv1z = nv[1]->z() - bsz;
 			nvphi1 = atan2(nv1y, nv1x);
 
 			if (reco::deltaPhi(nvphi0, nvphi1) < 0.5)
