@@ -849,13 +849,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         if (verbose)
           printf("   vertex dist (2d? %i) %7.3f  sig %7.3f\n", use_2d_vertex_dist, v_dist.value(), v_dist.significance());
 		
-		v0x = v[0].position().x() - bsx;
-		v0y = v[0].position().y() - bsy;
-		v0z = v[0].position().z() - bsz;
+		v0x = *v[0].x() - bsx;
+		v0y = *v[0].y() - bsy;
+		v0z = *v[0].z() - bsz;
 		phi0 = atan2(v0y, v0x);
-		v1x = v[1].position().x() - bsx;
-		v1y = v[1].position().y() - bsy;
-		v1z = v[1].position().z() - bsz;
+		v1x = *v[1].x() - bsx;
+		v1y = *v[1].y() - bsy;
+		v1z = *v[1].z() - bsz;
 		phi1 = atan2(v1y, v1x);
 
 		if (reco::deltaPhi(phi0, phi1) < 0.5)
