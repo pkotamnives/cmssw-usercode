@@ -827,7 +827,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   if (merge_anyway_sig > 0 || merge_anyway_dist > 0){
 	  double v0x;
 	  double v0y;
-	  double v0z;
+	  //double v0z;
 	  double phi0;
 
     for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
@@ -835,7 +835,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  
 	  double v1x;
 	  double v1y;
-	  double v1z;
+	  //double v1z;
 	  double phi1;
 
       bool merge = false;
@@ -851,11 +851,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		
 		v0x = v[0]->x() - bsx;
 		v0y = v[0]->y() - bsy;
-		v0z = v[0]->z() - bsz;
+		//v0z = v[0]->z() - bsz;
 		phi0 = atan2(v0y, v0x);
 		v1x = v[1]->x() - bsx;
 		v1y = v[1]->y() - bsy;
-		v1z = v[1]->z() - bsz;
+		//v1z = v[1]->z() - bsz;
 		phi1 = atan2(v1y, v1x);
 
 		if (reco::deltaPhi(phi0, phi1) < 0.5)
@@ -965,14 +965,14 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 	double nv0x;
 	double nv0y;
-	double nv0z;
+	//double nv0z;
 	double nvphi0;
 
 	for (nv[0] = vertices->begin(); nv[0] != vertices->end(); ++nv[0]) {
 		
 		double nv1x;
 		double nv1y;
-		double nv1z;
+		//double nv1z;
 		double nvphi1;
 
 		for (nv[1] = nv[0] + 1; nv[1] != vertices->end(); ++nv[1]) {
@@ -983,11 +983,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 			nv0x = nv[0]->x() - bsx;
 			nv0y = nv[0]->y() - bsy;
-			nv0z = nv[0]->z() - bsz;
+			//nv0z = nv[0]->z() - bsz;
 			nvphi0 = atan2(nv0y, nv0x);
 			nv1x = nv[1]->x() - bsx;
 			nv1y = nv[1]->y() - bsy;
-			nv1z = nv[1]->z() - bsz;
+			//nv1z = nv[1]->z() - bsz;
 			nvphi1 = atan2(nv1y, nv1x);
 
 			if (reco::deltaPhi(nvphi0, nvphi1) < 0.5)
