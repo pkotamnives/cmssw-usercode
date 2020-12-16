@@ -166,7 +166,7 @@ private:
   TH1F* h_n_output_vertices;
 
   TH2F* h_2D_close_dvv_its_significance_before_merge;
-  TH2F* h_2D_close_dvv_its_significance_merge_pairs;
+  TH2F* h_2D_close_dvv_its_significance_passed_merge_pairs;
   TH2F* h_2D_close_dvv_its_significance_failed_merge_pairs;
   TH2F* h_2D_close_dvv_its_significance_after_merge;
   TH1F* h_merged_vertex_chi2;
@@ -255,24 +255,24 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
     h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
 
-	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<3: dPhi(SV0,SV1)<0.5", 50, 0, 0.1, 100, 0, 30);
-	h_2D_close_dvv_its_significance_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_merge_pairs", "Only merging pairs by significance<3: dPhi(SV0,SV1)<0.5", 50, 0, 0.1, 100, 0, 30);
-	h_2D_close_dvv_its_significance_failed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_failed_merge_pairs", "Only failed merging pairs by significance<3: dPhi(SV0,SV1)<0.5", 50, 0, 0.1, 100, 0, 30);
-	h_2D_close_dvv_its_significance_after_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_after_merge", "After merging by significance<3: dPhi(SV0,SV1)<0.5, ", 50, 0, 0.1, 100, 0, 30);
-	h_merged_vertex_chi2 = fs->make<TH1F>("h_merged_vertex_chi2", "After merging by sigma<3: merged vertices, ", 20, 0, max_seed_vertex_chi2);
-	h_non_merged_vertex_chi2 = fs->make<TH1F>("h_non_merged_vertex_chi2", "After merging by sigma<3: non-merged vertices, ", 20, 0, max_seed_vertex_chi2);
-	h_merged_vertex_ntracks = fs->make<TH1F>("h_merged_vertex_ntracks", "After merging by sigma<3: merged vertices, ", 30, 0, 30);
-	h_non_merged_vertex_ntracks = fs->make<TH1F>("h_non_merged_vertex_ntracks", "After merging by sigma<3: non-merged vertices, ", 30, 0, 30);
-	h_merged_vertex_tkvtxdist = fs->make<TH1F>("h_merged_vertex_tkvtxdist", "After merging by sigma<3: merged vertices, ", 50, 0, 0.1);
-	h_non_merged_vertex_tkvtxdist = fs->make<TH1F>("h_non_merged_vertex_tkvtxdist", "After merging by sigma<3: non-merged vertices, ", 50, 0, 0.1);
-	h_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_merged_vertex_tkvtxdistsig", "After merging by sigma<3: merged vertices, ", 50, 0, 10);
-	h_non_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_non_merged_vertex_tkvtxdistsig", "After merging by sigma<3: non-merged vertices, ", 50, 0, 10);
-	h_merged_vertex_mass = fs->make<TH1F>("h_merged_vertex_mass", "After merging by sigma<3: merged vertices, ", 50, 0, 2000);
-	h_non_merged_vertex_mass = fs->make<TH1F>("h_non_merged_vertex_mass", "After merging by sigma<3: non-merged vertices, ", 50, 0, 2000);
-	h_merged_vertex_dBV = fs->make<TH1F>("h_merged_vertex_dBV", "After merging by sigma<3: merged vertices, ", 50, 0, 0.1);
-	h_non_merged_vertex_dBV = fs->make<TH1F>("h_non_merged_vertex_dBV", "After merging by sigma<3: non-merged vertices, ", 50, 0, 0.1);
-	h_merged_vertex_bs2derr = fs->make<TH1F>("h_merged_vertex_bs2derr", "After merging by sigma<3: merged vertices, ", 10, 0, 0.05);
-	h_non_merged_vertex_bs2derr = fs->make<TH1F>("h_non_merged_vertex_bs2derr", "After merging by sigma<3: non-merged vertices, ", 10, 0, 0.05);
+	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
+	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
+	h_2D_close_dvv_its_significance_failed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_failed_merge_pairs", "Only failed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
+	h_2D_close_dvv_its_significance_after_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_after_merge", "After merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm) ", 50, 0, 0.1, 100, 0, 30);
+	h_merged_vertex_chi2 = fs->make<TH1F>("h_merged_vertex_chi2", "After merging by sigma<4: merged vertices; chi2/dof ", 20, 0, max_seed_vertex_chi2);
+	h_non_merged_vertex_chi2 = fs->make<TH1F>("h_non_merged_vertex_chi2", "After merging by sigma<4: non-merged vertices; chi2/dof ", 20, 0, max_seed_vertex_chi2);
+	h_merged_vertex_ntracks = fs->make<TH1F>("h_merged_vertex_ntracks", "After merging by sigma<4: merged vertices; # of tracks/vtx ", 30, 0, 30);
+	h_non_merged_vertex_ntracks = fs->make<TH1F>("h_non_merged_vertex_ntracks", "After merging by sigma<4: non-merged vertices; # of tracks/vtx ", 30, 0, 30);
+	h_merged_vertex_tkvtxdist = fs->make<TH1F>("h_merged_vertex_tkvtxdist", "After merging by sigma<4: merged vertices; miss dist 3d (cm)", 50, 0, 0.1);
+	h_non_merged_vertex_tkvtxdist = fs->make<TH1F>("h_non_merged_vertex_tkvtxdist", "After merging by sigma<4: non-merged vertices; miss dist 3d (cm)", 50, 0, 0.1);
+	h_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_merged_vertex_tkvtxdistsig", "After merging by sigma<4: merged vertices; miss dist significance 3d ", 50, 0, 10);
+	h_non_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_non_merged_vertex_tkvtxdistsig", "After merging by sigma<4: non-merged vertices; miss dist significance 3d ", 50, 0, 10);
+	h_merged_vertex_mass = fs->make<TH1F>("h_merged_vertex_mass", "After merging by sigma<4: merged vertices; vtx mass (GeV)", 50, 0, 2000);
+	h_non_merged_vertex_mass = fs->make<TH1F>("h_non_merged_vertex_mass", "After merging by sigma<4: non-merged vertices; vtx mass (GeV)", 50, 0, 2000);
+	h_merged_vertex_dBV = fs->make<TH1F>("h_merged_vertex_dBV", "After merging by sigma<4: merged vertices; bvdist2d (cm)", 50, 0, 0.1);
+	h_non_merged_vertex_dBV = fs->make<TH1F>("h_non_merged_vertex_dBV", "After merging by sigma<4: non-merged vertices; bvdist2d (cm)", 50, 0, 0.1);
+	h_merged_vertex_bs2derr = fs->make<TH1F>("h_merged_vertex_bs2derr", "After merging by sigma<4: merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
+	h_non_merged_vertex_bs2derr = fs->make<TH1F>("h_non_merged_vertex_bs2derr", "After merging by sigma<4: non-merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
 
   }
 }
@@ -867,10 +867,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           merge = true;
 		  
 
-
-			  if (reco::deltaPhi(phi0, phi1) < 0.5)
-				  h_2D_close_dvv_its_significance_merge_pairs->Fill(v_dist.value(), v_dist.significance());
-
 			  std::vector<reco::TransientTrack> ttks;
 			  for (int i = 0; i < 2; ++i)
 				  for (auto tk : vertex_track_set(*v[i]))
@@ -921,6 +917,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  // pk: change vertices
 			  if (new_vertices.size() == 1)
 			  {
+				  if (reco::deltaPhi(phi0, phi1) < 0.5) {
+					  h_2D_close_dvv_its_significance_passed_merge_pairs->Fill(v_dist.value(), v_dist.significance());
+				  }
+
 				  std::cout << "check no mem out of ranges (before) : " << v[1] - vertices->begin() << std::endl;
 				  *v[0] = new_vertices[0];
 				  std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
