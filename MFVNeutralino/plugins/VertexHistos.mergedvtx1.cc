@@ -1189,7 +1189,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 			VertexDistance3D vertex_dist12_3d;
-			Measurement1D miss_dist02 = vertex_dist12_3d.distance(sv1, sv2);
+			Measurement1D miss_dist12 = vertex_dist12_3d.distance(sv1, sv2);
 
 			if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < double(mag(lsp1_x - sv1.x, lsp1_y - sv1.y, lsp1_z - sv1.z))) {
 				if (double(mag(lsp0_x - sv1.x, lsp0_y - sv1.y, lsp0_z - sv1.z)) < 0.0085) {
@@ -1434,7 +1434,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 							}
 						}
 
-			}
+		}
 
 					}
 				}
