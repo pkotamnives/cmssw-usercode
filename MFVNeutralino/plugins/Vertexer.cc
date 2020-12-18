@@ -840,8 +840,12 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
       bool merge = false;
       for (v[1] = v[0] + 1; v[1] != vertices->end(); ++v[1]) {
-        ivtx[1] = v[1] - vertices->begin();
 		std::cout << __LINE__ << std::endl;
+		std::cout << vertices->end() << std::end;
+        ivtx[1] = v[1] - vertices->begin();
+		
+		std::cout << __LINE__ << std::endl;
+		std::cout << v[1] - vertices->begin() << "in" << vertices->end() << std::end;
         if (verbose)
           printf("close-merge: # vertices = %lu. considering vertices #%lu (ntk = %i) and #%lu (ntk = %i):", vertices->size(), ivtx[0], v[0]->nTracks(), ivtx[1], v[1]->nTracks());
 
@@ -869,12 +873,16 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  std::cout << __LINE__ << std::endl;
 		  
 			  std::vector<reco::TransientTrack> ttks;
+			  
 			  for (int i = 0; i < 2; ++i) {
+				  std::cout << __LINE__ << std::endl;
 				  std::cout << i << ": " << vertex_track_set(*v[i]).size() << std::endl;
+				  std::cout << v[i] - vertices->begin() << "in" << vertices->end() << std::end;
+				  std::cout << __LINE__ << std::endl;
 				  for (auto tk : vertex_track_set(*v[i])) {
-					  std::cout << __LINE__ << std::endl;
+					  
 					  ttks.push_back(tt_builder->build(tk));
-					  std::cout << __LINE__ << std::endl;
+					  
 				  }
 
 			  }
@@ -931,7 +939,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  *v[0] = new_vertices[0];
 				  std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
 				  std::cout << __LINE__ << std::endl;
+				  std::cout << vertices->end() << std::end;
 				  vertices->erase(v[1]);
+				  std::cout << vertices->end() << std::end;
 				  std::cout << __LINE__ << std::endl;
 			  }
 			  // pk: change vertices
