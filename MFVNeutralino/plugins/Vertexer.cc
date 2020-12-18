@@ -823,16 +823,16 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     printf("fun2! before merge loop, # vertices = %lu\n", vertices->size());
   
   
-  std::cout << __LINE__ << std::endl;
+  
   if (merge_anyway_sig > 0 || merge_anyway_dist > 0){
 	  double v0x;
 	  double v0y;
 	  //double v0z;
 	  double phi0;
-	  std::cout << __LINE__ << std::endl;
+	  
     for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
       ivtx[0] = v[0] - vertices->begin();
-	  std::cout << __LINE__ << std::endl;
+	  
 	  double v1x;
 	  double v1y;
 	  //double v1z;
@@ -840,12 +840,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
       bool merge = false;
       for (v[1] = v[0] + 1; v[1] != vertices->end(); ++v[1]) {
-		std::cout << __LINE__ << std::endl;
-		std::cout << vertices->end() - vertices->begin() << std::endl;
+		
+		
         ivtx[1] = v[1] - vertices->begin();
 		
-		std::cout << __LINE__ << std::endl;
-		std::cout << v[1] - vertices->begin() << "in" << vertices->end() - vertices->begin() << std::endl;
         if (verbose)
           printf("close-merge: # vertices = %lu. considering vertices #%lu (ntk = %i) and #%lu (ntk = %i):", vertices->size(), ivtx[0], v[0]->nTracks(), ivtx[1], v[1]->nTracks());
 
@@ -870,15 +868,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
             printf("          dist < %7.3f || sig < %7.3f, breaking to merge\n", merge_anyway_dist, merge_anyway_sig);
           merge = true;
 		  
-		  std::cout << __LINE__ << std::endl;
+		  
 		  
 			  std::vector<reco::TransientTrack> ttks;
 			  
 			  for (int i = 0; i < 2; ++i) {
-				  std::cout << __LINE__ << std::endl;
-				  std::cout << i << ": " << vertex_track_set(*v[i]).size() << std::endl;
-				  std::cout << v[i] - vertices->begin() << "in" << vertices->end() - vertices->begin() << std::endl;
-				  std::cout << __LINE__ << std::endl;
+				  
+				  
 				  for (auto tk : vertex_track_set(*v[i])) {
 					  
 					  ttks.push_back(tt_builder->build(tk));
@@ -887,7 +883,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 			  }
 
-			  std::cout << __LINE__ << std::endl;
+			  
 			  reco::VertexCollection new_vertices;
 			  for (const TransientVertex& tv : kv_reco_dropin(ttks))
 			  {
@@ -903,7 +899,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 				  h_merged_vertex_dBV->Fill(dBV);
 				  h_merged_vertex_bs2derr->Fill(bs2derr);
-				  std::cout << __LINE__ << std::endl;
+				  
 				  for (auto it = new_vertices[0].tracks_begin(), ite = new_vertices[0].tracks_end(); it != ite; ++it) {
 
 					  reco::TransientTrack seed_track;
@@ -913,7 +909,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					  h_merged_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
 				  }
 
-				  std::cout << __LINE__ << std::endl;
+				  
 			  }
 
 
@@ -928,28 +924,27 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  printf("\n");
 			  }
 			  // pk: change vertices
-			  std::cout << __LINE__ << std::endl;
+			  
 			  if (new_vertices.size() == 1)
 			  {
 				  if (reco::deltaPhi(phi0, phi1) < 0.5) {
 					  h_2D_close_dvv_its_significance_passed_merge_pairs->Fill(v_dist.value(), v_dist.significance());
 				  }
 
-				  std::cout << "check no mem out of ranges (before) : " << v[1] - vertices->begin() << std::endl;
+				  //std::cout << "check no mem out of ranges (before) : " << v[1] - vertices->begin() << std::endl;
 				  *v[0] = new_vertices[0];
-				  std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
-				  std::cout << __LINE__ << std::endl;
-				  std::cout << vertices->end() - vertices->begin() << std::endl;
+				  //std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
+				  
+				  
 				  v[1] = vertices->erase(v[1]) -1 ;
-				  std::cout << vertices->end() - vertices->begin() << std::endl;
-				  std::cout << __LINE__ << std::endl;
+				  
 			  }
 			  // pk: change vertices
 			  else {	// pk: size is zero 
 				  if (reco::deltaPhi(phi0, phi1) < 0.5)
 					  h_2D_close_dvv_its_significance_failed_merge_pairs->Fill(v_dist.value(), v_dist.significance());
 			  }
-			  std::cout << __LINE__ << std::endl;
+			 
 
 		  
         }
@@ -1021,7 +1016,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	}
   }
 
-  std::cout << __LINE__ << std::endl;
+  
   //////////////////////////////////////////////////////////////////////
   // Drop tracks that "move" the vertex too much by refitting without each track.
   //////////////////////////////////////////////////////////////////////
