@@ -841,11 +841,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
       bool merge = false;
       for (v[1] = v[0] + 1; v[1] != vertices->end(); ++v[1]) {
 		std::cout << __LINE__ << std::endl;
-		std::cout << vertices->end() << std::end;
+		std::cout << vertices->end() << std::endl;
         ivtx[1] = v[1] - vertices->begin();
 		
 		std::cout << __LINE__ << std::endl;
-		std::cout << v[1] - vertices->begin() << "in" << vertices->end() << std::end;
+		std::cout << v[1] - vertices->begin() << "in" << vertices.size() << std::endl;
         if (verbose)
           printf("close-merge: # vertices = %lu. considering vertices #%lu (ntk = %i) and #%lu (ntk = %i):", vertices->size(), ivtx[0], v[0]->nTracks(), ivtx[1], v[1]->nTracks());
 
@@ -877,7 +877,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  for (int i = 0; i < 2; ++i) {
 				  std::cout << __LINE__ << std::endl;
 				  std::cout << i << ": " << vertex_track_set(*v[i]).size() << std::endl;
-				  std::cout << v[i] - vertices->begin() << "in" << vertices->end() << std::end;
+				  std::cout << v[i] - vertices->begin() << "in" << vertices->end() << std::endl;
 				  std::cout << __LINE__ << std::endl;
 				  for (auto tk : vertex_track_set(*v[i])) {
 					  
@@ -939,9 +939,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  *v[0] = new_vertices[0];
 				  std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
 				  std::cout << __LINE__ << std::endl;
-				  std::cout << vertices->end() << std::end;
+				  std::cout << vertices->end() << std::endl;
 				  vertices->erase(v[1]);
-				  std::cout << vertices->end() << std::end;
+				  std::cout << vertices->end() << std::endl;
 				  std::cout << __LINE__ << std::endl;
 			  }
 			  // pk: change vertices
