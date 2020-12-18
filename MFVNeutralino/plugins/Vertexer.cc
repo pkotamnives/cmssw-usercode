@@ -940,7 +940,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
 				  std::cout << __LINE__ << std::endl;
 				  std::cout << vertices->end() - vertices->begin() << std::endl;
-				  vertices->erase(v[1]);
+				  v[1] = vertices->erase(v[1]) -1 ;
 				  std::cout << vertices->end() - vertices->begin() << std::endl;
 				  std::cout << __LINE__ << std::endl;
 			  }
