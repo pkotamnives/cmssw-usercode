@@ -867,12 +867,17 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           merge = true;
 		  
 		  std::cout << __LINE__ << std::endl;
+		  
 			  std::vector<reco::TransientTrack> ttks;
-			  for (int i = 0; i < 2; ++i)
-				  for (auto tk : vertex_track_set(*v[i]))
+			  for (int i = 0; i < 2; ++i) {
+				  std::cout << i << ": " << vertex_track_set(*v[i]).size() << std::endl;
+				  for (auto tk : vertex_track_set(*v[i])) {
+					  std::cout << __LINE__ << std::endl;
 					  ttks.push_back(tt_builder->build(tk));
+					  std::cout << __LINE__ << std::endl;
+				  }
 
-
+			  }
 
 			  std::cout << __LINE__ << std::endl;
 			  reco::VertexCollection new_vertices;
