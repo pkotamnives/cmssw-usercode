@@ -12,13 +12,14 @@ _presel_s = '_leptonpresel' if _leptonpresel else ''
 def cmd_hadd_vertexer_histos():
     ntuple = sys.argv[2]
     samples = Samples.registry.from_argv(
-            Samples.data_samples_2015 + \
-            Samples.ttbar_samples_2015 + Samples.qcd_samples_2015 + Samples.qcd_samples_ext_2015 + \
-            Samples.data_samples + \
-            Samples.ttbar_samples + Samples.qcd_samples + Samples.qcd_samples_ext)
+            Samples.all_signal_samples_2017)
+           # Samples.data_samples_2015 + \
+           # Samples.ttbar_samples_2015 + Samples.qcd_samples_2015 + Samples.qcd_samples_ext_2015 + \
+           # Samples.data_samples + \
+           # Samples.ttbar_samples + Samples.qcd_samples + Samples.qcd_samples_ext)
     for s in samples:
         s.set_curr_dataset(ntuple)
-        hadd(s.name + '.root', ['root://cmseos.fnal.gov/' + fn.replace('ntuple', 'vertex_histos') for fn in s.filenames])
+        hadd(s.name + '.root', ['root://eosuser.cern.ch/' + fn.replace('ntuple', 'vertex_histos') for fn in s.filenames])
 
 def cmd_report_data():
     for ds, ex in ('SingleMuon', '_mu'), ('JetHT', ''):
@@ -121,7 +122,7 @@ def _background_samples(trigeff=False, year=2017):
             x += ['qcdempt%03i' % x for x in [15,20,30,50,80,120,170,300]]
             x += ['qcdbctoept%03i' % x for x in [15,20,30,80,170,250]]
     else:
-        x = ['qcdht%04i' % x for x in [700, 1000, 1500, 2000]]
+        x = ['qcdht%04i' % x for x in [1000, 1500, 2000]]
         x += ['ttbarht%04i' % x for x in [600, 800, 1200, 2500]]
     return x
 

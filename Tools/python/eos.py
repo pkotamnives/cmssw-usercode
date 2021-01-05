@@ -1,6 +1,6 @@
 import sys, subprocess, os, fnmatch, re
 
-url = 'root://cmseos.fnal.gov/'
+url = 'root://eosuser.cern.ch/'
 global_url = 'root://cms-xrd-global.cern.ch/'
 
 def _popen(cmd, shell=False):
@@ -43,7 +43,7 @@ def quota():
     return "eos quota command didn't work or didn't find user %s" % user
 
 def exists(fn):
-    fn = storeonly(fn)
+    #fn = storeonly(fn)
     return _system('eos %s ls %s' % (url, fn))
 
 def isdir(fn):

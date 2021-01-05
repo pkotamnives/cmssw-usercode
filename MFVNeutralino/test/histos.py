@@ -126,12 +126,12 @@ if __name__ == '__main__' and hasattr(sys, 'argv') and 'submit' in sys.argv:
         samples = pick_samples(dataset, qcd=True, ttbar=False, span_signal=True, data=False, bjet=True) # no data currently; no sliced ttbar since inclusive is used
         pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier())
     else :
-        samples = pick_samples(dataset, span_signal=True, all_signal=False, data=False)
+        samples = pick_samples(dataset, span_signal=True, qcd=True, all_signal=False, data=False)
         pset_modifier = chain_modifiers(is_mc_modifier, per_sample_pileup_weights_modifier())
 
     set_splitting(samples, dataset, 'histos', data_json=json_path('ana_2017p8.json'))
 
-    cs = CondorSubmitter('Histos_mergedvtx2_' + version,
+    cs = CondorSubmitter('Histos' + version,
                          ex = year,
                          dataset = dataset,
                          pset_modifier = pset_modifier,

@@ -106,7 +106,7 @@ should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_input_files = __TARBALL_FN__,cs_jobmap,cs_njobs,cs_pset.py,cs_filelist.py,cs.json,cs_cmsrun_args,cs_primaryds,cs_samplename,cs_timestamp__INPUT_FNS__
 x509userproxy = $ENV(X509_USER_PROXY)
-+JobFlavour = "espresso"
++JobFlavour = "testmatch"
 __EXTRAS__
 Queue __NJOBS__
 '''

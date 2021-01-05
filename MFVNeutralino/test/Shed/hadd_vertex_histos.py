@@ -27,7 +27,7 @@ else:
     samples = [sample]
 
 bn_re = re.compile(r'(.*)_(\d+)\.root')
-path_re = re.compile(r'(/store.*/\d{6}_\d{6})/')
+path_re = re.compile(r'(/eos.*/\d{6}_\d{6})/')
 
 hadds = []
 
@@ -45,8 +45,8 @@ for sample in samples:
         assert fn.endswith('.root')
         if verbosity >= 2:
             print fn
-        if not eos.exists(fn):
-            raise IOError('does not exist on eos: %r' % fn)
+        #if not eos.exists(fn):
+        #    raise IOError('does not exist on eos: %r' % fn)
 
         dn, bn = os.path.split(fn)
         mo = bn_re.search(bn)

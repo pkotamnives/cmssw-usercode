@@ -486,12 +486,15 @@ def compare_hists(ps, samples, **kwargs):
     ###
 
     proto_dir = samples[0][1]
+    print 'here proto dir', proto_dir
     if recurse:
         names = flatten_directory(proto_dir)
     else:
         names = [k.GetName() for k in proto_dir.GetListOfKeys()]
+    print 'here names', names
     names = [name for name in names if issubclass(type(proto_dir.Get(name)), ROOT.TH1)]
-    if not names:
+     
+    if not names: 
         raise ValueError('no TH1-descended objects found')
 
     if sort_names:
