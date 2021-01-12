@@ -378,415 +378,64 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
   edm::Handle<MFVVertexAuxCollection> auxes;
   event.getByToken(vertex_token, auxes);
-  if ( 0.00150 < mevent->lspdist2d() < 2 ) {
-	  const int nsv = int(auxes->size());
-	  h_nsv->Fill(nsv, w);
+  if (0.00150 < mevent->lspdist2d() < 2) {
+	  //////////////////////////////////////////////////////////////////////
 
-	  for (int isv = 0; isv < nsv; ++isv) {
-		  const MFVVertexAux& aux = auxes->at(isv);
-		  if (aux.gen3ddist < 0.0085) {
-			  const int ntracks = aux.ntracks();
+	  if (nsv >= 2) {
+		  const MFVVertexAux& sv0 = auxes->at(0);
+		  const MFVVertexAux& sv1 = auxes->at(1);
+		  if (sv0.gen3ddist < 0.0085 || sv1.gen3ddist < 0.0085) {
+			  double svdist2d = mag(sv0.x - sv1.x, sv0.y - sv1.y);
+			  double svdist3d = mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z);
+			  h_svdist2d->Fill(svdist2d, w);
+			  h_svdist3d->Fill(svdist3d, w);
+			  h_sv0pvdz_v_sv1pvdz->Fill(sv0.pvdz(), sv1.pvdz(), w);
+			  h_sv0pvdzsig_v_sv1pvdzsig->Fill(sv0.pvdzsig(), sv1.pvdzsig(), w);
+			  double phi0 = atan2(sv0.y - bsy, sv0.x - bsx);
+			  double phi1 = atan2(sv1.y - bsy, sv1.x - bsx);
+			  h_absdeltaphi01->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
 
-			  h_sv_xy->Fill(aux.x - mevent->bsx_at_z(aux.z), aux.y - mevent->bsy_at_z(aux.z), w);
-			  h_sv_xz->Fill(aux.x - mevent->bsx_at_z(aux.z), aux.z - bsz, w);
-			  h_sv_yz->Fill(aux.y - mevent->bsy_at_z(aux.z), aux.z - bsz, w);
-			  h_sv_rz->Fill(mevent->bs2ddist(aux) * (aux.y - mevent->bsy_at_z(aux.z) >= 0 ? 1 : -1), aux.z - bsz, w);
+			  h_fractrackssharedwpv01->Fill(float(sv0.ntrackssharedwpv() + sv1.ntrackssharedwpv()) / (sv0.ntracks() + sv1.ntracks()), w);
+			  h_fractrackssharedwpvs01->Fill(float(sv0.ntrackssharedwpvs() + sv1.ntrackssharedwpvs()) / (sv0.ntracks() + sv1.ntracks()), w);
+			  h_pvmosttracksshared->Fill(sv0.ntrackssharedwpvs() ? sv0.pvmosttracksshared() : -1,
+				  sv1.ntrackssharedwpvs() ? sv1.pvmosttracksshared() : -1,
+				  w);
 
-			  MFVVertexAux::stats trackpairdeta_stats(&aux, aux.trackpairdetas());
-			  MFVVertexAux::stats   trackpairdr_stats(&aux, aux.trackpairdrs());
+			  std::vector<std::vector<int> > sv_track_which_jet;
+			  for (int isv = 0; isv < nsv; ++isv) {
+				  const MFVVertexAux& aux = auxes->at(isv);
+				  const int ntracks = aux.ntracks();
 
-			  jmt::MaxValue max_nm1_refit_dist3_wbad, max_nm1_refit_dist3, max_nm1_refit_dist2, max_nm1_refit_distz;
-			  for (size_t i = 0, ie = aux.nnm1(); i < ie; ++i) {
-				  const double dist3 = mag(aux.nm1_x[i] - aux.x, aux.nm1_y[i] - aux.y, aux.nm1_z[i] - aux.z);
-				  if (aux.nm1_chi2[i] < 0)
-					  max_nm1_refit_dist3_wbad(std::numeric_limits<double>::max());
-				  else {
-					  max_nm1_refit_dist3_wbad(dist3);
-					  max_nm1_refit_dist3(dist3);
-					  max_nm1_refit_dist2(mag(aux.nm1_x[i] - aux.x, aux.nm1_y[i] - aux.y));
-					  max_nm1_refit_distz(fabs(aux.nm1_z[i] - aux.z));
-				  }
-			  }
-
-			  if (max_nm1_refit_dist3_wbad == std::numeric_limits<double>::max())
-				  max_nm1_refit_dist3_wbad.set(-0.0005);
-
-			  PairwiseHistos::ValueMap v = {
-				  {"x", aux.x - mevent->bsx_at_z(aux.z)},
-				  {"y", aux.y - mevent->bsy_at_z(aux.z)},
-				  {"z", aux.z - bsz},
-				  {"phi", atan2(aux.y - mevent->bsy_at_z(aux.z), aux.x - mevent->bsx_at_z(aux.z))},
-				  {"phi_pv", atan2(aux.y - mevent->pvy, aux.x - mevent->pvx)},
-				  {"cxx", aux.cxx},
-				  {"cxy", aux.cxy},
-				  {"cxz", aux.cxz},
-				  {"cyy", aux.cyy},
-				  {"cyz", aux.cyz},
-				  {"czz", aux.czz},
-
-				  {"rescale_chi2", aux.rescale_chi2},
-				  {"rescale_x", aux.rescale_x - mevent->bsx_at_z(aux.z)},
-				  {"rescale_y", aux.rescale_y - mevent->bsy_at_z(aux.z)},
-				  {"rescale_z", aux.rescale_z - bsz},
-				  {"rescale_cxx", aux.rescale_cxx},
-				  {"rescale_cxy", aux.rescale_cxy},
-				  {"rescale_cxz", aux.rescale_cxz},
-				  {"rescale_cyy", aux.rescale_cyy},
-				  {"rescale_cyz", aux.rescale_cyz},
-				  {"rescale_czz", aux.rescale_czz},
-				  {"rescale_dx", aux.rescale_x - aux.x},
-				  {"rescale_dy", aux.rescale_y - aux.y},
-				  {"rescale_dz", aux.rescale_z - aux.z},
-				  {"rescale_dx_big", aux.rescale_x - aux.x},
-				  {"rescale_dy_big", aux.rescale_y - aux.y},
-				  {"rescale_dz_big", aux.rescale_z - aux.z},
-				  {"rescale_d2",     mag(aux.rescale_x - aux.x, aux.rescale_y - aux.y)},
-				  {"rescale_d2_big", mag(aux.rescale_x - aux.x, aux.rescale_y - aux.y)},
-				  {"rescale_d3",     mag(aux.rescale_x - aux.x, aux.rescale_y - aux.y, aux.rescale_z - aux.z)},
-				  {"rescale_d3_big", mag(aux.rescale_x - aux.x, aux.rescale_y - aux.y, aux.rescale_z - aux.z)},
-				  {"rescale_bsbs2ddist", mag(aux.x - mevent->bsx_at_z(aux.z), aux.y - mevent->bsy_at_z(aux.z))},
-				  {"rescale_bs2derr", aux.rescale_bs2derr},
-
-				  {"max_nm1_refit_dist3_wbad", max_nm1_refit_dist3_wbad},
-				  {"max_nm1_refit_dist3", max_nm1_refit_dist3},
-				  {"max_nm1_refit_dist2", max_nm1_refit_dist2},
-				  {"max_nm1_refit_distz", max_nm1_refit_distz},
-
-				  {"nlep",                    aux.which_lep.size()},
-				  {"ntracks",                 ntracks},
-				  {"ntracksptgt3",            aux.ntracksptgt(3)},
-				  {"ntracksptgt10",           aux.ntracksptgt(10)},
-				  {"ntracksetagt1p5",         aux.ntracksetagt(1.5)},
-				  {"trackminnhits",           aux.trackminnhits()},
-				  {"trackmaxnhits",           aux.trackmaxnhits()},
-				  {"njetsntks",               aux.njets[mfv::JByNtracks]},
-				  {"chi2dof",                 aux.chi2dof()},
-				  {"chi2dofprob",             TMath::Prob(aux.chi2, aux.ndof())},
-
-				  {"tkonlyp",             aux.p4(mfv::PTracksOnly).P()},
-				  {"tkonlypt",            aux.pt[mfv::PTracksOnly]},
-				  {"tkonlyeta",           aux.eta[mfv::PTracksOnly]},
-				  {"tkonlyrapidity",      aux.p4(mfv::PTracksOnly).Rapidity()},
-				  {"tkonlyphi",           aux.phi[mfv::PTracksOnly]},
-				  {"tkonlymass",          aux.mass[mfv::PTracksOnly]},
-
-				  {"jetsntkp",             aux.p4(mfv::PJetsByNtracks).P()},
-				  {"jetsntkpt",            aux.pt[mfv::PJetsByNtracks]},
-				  {"jetsntketa",           aux.eta[mfv::PJetsByNtracks]},
-				  {"jetsntkrapidity",      aux.p4(mfv::PJetsByNtracks).Rapidity()},
-				  {"jetsntkphi",           aux.phi[mfv::PJetsByNtracks]},
-				  {"jetsntkmass",          aux.mass[mfv::PJetsByNtracks]},
-
-				  {"tksjetsntkp",             aux.p4(mfv::PTracksPlusJetsByNtracks).P()},
-				  {"tksjetsntkpt",            aux.pt[mfv::PTracksPlusJetsByNtracks]},
-				  {"tksjetsntketa",           aux.eta[mfv::PTracksPlusJetsByNtracks]},
-				  {"tksjetsntkrapidity",      aux.p4(mfv::PTracksPlusJetsByNtracks).Rapidity()},
-				  {"tksjetsntkphi",           aux.phi[mfv::PTracksPlusJetsByNtracks]},
-				  {"tksjetsntkmass",          aux.mass[mfv::PTracksPlusJetsByNtracks]},
-
-				  {"costhtkonlymombs",         aux.costhmombs(mfv::PTracksOnly)},
-				  {"costhtkonlymompv2d",       aux.costhmompv2d(mfv::PTracksOnly)},
-				  {"costhtkonlymompv3d",       aux.costhmompv3d(mfv::PTracksOnly)},
-
-				  {"costhtksjetsntkmombs",     aux.costhmombs(mfv::PTracksPlusJetsByNtracks)},
-				  {"costhtksjetsntkmompv2d",   aux.costhmompv2d(mfv::PTracksPlusJetsByNtracks)},
-				  {"costhtksjetsntkmompv3d",   aux.costhmompv3d(mfv::PTracksPlusJetsByNtracks)},
-
-				  {"missdisttkonlypv",        aux.missdistpv[mfv::PTracksOnly]},
-				  {"missdisttkonlypverr",     aux.missdistpverr[mfv::PTracksOnly]},
-				  {"missdisttkonlypvsig",     aux.missdistpvsig(mfv::PTracksOnly)},
-
-				  {"missdisttksjetsntkpv",        aux.missdistpv[mfv::PTracksPlusJetsByNtracks]},
-				  {"missdisttksjetsntkpverr",     aux.missdistpverr[mfv::PTracksPlusJetsByNtracks]},
-				  {"missdisttksjetsntkpvsig",     aux.missdistpvsig(mfv::PTracksPlusJetsByNtracks)},
-
-				  {"sumpt2",                  aux.sumpt2()},
-
-				  {"ntrackssharedwpv", aux.ntrackssharedwpv()},
-				  {"ntrackssharedwpvs", aux.ntrackssharedwpvs()},
-				  {"fractrackssharedwpv", float(aux.ntrackssharedwpv()) / ntracks},
-				  {"fractrackssharedwpvs", float(aux.ntrackssharedwpvs()) / ntracks},
-				  {"npvswtracksshared", aux.npvswtracksshared()},
-
-				  {"trackdxymin", aux.trackdxymin()},
-				  {"trackdxymax", aux.trackdxymax()},
-				  {"trackdxyavg", aux.trackdxyavg()},
-				  {"trackdxyrms", aux.trackdxyrms()},
-
-				  {"trackdzmin", aux.trackdzmin()},
-				  {"trackdzmax", aux.trackdzmax()},
-				  {"trackdzavg", aux.trackdzavg()},
-				  {"trackdzrms", aux.trackdzrms()},
-
-				  {"trackpterrmin", aux.trackpterrmin()},
-				  {"trackpterrmax", aux.trackpterrmax()},
-				  {"trackpterravg", aux.trackpterravg()},
-				  {"trackpterrrms", aux.trackpterrrms()},
-
-				  {"tracketaerrmin", aux.tracketaerrmin()},
-				  {"tracketaerrmax", aux.tracketaerrmax()},
-				  {"tracketaerravg", aux.tracketaerravg()},
-				  {"tracketaerrrms", aux.tracketaerrrms()},
-
-				  {"trackphierrmin", aux.trackphierrmin()},
-				  {"trackphierrmax", aux.trackphierrmax()},
-				  {"trackphierravg", aux.trackphierravg()},
-				  {"trackphierrrms", aux.trackphierrrms()},
-
-				  {"trackdxyerrmin", aux.trackdxyerrmin()},
-				  {"trackdxyerrmax", aux.trackdxyerrmax()},
-				  {"trackdxyerravg", aux.trackdxyerravg()},
-				  {"trackdxyerrrms", aux.trackdxyerrrms()},
-
-				  {"trackdzerrmin", aux.trackdzerrmin()},
-				  {"trackdzerrmax", aux.trackdzerrmax()},
-				  {"trackdzerravg", aux.trackdzerravg()},
-				  {"trackdzerrrms", aux.trackdzerrrms()},
-
-				  {"trackpairdetamin", trackpairdeta_stats.min},
-				  {"trackpairdetamax", trackpairdeta_stats.max},
-				  {"trackpairdetaavg", trackpairdeta_stats.avg},
-				  {"trackpairdetarms", trackpairdeta_stats.rms},
-
-				  {"trackpairdrmin",  trackpairdr_stats.min},
-				  {"trackpairdrmax",  trackpairdr_stats.max},
-				  {"trackpairdravg",  trackpairdr_stats.avg},
-				  {"trackpairdrrms",  trackpairdr_stats.rms},
-
-				  {"costhtkmomvtxdispmin", aux.costhtkmomvtxdispmin()},
-				  {"costhtkmomvtxdispmax", aux.costhtkmomvtxdispmax()},
-				  {"costhtkmomvtxdispavg", aux.costhtkmomvtxdispavg()},
-				  {"costhtkmomvtxdisprms", aux.costhtkmomvtxdisprms()},
-
-				  {"costhjetmomvtxdispmin", aux.costhjetmomvtxdispmin()},
-				  {"costhjetmomvtxdispmax", aux.costhjetmomvtxdispmax()},
-				  {"costhjetmomvtxdispavg", aux.costhjetmomvtxdispavg()},
-				  {"costhjetmomvtxdisprms", aux.costhjetmomvtxdisprms()},
-
-				  {"gen2ddist",   aux.gen2ddist},
-				  {"gen2derr",    aux.gen2derr},
-				  {"gen2dsig",    aux.gen2dsig()},
-				  {"gen3ddist",   aux.gen3ddist},
-				  {"gen3derr",    aux.gen3derr},
-				  {"gen3dsig",    aux.gen3dsig()},
-				  {"bs2ddist",    aux.bs2ddist},
-				  {"bsbs2ddist",  mevent->bs2ddist(aux)},
-				  {"bs2derr",     aux.bs2derr},
-				  {"bs2dsig",     aux.bs2dsig()},
-				  {"pv2ddist",    aux.pv2ddist},
-				  {"pv2derr",     aux.pv2derr},
-				  {"pv2dsig",     aux.pv2dsig()},
-				  {"pv3ddist",    aux.pv3ddist},
-				  {"pv3derr",     aux.pv3derr},
-				  {"pv3dsig",     aux.pv3dsig()},
-				  {"pvdz",        aux.pvdz()},
-				  {"pvdzerr",     aux.pvdzerr()},
-				  {"pvdzsig",     aux.pvdzsig()}
-			  };
-
-			  std::map<int, int> multipv = aux.pvswtracksshared();
-			  std::map<int, int> multipvbyz;
-			  for (int i = 0; i < ntracks; ++i) {
-				  jmt::MinValue closest(0.1);
-				  for (int j = 0; j < mevent->npv; ++j)
-					  closest(j, fabs(aux.track_vz[i] - mevent->pv_z(j)));
-				  if (closest.i() >= 0)
-					  ++multipvbyz[closest.i()];
-			  }
-
-			  auto multipv_maxdz = [&](const std::map<int, int> & m) {
-				  std::vector<int> mv;
-				  for (auto c : m)
-					  if (c.first != -1)
-						  mv.push_back(c.first);
-				  jmt::MaxValue v;
-				  const size_t n = mv.size();
-				  for (size_t i = 0; i < n; ++i)
-					  for (size_t j = i + 1; j < n; ++j)
-						  v(fabs(mevent->pv_z(mv[i]) - mevent->pv_z(mv[j])));
-				  return double(v);
-			  };
-			  v["multipv_maxdz"] = multipv_maxdz(multipv);
-			  v["multipvbyz_maxdz"] = multipv_maxdz(multipvbyz);
-
-			  std::vector<float> trackpairdphis = aux.trackpairdphis();
-			  std::sort(trackpairdphis.begin(), trackpairdphis.end());
-			  const size_t ntrackpairs = trackpairdphis.size();
-			  v["trackpairdphimax"] = ntrackpairs < 1 ? -1 : trackpairdphis[ntrackpairs - 1];
-			  v["trackpairdphimaxm1"] = ntrackpairs < 2 ? -1 : trackpairdphis[ntrackpairs - 2];
-			  v["trackpairdphimaxm2"] = ntrackpairs < 3 ? -1 : trackpairdphis[ntrackpairs - 3];
-
-			  for (int i = 0; i < 4; ++i) {
-				  std::vector<double> jetdeltaphis;
-				  for (size_t ijet = 0; ijet < mevent->jet_id.size(); ++ijet) {
-					  if (mevent->jet_pt[ijet] < mfv::min_jet_pt)
-						  continue;
-					  if (((mevent->jet_id[ijet] >> 2) & 3) >= i) {
-						  const double dphi = reco::deltaPhi(atan2(aux.y - bsy, aux.x - bsx), mevent->jet_phi[ijet]);
-						  fill(h_sv_jets_deltaphi[i], isv, dphi, w);
-						  jetdeltaphis.push_back(fabs(dphi));
-					  }
-				  }
-				  std::sort(jetdeltaphis.begin(), jetdeltaphis.end());
-				  int njets = jetdeltaphis.size();
-				  v[TString::Format("jet%d_deltaphi0", i).Data()] = 0 > njets - 1 ? -1 : jetdeltaphis[0];
-				  v[TString::Format("jet%d_deltaphi1", i).Data()] = 1 > njets - 1 ? -1 : jetdeltaphis[1];
-			  }
-
-			  fill(h_sv_bs2derr_bsbs2ddist, isv, mevent->bs2ddist(aux), aux.bs2derr, w);
-			  fill(h_pvrho_bsbs2ddist, isv, mevent->bs2ddist(aux), mevent->pv_rho(), w);
-
-			  for (int i = 0; i < ntracks; ++i) {
-				  fill(h_sv_track_weight, isv, aux.track_weight(i), w);
-				  fill(h_sv_track_q, isv, aux.track_q(i), w);
-				  fill(h_sv_track_pt, isv, aux.track_pt(i), w);
-				  fill(h_sv_track_eta, isv, aux.track_eta[i], w);
-				  fill(h_sv_track_phi, isv, aux.track_phi[i], w);
-				  fill(h_sv_track_dxy, isv, aux.track_dxy[i], w);
-				  fill(h_sv_track_dz, isv, aux.track_dz[i], w);
-				  fill(h_sv_track_pt_err, isv, aux.track_pt_err[i], w);
-				  fill(h_sv_track_eta_err, isv, aux.track_eta_err(i), w);
-				  fill(h_sv_track_phi_err, isv, aux.track_phi_err(i), w);
-				  fill(h_sv_track_dxy_err, isv, aux.track_dxy_err(i), w);
-				  fill(h_sv_track_dz_err, isv, aux.track_dz_err(i), w);
-				  fill(h_sv_track_nsigmadxy, isv, aux.track_dxy[i] / aux.track_dxy_err(i), w);
-				  fill(h_sv_track_chi2dof, isv, aux.track_chi2dof(i), w);
-				  fill(h_sv_track_npxhits, isv, aux.track_npxhits(i), w);
-				  fill(h_sv_track_nsthits, isv, aux.track_nsthits(i), w);
-				  fill(h_sv_track_nhitsbehind, isv, aux.track_nhitsbehind(i), w);
-				  fill(h_sv_track_nhitslost, isv, aux.track_nhitslost(i), w);
-				  fill(h_sv_track_nhits, isv, aux.track_nhits(i), w);
-				  fill(h_sv_track_injet, isv, aux.track_injet[i], w);
-				  fill(h_sv_track_inpv, isv, aux.track_inpv[i], w);
-			  }
-
-			  if (max_ntrackplots > 0) {
-				  std::vector<std::pair<int, float>> itk_pt;
-				  for (int i = 0; i < ntracks; ++i)
-					  itk_pt.push_back(std::make_pair(i, aux.track_pt(i)));
-
-				  std::sort(itk_pt.begin(), itk_pt.end(), [](std::pair<int, float> itk_pt1, std::pair<int, float> itk_pt2) { return itk_pt1.second > itk_pt2.second; });
-				  for (int i = 0; i < max_ntrackplots; ++i) {
-					  if (i < ntracks) {
-						  v[TString::Format("track%i_weight", i).Data()] = aux.track_weight(itk_pt[i].first);
-						  v[TString::Format("track%i_q", i).Data()] = aux.track_q(itk_pt[i].first);
-						  v[TString::Format("track%i_pt", i).Data()] = aux.track_pt(itk_pt[i].first);
-						  v[TString::Format("track%i_eta", i).Data()] = aux.track_eta[itk_pt[i].first];
-						  v[TString::Format("track%i_phi", i).Data()] = aux.track_phi[itk_pt[i].first];
-						  v[TString::Format("track%i_dxy", i).Data()] = aux.track_dxy[itk_pt[i].first];
-						  v[TString::Format("track%i_dz", i).Data()] = aux.track_dz[itk_pt[i].first];
-						  v[TString::Format("track%i_pt_err", i).Data()] = aux.track_pt_err[itk_pt[i].first];
-						  v[TString::Format("track%i_eta_err", i).Data()] = aux.track_eta_err(itk_pt[i].first);
-						  v[TString::Format("track%i_phi_err", i).Data()] = aux.track_phi_err(itk_pt[i].first);
-						  v[TString::Format("track%i_dxy_err", i).Data()] = aux.track_dxy_err(itk_pt[i].first);
-						  v[TString::Format("track%i_dz_err", i).Data()] = aux.track_dz_err(itk_pt[i].first);
-						  v[TString::Format("track%i_nsigmadxy", i).Data()] = aux.track_dxy[itk_pt[i].first] / aux.track_dxy_err(itk_pt[i].first);
-						  v[TString::Format("track%i_chi2dof", i).Data()] = aux.track_chi2dof(itk_pt[i].first);
-						  v[TString::Format("track%i_npxhits", i).Data()] = aux.track_npxhits(itk_pt[i].first);
-						  v[TString::Format("track%i_nsthits", i).Data()] = aux.track_nsthits(itk_pt[i].first);
-						  v[TString::Format("track%i_nhitsbehind", i).Data()] = aux.track_nhitsbehind(itk_pt[i].first);
-						  v[TString::Format("track%i_nhitslost", i).Data()] = aux.track_nhitslost(itk_pt[i].first);
-						  v[TString::Format("track%i_nhits", i).Data()] = aux.track_nhits(itk_pt[i].first);
-						  v[TString::Format("track%i_injet", i).Data()] = aux.track_injet[itk_pt[i].first];
-						  v[TString::Format("track%i_inpv", i).Data()] = aux.track_inpv[itk_pt[i].first];
-
-						  std::vector<double> jetdeltaphis;
-						  for (size_t ijet = 0; ijet < mevent->jet_id.size(); ++ijet) {
-							  if (mevent->jet_pt[ijet] < mfv::min_jet_pt)
-								  continue;
-							  jetdeltaphis.push_back(fabs(reco::deltaPhi(aux.track_phi[itk_pt[i].first], mevent->jet_phi[ijet])));
+				  std::vector<int> track_which_jet;
+				  for (int i = 0; i < ntracks; ++i) {
+					  double match_threshold = 1.3;
+					  int jet_index = 255;
+					  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {
+						  double a = fabs(aux.track_pt(i) - fabs(mevent->jet_track_qpt[j])) + 1;
+						  double b = fabs(aux.track_eta[i] - mevent->jet_track_eta[j]) + 1;
+						  double c = fabs(aux.track_phi[i] - mevent->jet_track_phi[j]) + 1;
+						  if (a * b * c < match_threshold) {
+							  match_threshold = a * b * c;
+							  jet_index = mevent->jet_track_which_jet[j];
 						  }
-						  std::sort(jetdeltaphis.begin(), jetdeltaphis.end());
-						  int njets = jetdeltaphis.size();
-						  v[TString::Format("track%i_jet_deltaphi0", i).Data()] = 0 > njets - 1 ? -1 : jetdeltaphis[0];
 					  }
-					  else {
-						  v[TString::Format("track%i_weight", i).Data()] = -1e6;
-						  v[TString::Format("track%i_q", i).Data()] = -1e6;
-						  v[TString::Format("track%i_pt", i).Data()] = -1e6;
-						  v[TString::Format("track%i_eta", i).Data()] = -1e6;
-						  v[TString::Format("track%i_phi", i).Data()] = -1e6;
-						  v[TString::Format("track%i_dxy", i).Data()] = -1e6;
-						  v[TString::Format("track%i_dz", i).Data()] = -1e6;
-						  v[TString::Format("track%i_pt_err", i).Data()] = -1e6;
-						  v[TString::Format("track%i_eta_err", i).Data()] = -1e6;
-						  v[TString::Format("track%i_phi_err", i).Data()] = -1e6;
-						  v[TString::Format("track%i_dxy_err", i).Data()] = -1e6;
-						  v[TString::Format("track%i_dz_err", i).Data()] = -1e6;
-						  v[TString::Format("track%i_nsigmadxy", i).Data()] = -1e6;
-						  v[TString::Format("track%i_chi2dof", i).Data()] = -1e6;
-						  v[TString::Format("track%i_npxhits", i).Data()] = -1e6;
-						  v[TString::Format("track%i_nsthits", i).Data()] = -1e6;
-						  v[TString::Format("track%i_nhitsbehind", i).Data()] = -1e6;
-						  v[TString::Format("track%i_nhitslost", i).Data()] = -1e6;
-						  v[TString::Format("track%i_nhits", i).Data()] = -1e6;
-						  v[TString::Format("track%i_injet", i).Data()] = -1e6;
-						  v[TString::Format("track%i_inpv", i).Data()] = -1e6;
-						  v[TString::Format("track%i_jet_deltaphi0", i).Data()] = -1e6;
+					  if (jet_index != 255) {
+						  track_which_jet.push_back((int)jet_index);
 					  }
 				  }
+				  sv_track_which_jet.push_back(track_which_jet);
 			  }
 
-			  fill(h_sv, isv, v, w);
-		  }
-	  }
-  }
-  //////////////////////////////////////////////////////////////////////
-
-  if (nsv >= 2) {
-	  const MFVVertexAux& sv0 = auxes->at(0);
-	  const MFVVertexAux& sv1 = auxes->at(1);
-	  if (sv0.gen3ddist < 0.0085 || sv1.gen3ddist < 0.0085) {
-		  double svdist2d = mag(sv0.x - sv1.x, sv0.y - sv1.y);
-		  double svdist3d = mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z);
-		  h_svdist2d->Fill(svdist2d, w);
-		  h_svdist3d->Fill(svdist3d, w);
-		  h_sv0pvdz_v_sv1pvdz->Fill(sv0.pvdz(), sv1.pvdz(), w);
-		  h_sv0pvdzsig_v_sv1pvdzsig->Fill(sv0.pvdzsig(), sv1.pvdzsig(), w);
-		  double phi0 = atan2(sv0.y - bsy, sv0.x - bsx);
-		  double phi1 = atan2(sv1.y - bsy, sv1.x - bsx);
-		  h_absdeltaphi01->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
-
-		  h_fractrackssharedwpv01->Fill(float(sv0.ntrackssharedwpv() + sv1.ntrackssharedwpv()) / (sv0.ntracks() + sv1.ntracks()), w);
-		  h_fractrackssharedwpvs01->Fill(float(sv0.ntrackssharedwpvs() + sv1.ntrackssharedwpvs()) / (sv0.ntracks() + sv1.ntracks()), w);
-		  h_pvmosttracksshared->Fill(sv0.ntrackssharedwpvs() ? sv0.pvmosttracksshared() : -1,
-			  sv1.ntrackssharedwpvs() ? sv1.pvmosttracksshared() : -1,
-			  w);
-
-		  std::vector<std::vector<int> > sv_track_which_jet;
-		  for (int isv = 0; isv < nsv; ++isv) {
-			  const MFVVertexAux& aux = auxes->at(isv);
-			  const int ntracks = aux.ntracks();
-
-			  std::vector<int> track_which_jet;
-			  for (int i = 0; i < ntracks; ++i) {
-				  double match_threshold = 1.3;
-				  int jet_index = 255;
-				  for (unsigned j = 0; j < mevent->jet_track_which_jet.size(); ++j) {
-					  double a = fabs(aux.track_pt(i) - fabs(mevent->jet_track_qpt[j])) + 1;
-					  double b = fabs(aux.track_eta[i] - mevent->jet_track_eta[j]) + 1;
-					  double c = fabs(aux.track_phi[i] - mevent->jet_track_phi[j]) + 1;
-					  if (a * b * c < match_threshold) {
-						  match_threshold = a * b * c;
-						  jet_index = mevent->jet_track_which_jet[j];
-					  }
-				  }
-				  if (jet_index != 255) {
-					  track_which_jet.push_back((int)jet_index);
-				  }
+			  bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
+			  h_sv_shared_jets->Fill(shared_jet, w);
+			  if (shared_jet) {
+				  h_svdist2d_shared_jets->Fill(svdist2d, w);
+				  h_absdeltaphi01_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
 			  }
-			  sv_track_which_jet.push_back(track_which_jet);
-		  }
-
-		  bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
-		  h_sv_shared_jets->Fill(shared_jet, w);
-		  if (shared_jet) {
-			  h_svdist2d_shared_jets->Fill(svdist2d, w);
-			  h_absdeltaphi01_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
-		  }
-		  else {
-			  h_svdist2d_no_shared_jets->Fill(svdist2d, w);
-			  h_absdeltaphi01_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+			  else {
+				  h_svdist2d_no_shared_jets->Fill(svdist2d, w);
+				  h_absdeltaphi01_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+			  }
 		  }
 	  }
   }
