@@ -50,6 +50,7 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH2F* h_sv0pvdz_v_sv1pvdz;
   TH2F* h_sv0pvdzsig_v_sv1pvdzsig;
   TH1F* h_absdeltaphi01;
+  /*
   TH2F* h_pvmosttracksshared;
   TH1F* h_fractrackssharedwpv01;
   TH1F* h_fractrackssharedwpvs01;
@@ -58,6 +59,63 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH1F* h_svdist2d_no_shared_jets;
   TH1F* h_absdeltaphi01_shared_jets;
   TH1F* h_absdeltaphi01_no_shared_jets;
+  */
+
+  // Q2 w/o 85 um plots to study in lsp0's hemisphere
+  TH1F* h_nsv_lsp0;
+  TH1F* h_nsv01_lsp0;
+  TH1F* h_dist3d_sv_lsp0;
+  //TH1F* h_significance_sv_lsp0;
+  //TH2F* h_2D_significance_dist3d_sv_lsp0;
+  //nsv==1
+  TH1F* h_nsv1_dist3d_sv_lsp0;
+  TH1F* h_nsv1_ntracks_sv_lsp0;
+  TH1F* h_nsv1_dist3d_sv_lsp0;
+  TH1F* h_nsv1_rescale_dBV_sv_lsp0;
+  TH1F* h_nsv1_rescale_bs2derr_sv_lsp0;
+  TH1F* h_nsv1_tksjetsntkmass_sv_lsp0;
+  //nsv>=2
+  TH1F* h_ntracks_sv_lsp0;
+  TH1F* h_ntracks_sv0_lsp0;
+  TH1F* h_ntracks_sv1_lsp0;
+  TH1F* h_ntracks_sv2_lsp0;
+  TH1F* h_dist3d_sv0_lsp0;
+  TH1F* h_dist3d_sv1_lsp0;
+  TH1F* h_dist3d_sv2_lsp0;
+  TH1F* h_rescale_dBV_sv0_lsp0;
+  TH1F* h_rescale_dBV_sv1_lsp0;
+  TH1F* h_rescale_dBV_sv2_lsp0;
+  TH1F* h_rescale_bs2derr_sv0_lsp0;
+  TH1F* h_rescale_bs2derr_sv1_lsp0;
+  TH1F* h_rescale_bs2derr_sv2_lsp0;
+  TH1F* h_tksjetsntkmass_sv0_lsp0;
+  TH1F* h_tksjetsntkmass_sv1_lsp0;
+  TH1F* h_tksjetsntkmass_sv2_lsp0;
+
+  // Q2 w/ 85 um plots to study in lsp0's hemisphere
+  /*
+  TH1F* h_nsv_lsp0_gensv;
+  TH1F* h_dist3d_sv_lsp0_gensv;
+  //TH1F* h_significance_sv_lsp0_gensv;
+  //TH2F* h_2D_significance_dist3d_sv_lsp0_gensv;
+  TH1F* h_ntracks_sv_lsp0_gensv;
+  TH1F* h_ntracks_sv0_lsp0_gensv;
+  TH1F* h_ntracks_sv1_lsp0_gensv;
+  TH1F* h_ntracks_sv2_lsp0_gensv;
+  TH1F* h_dist3d_sv0_lsp0_gensv;
+  TH1F* h_dist3d_sv1_lsp0_gensv;
+  TH1F* h_dist3d_sv2_lsp0_gensv;
+  TH1F* h_rescale_dBV_sv0_lsp0_gensv;
+  TH1F* h_rescale_dBV_sv1_lsp0_gensv;
+  TH1F* h_rescale_dBV_sv2_lsp0_gensv;
+  TH1F* h_rescale_bs2derr_sv0_lsp0_gensv;
+  TH1F* h_rescale_bs2derr_sv1_lsp0_gensv;
+  TH1F* h_rescale_bs2derr_sv2_lsp0_gensv;
+  TH1F* h_tksjetsntkmass_sv0_lsp0_gensv;
+  TH1F* h_tksjetsntkmass_sv1_lsp0_gensv;
+  TH1F* h_tksjetsntkmass_sv2_lsp0_gensv;
+  */
+  ////////////////////////////////////////
 
   TH1F* h_sv_track_weight[sv_num_indices];
   TH1F* h_sv_track_q[sv_num_indices];
@@ -95,7 +153,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
 
   h_w = fs->make<TH1F>("h_w", ";event weight;events/0.1", 100, 0, 10);
   h_nsv = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
-
+  
   PairwiseHistos::HistoDefs hs;
 
   hs.add("x", "SV x (cm)", 100, -4, 4);
@@ -351,6 +409,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_sv0pvdz_v_sv1pvdz = fs->make<TH2F>("h_sv0pvdz_v_sv1pvdz", ";sv #1 dz to PV (cm);sv #0 dz to PV (cm)", 100, 0, 0.5, 100, 0, 0.5);
   h_sv0pvdzsig_v_sv1pvdzsig = fs->make<TH2F>("h_sv0pvdzsig_v_sv1pvdzsig", ";N#sigma(sv #1 dz to PV);sv N#sigma(#0 dz to PV)", 100, 0, 50, 100, 0, 50);
   h_absdeltaphi01 = fs->make<TH1F>("h_absdeltaphi01", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 315, 0, 3.15);
+  /*
   h_fractrackssharedwpv01 = fs->make<TH1F>("h_fractrackssharedwpv01", ";fraction of sv #0 and sv #1 tracks shared with the PV;arb. units", 41, 0, 1.025);
   h_fractrackssharedwpvs01 = fs->make<TH1F>("h_fractrackssharedwpvs01", ";fraction of sv #0 and sv #1 tracks shared with any PV;arb. units", 41, 0, 1.025);
   h_pvmosttracksshared = fs->make<TH2F>("h_pvmosttracksshared", ";index of pv most-shared to sv #0; index of pv most-shared to sv #1", 71, -1, 70, 71, -1, 70);
@@ -359,7 +418,66 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   h_svdist2d_no_shared_jets = fs->make<TH1F>("h_svdist2d_no_shared_jets", ";dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);
   h_absdeltaphi01_shared_jets = fs->make<TH1F>("h_absdeltaphi01_shared_jets", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
   h_absdeltaphi01_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_no_shared_jets", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 316, 0, 3.16);
-}
+  */
+
+  // Q2 w/o 85 um plots to study in lsp0's hemisphere
+  h_nsv_lsp0 = fs->make<TH1F>("h_nsv_lsp0", ";# of secondary vertices;arb. units", 15, 0, 15);
+  h_nsv01_lsp0 = fs->make<TH1F>("h_nsv01_lsp0", "nsv < 2;# of secondary vertices;arb. units", 15, 0, 15);
+  h_dist3d_sv_lsp0 = fs->make<TH1F>("h_dist3d_sv_lsp0", ";dist3d(lsp #0, each sv in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  //h_significance_sv_lsp0 = fs->make<TH1F>("h_significance_sv_lsp0", ";significance3d(lsp #0, each sv in lsp0 hemisphere);arb. units", 200, 0, 20);
+  //h_2D_significance_dist3d_sv_lsp0 = fs->make<TH2F>("h_2D_significance_dist3d_sv_lsp0", ";dist3d(lsp #0, each sv in lsp0 hemisphere) (cm); significance3d(lsp #0, each sv in lsp0 hemisphere)", 200, 0, 0.2, 200, 0, 20);
+  //nsv==1
+  h_nsv1_dist3d_sv_lsp0 = fs->make<TH1F>("h_nsv1_dist3d_sv_lsp0", "nsv == 1;dist3d(lsp #0, each sv in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_nsv1_ntracks_sv_lsp0 = fs->make<TH1F>("h_nsv1_ntracks_sv_lsp0", "nsv == 1;# of tracks/SV (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_nsv1_dist3d_sv_lsp0 = fs->make<TH1F>("h_nsv1_dist3d_sv_lsp0", "nsv == 1;dist3d(lsp #0, sv0 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_nsv1_rescale_dBV_sv_lsp0 = fs->make<TH1F>("h_nsv1_rescale_dBV_sv_lsp0", "nsv == 1;dist2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_nsv1_rescale_bs2derr_sv_lsp0 = fs->make<TH1F>("h_nsv1_rescale_bs2derr_sv_lsp0", "nsv == 1;sigma2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_nsv1_tksjetsntkmass_sv_lsp0 = fs->make<TH1F>("h_nsv1_tksjetsntkmass_sv_lsp0", "nsv == 1;sv0 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+
+  //nsv>=2
+  h_ntracks_sv_lsp0 = fs->make<TH1F>("h_ntracks_sv_lsp0", ";# of tracks/SV (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_ntracks_sv0_lsp0 = fs->make<TH1F>("h_ntracks_sv0_lsp0", ";# of tracks/SV0 (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_ntracks_sv1_lsp0 = fs->make<TH1F>("h_ntracks_sv1_lsp0", ";# of tracks/SV1 (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_ntracks_sv2_lsp0 = fs->make<TH1F>("h_ntracks_sv2_lsp0", ";# of tracks/SV2 (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_dist3d_sv0_lsp0 = fs->make<TH1F>("h_dist3d_sv0_lsp0", ";dist3d(lsp #0, sv0 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_dist3d_sv1_lsp0 = fs->make<TH1F>("h_dist3d_sv1_lsp0", ";dist3d(lsp #0, sv1 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_dist3d_sv2_lsp0 = fs->make<TH1F>("h_dist3d_sv2_lsp0", ";dist3d(lsp #0, sv2 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_rescale_dBV_sv0_lsp0 = fs->make<TH1F>("h_rescale_dBV_sv0_lsp0", ";dist2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_rescale_dBV_sv1_lsp0 = fs->make<TH1F>("h_rescale_dBV_sv1_lsp0", ";dist2d(beamspot, sv1 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_rescale_dBV_sv2_lsp0 = fs->make<TH1F>("h_rescale_dBV_sv2_lsp0", ";dist2d(beamspot, sv2 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_rescale_bs2derr_sv0_lsp0 = fs->make<TH1F>("h_rescale_bs2derr_sv0_lsp0", ";sigma2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_rescale_bs2derr_sv1_lsp0 = fs->make<TH1F>("h_rescale_bs2derr_sv1_lsp0", ";sigma2d(beamspot, sv1 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_rescale_bs2derr_sv2_lsp0 = fs->make<TH1F>("h_rescale_bs2derr_sv2_lsp0", ";sigma2d(beamspot, sv2 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_tksjetsntkmass_sv0_lsp0 = fs->make<TH1F>("h_tksjetsntkmass_sv0_lsp0", ";sv0 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+  h_tksjetsntkmass_sv1_lsp0 = fs->make<TH1F>("h_tksjetsntkmass_sv1_lsp0", ";sv1 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+  h_tksjetsntkmass_sv2_lsp0 = fs->make<TH1F>("h_tksjetsntkmass_sv2_lsp0", ";sv2 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+
+
+  // Q2 w/ 85 um plots to study in lsp0's hemisphere (need a title for gensv) 
+  /*
+  h_nsv_lsp0_gensv = fs->make<TH1F>("h_nsv_lsp0_gensv", ";# of secondary vertices;arb. units", 15, 0, 15);
+  h_dist3d_sv_lsp0_gensv = fs->make<TH1F>("h_dist3d_sv_lsp0_gensv", ";dist3d(lsp #0, each sv in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  //h_significance_sv_lsp0_gensv = fs->make<TH1F>("h_significance_sv_lsp0_gensv", ";significance3d(lsp #0, each sv in lsp0 hemisphere);arb. units", 200, 0, 20);
+  //h_2D_significance_dist3d_sv_lsp0_gensv = fs->make<TH2F>("h_2D_significance_dist3d_sv_lsp0_gensv", ";dist3d(lsp #0, each sv in lsp0 hemisphere) (cm); significance3d(lsp #0, each sv in lsp0 hemisphere)", 200, 0, 0.2, 200, 0, 20);
+  h_ntracks_sv_lsp0_gensv = fs->make<TH1F>("h_ntracks_sv_lsp0_gensv", ";# of tracks/SV (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_ntracks_sv0_lsp0_gensv = fs->make<TH1F>("h_ntracks_sv0_lsp0_gensv", ";# of tracks/SV0 (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_ntracks_sv1_lsp0_gensv = fs->make<TH1F>("h_ntracks_sv1_lsp0_gensv", ";# of tracks/SV1 (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_ntracks_sv2_lsp0_gensv = fs->make<TH1F>("h_ntracks_sv2_lsp0_gensv", ";# of tracks/SV2 (in lsp0 hemisphere);arb. units", 40, 0, 40);
+  h_dist3d_sv0_lsp0_gensv = fs->make<TH1F>("h_dist3d_sv0_lsp0_gensv", ";dist3d(lsp #0, sv0 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_dist3d_sv1_lsp0_gensv = fs->make<TH1F>("h_dist3d_sv1_lsp0_gensv", ";dist3d(lsp #0, sv1 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_dist3d_sv2_lsp0_gensv = fs->make<TH1F>("h_dist3d_sv2_lsp0_gensv", ";dist3d(lsp #0, sv2 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
+  h_rescale_dBV_sv0_lsp0_gensv = fs->make<TH1F>("h_rescale_dBV_sv0_lsp0_gensv", ";dist2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_rescale_dBV_sv1_lsp0_gensv = fs->make<TH1F>("h_rescale_dBV_sv1_lsp0_gensv", ";dist2d(beamspot, sv1 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_rescale_dBV_sv2_lsp0_gensv = fs->make<TH1F>("h_rescale_dBV_sv2_lsp0_gensv", ";dist2d(beamspot, sv2 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
+  h_rescale_bs2derr_sv0_lsp0_gensv = fs->make<TH1F>("h_rescale_bs2derr_sv0_lsp0_gensv", ";sigma2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_rescale_bs2derr_sv1_lsp0_gensv = fs->make<TH1F>("h_rescale_bs2derr_sv1_lsp0_gensv", ";sigma2d(beamspot, sv1 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_rescale_bs2derr_sv2_lsp0_gensv = fs->make<TH1F>("h_rescale_bs2derr_sv2_lsp0_gensv", ";sigma2d(beamspot, sv2 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
+  h_tksjetsntkmass_sv0_lsp0_gensv = fs->make<TH1F>("h_tksjetsntkmass_sv0_lsp0_gensv", ";sv0 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+  h_tksjetsntkmass_sv1_lsp0_gensv = fs->make<TH1F>("h_tksjetsntkmass_sv1_lsp0_gensv", ";sv1 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+  h_tksjetsntkmass_sv2_lsp0_gensv = fs->make<TH1F>("h_tksjetsntkmass_sv2_lsp0_gensv", ";sv2 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
+  }
+  */
+
 
 void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
   edm::Handle<MFVEvent> mevent;
@@ -378,13 +496,14 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 
   edm::Handle<MFVVertexAuxCollection> auxes;
   event.getByToken(vertex_token, auxes);
-  if (0.00150 < mevent->lspdist2d() && mevent->lspdist2d() < 2) {
+  if (0.0150 < mevent->lspdist2d() && mevent->lspdist2d() < 2) {
 	  const int nsv = int(auxes->size());
 	  h_nsv->Fill(nsv, w);
+	 
 
 	  for (int isv = 0; isv < nsv; ++isv) {
 		  const MFVVertexAux& aux = auxes->at(isv);
-		  if (aux.gen3ddist < 0.0085) {
+		  
 			  const int ntracks = aux.ntracks();
 
 			  h_sv_xy->Fill(aux.x - mevent->bsx_at_z(aux.z), aux.y - mevent->bsy_at_z(aux.z), w);
@@ -728,15 +847,38 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			  }
 
 			  fill(h_sv, isv, v, w);
-		  }
+		  
 	  }
 
+	  
 	  //////////////////////////////////////////////////////////////////////
+	  if (nsv == 0) {
+		  h_nsv01_lsp0->Fill(int(0), w);
+	  }
+	  
+
+	  if (nsv == 1) {
+		  const MFVVertexAux& sv0 = auxes->at(0);
+		  double lsp0_z = mevent->gen_lsp_decay[2];
+		  double lsp0_x = mevent->gen_lsp_decay[0];
+		  double lsp0_y = mevent->gen_lsp_decay[1];
+		  double sv0_phi = atan2(sv0.y - mevent->bsy_at_z(sv0.z), sv0.x - mevent->bsx_at_z(sv0.z));
+		  if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], sv0_phi)) < 3.14) {
+			  h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
+			  h_nsv1_ntracks_sv_lsp0->Fill(int(sv0.ntracks()), w);
+		      h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
+			  h_nsv1_rescale_dBV_sv_lsp0->Fill(mag(sv0.x - mevent->bsx_at_z(sv0.z), sv0.y - mevent->bsy_at_z(sv0.z)), w);
+			  h_nsv1_rescale_bs2derr_sv_lsp0->Fill(sv0.rescale_bs2derr, w);
+			  h_nsv1_tksjetsntkmass_sv_lsp0->Fill(sv0.mass[mfv::PTracksPlusJetsByNtracks], w);
+		  }
+		  h_nsv01_lsp0->Fill(nsv, w);
+	  }
+
 
 	  if (nsv >= 2) {
 		  const MFVVertexAux& sv0 = auxes->at(0);
 		  const MFVVertexAux& sv1 = auxes->at(1);
-		  if (sv0.gen3ddist < 0.0085 || sv1.gen3ddist < 0.0085) {
+		  
 			  double svdist2d = mag(sv0.x - sv1.x, sv0.y - sv1.y);
 			  double svdist3d = mag(sv0.x - sv1.x, sv0.y - sv1.y, sv0.z - sv1.z);
 			  h_svdist2d->Fill(svdist2d, w);
@@ -747,6 +889,7 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 			  double phi1 = atan2(sv1.y - bsy, sv1.x - bsx);
 			  h_absdeltaphi01->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
 
+			  /*
 			  h_fractrackssharedwpv01->Fill(float(sv0.ntrackssharedwpv() + sv1.ntrackssharedwpv()) / (sv0.ntracks() + sv1.ntracks()), w);
 			  h_fractrackssharedwpvs01->Fill(float(sv0.ntrackssharedwpvs() + sv1.ntrackssharedwpvs()) / (sv0.ntracks() + sv1.ntracks()), w);
 			  h_pvmosttracksshared->Fill(sv0.ntrackssharedwpvs() ? sv0.pvmosttracksshared() : -1,
@@ -788,7 +931,46 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 				  h_svdist2d_no_shared_jets->Fill(svdist2d, w);
 				  h_absdeltaphi01_no_shared_jets->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
 			  }
-		  }
+			  */
+			  
+			  if (fabs(reco::deltaPhi(phi0, phi1)) < 3.14) {
+				  int nsv_lsp0 = 0;
+				  double lsp0_z = mevent->gen_lsp_decay[2];
+				  double lsp0_x = mevent->gen_lsp_decay[0];
+				  double lsp0_y = mevent->gen_lsp_decay[1];
+				  for (int isv = 0; isv < nsv; ++isv) {
+					  const MFVVertexAux& aux = auxes->at(isv);
+					  double aux_phi = atan2(aux.y - mevent->bsy_at_z(aux.z), aux.x - mevent->bsx_at_z(aux.z));
+					  if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], aux_phi)) < 3.14) {
+						  nsv_lsp0 += 1;
+						  h_dist3d_sv_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)), w);
+						  h_ntracks_sv_lsp0->Fill(int(aux.ntracks()), w);
+						  if (nsv_lsp0 == 1) {
+							  h_ntracks_sv0_lsp0->Fill(int(aux.ntracks()), w);
+							  h_dist3d_sv0_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)),w);
+							  h_rescale_dBV_sv0_lsp0->Fill(mag(aux.x - mevent->bsx_at_z(aux.z), aux.y - mevent->bsy_at_z(aux.z)),w);
+							  h_rescale_bs2derr_sv0_lsp0->Fill(aux.rescale_bs2derr, w);
+							  h_tksjetsntkmass_sv0_lsp0->Fill(aux.mass[mfv::PTracksPlusJetsByNtracks],w);
+						  }
+						  if (nsv_lsp0 == 2) {
+							  h_ntracks_sv1_lsp0->Fill(int(aux.ntracks()), w);
+							  h_dist3d_sv1_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)), w);
+							  h_rescale_dBV_sv1_lsp0->Fill(mag(aux.x - mevent->bsx_at_z(aux.z), aux.y - mevent->bsy_at_z(aux.z)), w);
+							  h_rescale_bs2derr_sv1_lsp0->Fill(aux.rescale_bs2derr, w);
+							  h_tksjetsntkmass_sv1_lsp0->Fill(aux.mass[mfv::PTracksPlusJetsByNtracks], w);
+						  }
+						  if (nsv_lsp0 == 3) {
+							  h_ntracks_sv2_lsp0->Fill(int(aux.ntracks()), w);
+							  h_dist3d_sv2_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)), w);
+							  h_rescale_dBV_sv2_lsp0->Fill(mag(aux.x - mevent->bsx_at_z(aux.z), aux.y - mevent->bsy_at_z(aux.z)), w);
+							  h_rescale_bs2derr_sv2_lsp0->Fill(aux.rescale_bs2derr, w);
+							  h_tksjetsntkmass_sv2_lsp0->Fill(aux.mass[mfv::PTracksPlusJetsByNtracks], w);
+						  }
+					 }
+				  }
+				  h_nsv_lsp0->Fill(nsv_lsp0,w);
+			  }
+		 
 	  }
   }
 }
