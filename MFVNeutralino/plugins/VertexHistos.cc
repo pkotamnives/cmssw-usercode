@@ -862,6 +862,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double lsp0_x = mevent->gen_lsp_decay[0];
 				double lsp0_y = mevent->gen_lsp_decay[1];
 				double sv0_phi = atan2(sv0.y - mevent->bsy_at_z(sv0.z), sv0.x - mevent->bsx_at_z(sv0.z));
+
 				if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], sv0_phi)) < 2.7) {
 					h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
 					h_nsv1_ntracks_sv_lsp0->Fill(int(sv0.ntracks()), w);
@@ -932,7 +933,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				}
 				*/
 
-				if (fabs(reco::deltaPhi(phi0, phi1)) < 2.7) {
+				if (fabs(reco::deltaPhi(phi0, phi1)) > 2.7) {	  // back-to-back sv0 sv1 
 					int nsv_lsp0 = 0;
 					double lsp0_z = mevent->gen_lsp_decay[2];
 					double lsp0_x = mevent->gen_lsp_decay[0];
@@ -940,7 +941,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					for (int isv = 0; isv < nsv; ++isv) {
 						const MFVVertexAux& aux = auxes->at(isv);
 						double aux_phi = atan2(aux.y - mevent->bsy_at_z(aux.z), aux.x - mevent->bsx_at_z(aux.z));
-						if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], aux_phi)) < 2.7) {
+						if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], aux_phi)) < 2.7) {	// lsp0's hemisphere 
 							nsv_lsp0 += 1;
 							h_dist3d_sv_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)), w);
 							h_ntracks_sv_lsp0->Fill(int(aux.ntracks()), w);
