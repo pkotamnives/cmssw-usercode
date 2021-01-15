@@ -476,8 +476,9 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
 	}
 	*/
 
+}
 
-	void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) {
+void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) {
 		edm::Handle<MFVEvent> mevent;
 		event.getByToken(mevent_token, mevent);
 
@@ -939,7 +940,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
 						const MFVVertexAux& aux = auxes->at(isv);
 						double aux_phi = atan2(aux.y - mevent->bsy_at_z(aux.z), aux.x - mevent->bsx_at_z(aux.z));
 						if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], aux_phi)) < 3.14) {
-							nsv_lsp0 += 1;
+							nsv_lsp0 = nsv_lsp + 1;
 							h_dist3d_sv_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)), w);
 							h_ntracks_sv_lsp0->Fill(int(aux.ntracks()), w);
 							if (nsv_lsp0 == 1) {
@@ -971,6 +972,6 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
 			}
 		}
 	}
-}
+
 
 DEFINE_FWK_MODULE(MFVVertexHistos);
