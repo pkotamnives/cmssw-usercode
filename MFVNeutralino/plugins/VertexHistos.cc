@@ -70,7 +70,6 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   //nsv==1
   TH1F* h_nsv1_dist3d_sv_lsp0;
   TH1F* h_nsv1_ntracks_sv_lsp0;
-  TH1F* h_nsv1_dist3d_sv_lsp0;
   TH1F* h_nsv1_rescale_dBV_sv_lsp0;
   TH1F* h_nsv1_rescale_bs2derr_sv_lsp0;
   TH1F* h_nsv1_tksjetsntkmass_sv_lsp0;
@@ -429,7 +428,6 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
   //nsv==1
   h_nsv1_dist3d_sv_lsp0 = fs->make<TH1F>("h_nsv1_dist3d_sv_lsp0", "nsv == 1;dist3d(lsp #0, each sv in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
   h_nsv1_ntracks_sv_lsp0 = fs->make<TH1F>("h_nsv1_ntracks_sv_lsp0", "nsv == 1;# of tracks/SV (in lsp0 hemisphere);arb. units", 40, 0, 40);
-  h_nsv1_dist3d_sv_lsp0 = fs->make<TH1F>("h_nsv1_dist3d_sv_lsp0", "nsv == 1;dist3d(lsp #0, sv0 in lsp0 hemisphere) (cm);arb. units", 200, 0, 0.2);
   h_nsv1_rescale_dBV_sv_lsp0 = fs->make<TH1F>("h_nsv1_rescale_dBV_sv_lsp0", "nsv == 1;dist2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 500, 0, 2.5);
   h_nsv1_rescale_bs2derr_sv_lsp0 = fs->make<TH1F>("h_nsv1_rescale_bs2derr_sv_lsp0", "nsv == 1;sigma2d(beamspot, sv0 in lsp0 hemisphere) (cm);arb. units", 1000, 0, 0.05);
   h_nsv1_tksjetsntkmass_sv_lsp0 = fs->make<TH1F>("h_nsv1_tksjetsntkmass_sv_lsp0", "nsv == 1;sv0 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000);
@@ -866,7 +864,6 @@ void MFVVertexHistos::analyze(const edm::Event& event, const edm::EventSetup&) {
 		  if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], sv0_phi)) < 3.14) {
 			  h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
 			  h_nsv1_ntracks_sv_lsp0->Fill(int(sv0.ntracks()), w);
-		      h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
 			  h_nsv1_rescale_dBV_sv_lsp0->Fill(mag(sv0.x - mevent->bsx_at_z(sv0.z), sv0.y - mevent->bsy_at_z(sv0.z)), w);
 			  h_nsv1_rescale_bs2derr_sv_lsp0->Fill(sv0.rescale_bs2derr, w);
 			  h_nsv1_tksjetsntkmass_sv_lsp0->Fill(sv0.mass[mfv::PTracksPlusJetsByNtracks], w);
