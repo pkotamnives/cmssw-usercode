@@ -933,7 +933,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				}
 				*/
 
-				if (fabs(reco::deltaPhi(phi0, phi1)) > 2.7) {	  // back-to-back sv0 sv1 
+				if (fabs(reco::deltaPhi(phi0, phi1)) > 1.57) {	  // back-to-back sv0 sv1 
 					int nsv_lsp0 = 0;
 					double lsp0_z = mevent->gen_lsp_decay[2];
 					double lsp0_x = mevent->gen_lsp_decay[0];
