@@ -8,7 +8,7 @@ from JMTucker.Tools.ROOTTools import *
 cmssw_setup()
 
 # FIXME you can replace this with the usual stuff for putting plots into our publicweb areas and generating the html
-outputdir = "~/publicweb/testTwoNtuples"
+outputdir = "/eos/user/p/pekotamn/www/Compare_10mm_3.0TeV_4sigma_default_ntuples"
 outputdir += "/" # in case we forget it...
 os.system("mkdir -p "+outputdir)
 
@@ -33,7 +33,7 @@ ROOT.gROOT.SetBatch() # don't pop up canvases
 outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
-h_zmass = ROOT.TH1F ("zmass", "Z Candidate Mass;mass [GeV];entries", 50, 20, 220)
+h_2D_nsv = ROOT.TH2F ("h_2D_nsv", ";# of SVs (4sigma);# of SVs in (default)", 15, 0, 15, 15, 0, 15)
 
 nevents_processed = 0
 for event1 in events_ntuple1 :
@@ -71,7 +71,7 @@ for event1 in events_ntuple1 :
             print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
 
         # fill the histogram -- obviously you'll need to make the relevant ones
-        #h_zmass.Fill(zmass)
+        h_2D_nsv.Fill(len(vertices_from_ntuple1),len(vertices_from_ntuple2))
     
     # reset event2
     events_ntuple2.toBegin()
@@ -80,5 +80,5 @@ for event1 in events_ntuple1 :
 
 # make a canvas, draw, and save it
 c1 = ROOT.TCanvas()
-h_zmass.Draw()
-c1.Print (outputdir+"h_zmass.png")
+h_2D_nsv.Draw()
+c1.Print (outputdir+"h_2D_nsv.png")
