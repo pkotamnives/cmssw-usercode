@@ -84,7 +84,7 @@ for event1 in events_ntuple1 :
                 vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
                 vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
 
-                if math.fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple1_phi)) < 2.7 and math.fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple2_phi)) < 2.7 :
+                if math.fabs(math.fmod(mevent.gen_lsp_phi[0]-vtx_ntuple1_phi,2*math.pi)) < 2.7 and math.fabs(math.fmod(mevent.gen_lsp_phi[0]- vtx_ntuple2_phi,2*math.pi)) < 2.7 :
                    h_2D_nsv.Fill(1,1) 
 
             if  len(vertices_from_ntuple2) >= 2:
@@ -98,7 +98,7 @@ for event1 in events_ntuple1 :
                 sv0_ntuple2_phi = math.atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
                 sv1_ntuple2_phi = math.atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
      
-                if math.fabs(deltaPhi(sv0_ntuple1_phi, sv1_ntuple1_phi)) > 1.57 and math.fabs(deltaPhi(sv0_ntuple2_phi, sv1_ntuple2_phi)) > 1.57:
+                if math.fabs(math.fmod(sv0_ntuple1_phi-sv1_ntuple1_phi,2*math.pi)) > 1.57 and math.fabs(math.fmod(sv0_ntuple2_phi-sv1_ntuple2_phi,2*math.pi)) > 1.57:
                     nsv_ntuple1 = 0
                     for vtx_ntuple1 in vertices_from_ntuple1 :
                          vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
@@ -109,7 +109,7 @@ for event1 in events_ntuple1 :
                     nsv_ntuple2 = 0
                     for vtx_ntuple2 in vertices_from_ntuple2 :
                          vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
-                         if math.fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple2_phi)) < 2.7:
+                         if math.fabs(math.fmod(mevent.gen_lsp_phi[0]- vtx_ntuple2_phi,2*math.pi)) < 2.7:
                              nsv_ntuple2 += 1
                              #print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
 
