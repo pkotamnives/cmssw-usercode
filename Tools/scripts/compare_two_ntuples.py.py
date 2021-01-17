@@ -23,8 +23,8 @@ vertices_handle2  = Handle ("std::vector<MFVVertexAux>")
 vertices_label2 = ("mfvVerticesAux")
 
 # FIXME should be able to do the same for our mfv events, just didn't do anything with it yet
-#event_handle1  = Handle ("MFVEvent")
-#event_label1 = ("mfvEvent")
+# event_handle1  = Handle ("MFVEvent")
+# event_label1 = ("mfvEvent")
 
 # Create histograms, etc.
 ROOT.gROOT.SetBatch() # don't pop up canvases
@@ -58,6 +58,9 @@ for event1 in events_ntuple1 :
         if run_lumi_event_number1 != run_lumi_event_number2 : continue
 
         # Okay! we have the same event in both ntuples here now
+        mfv_event2 = Handle ("MFVEvent")
+        print "lsp2d is %s" % mfv_event2.lspdist2d()
+
         event2.getByLabel (vertices_label2, vertices_handle2)
         vertices_from_ntuple2 = vertices_handle2.product()
 
@@ -80,5 +83,5 @@ for event1 in events_ntuple1 :
 
 # make a canvas, draw, and save it
 c1 = ROOT.TCanvas()
-h_2D_nsv.Draw()
+h_2D_nsv.Draw("colz")
 c1.Print (outputdir+"h_2D_nsv.png")
