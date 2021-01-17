@@ -58,9 +58,13 @@ for event1 in events_ntuple1 :
         if run_lumi_event_number1 != run_lumi_event_number2 : continue
 
         # Okay! we have the same event in both ntuples here now
-        mfv_event2 = Handle ("MFVEvent")
-        print "lsp2d is %s" % mfv_event2.lspdist2d()
+        mfv_event2_handle2 = Handle ("MFVEvent")
+        mfv_event2_label2 = ("mfvEvent")
+        event2.getByLabel (mfv_event2_label2, mfv_event2_handle2)
+        mevent = mfv_event2_handle2.product()
 
+        print "lsp2d is %s" % mevent.lspdist2d()
+        ################################################
         event2.getByLabel (vertices_label2, vertices_handle2)
         vertices_from_ntuple2 = vertices_handle2.product()
 
