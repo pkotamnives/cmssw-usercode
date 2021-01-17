@@ -49,6 +49,10 @@ for event1 in events_ntuple1 :
     # get the product: these are the objects that we'll access!
     vertices_from_ntuple1 = vertices_handle1.product()
 
+    mfv_event1_handle1 = Handle ("MFVEvent")
+    mfv_event1_label1 = ("mfvEvent")
+    event1.getByLabel (mfv_event1_label1, mfv_event1_handle1)
+    mevent1 = mfv_event1_handle1.product()
 
     for event2 in events_ntuple2 :
 
@@ -63,23 +67,54 @@ for event1 in events_ntuple1 :
         event2.getByLabel (mfv_event2_label2, mfv_event2_handle2)
         mevent = mfv_event2_handle2.product()
 
-        print "lsp2d is %s" % mevent.lspdist2d()
-        ################################################
         event2.getByLabel (vertices_label2, vertices_handle2)
         vertices_from_ntuple2 = vertices_handle2.product()
 
-        print "Number of vertices_from_ntuple1 is %s" % len(vertices_from_ntuple1)
-        print "Number of vertices_from_ntuple2 is %s" % len(vertices_from_ntuple2)
+        print "lsp2d ntuple1 %s" % mevent1.lspdist2d()
+        print "lsp2d ntuple2 %s" % mevent.lspdist2d()
+        
+        if  0.0150 < mevent.lspdist2d() < 2 :   # apply fiducial cuts
+            if  len(vertices_from_ntuple2) == 0 :
+                h_2D_nsv.Fill(0,0)
+            if  len(vertices_from_ntuple2) == 1 :
+                vtx_ntuple1 =  vertices_from_ntuple1[0]
+                vtx_ntuple2 =  vertices_from_ntuple2[0]
+                vtx_ntuple1_phi = atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
+                vtx_ntuple2_phi = atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
 
-        for vtx_ntuple1 in vertices_from_ntuple1 :
-            print vtx_ntuple1.bs2derr, vtx_ntuple1.pt[0], vtx_ntuple1.eta[0], vtx_ntuple1.mass[0] # etc to access other vars
+                if fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple1_phi)) < 2.7 and fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple2_phi)) < 2.7 :
+                   h_2D_nsv.Fill(1,1) 
 
-        for vtx_ntuple2 in vertices_from_ntuple2 :
-            print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
+            if  len(vertices_from_ntuple2) >= 2:
+                sv0_ntuple1 =  vertices_from_ntuple1[0]
+                sv1_ntuple1 =  vertices_from_ntuple1[1]
+                sv0_ntuple1_phi = atan2(sv0_ntuple1.y - mevent.bsy_at_z(sv0_ntuple1.z), sv0_ntuple1.x - mevent.bsx_at_z(sv0_ntuple1.z))
+                sv1_ntuple1_phi = atan2(sv1_ntuple1.y - mevent.bsy_at_z(sv1_ntuple1.z), sv1_ntuple1.x - mevent.bsx_at_z(sv1_ntuple1.z))
+     
+                sv0_ntuple2 =  vertices_from_ntuple2[0]
+                sv1_ntuple2 =  vertices_from_ntuple2[1]
+                sv0_ntuple2_phi = atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
+                sv1_ntuple2_phi = atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
+     
+                if fabs(deltaPhi(sv0_ntuple1_phi, sv1_ntuple1_phi)) > 1.57 and fabs(deltaPhi(sv0_ntuple2_phi, sv1_ntuple2_phi)) > 1.57:
+                    nsv_ntuple1 = 0
+                    for vtx_ntuple1 in vertices_from_ntuple1 :
+                         vtx_ntuple1_phi = atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
+                         if fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple1_phi)) < 2.7:
+                             nsv_ntuple1 += 1
+                             #print vtx_ntuple1.bs2derr, vtx_ntuple1.pt[0], vtx_ntuple1.eta[0], vtx_ntuple1.mass[0] # etc to access other vars
+                    
+                    nsv_ntuple2 = 0
+                    for vtx_ntuple2 in vertices_from_ntuple2 :
+                         vtx_ntuple2_phi = atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
+                         if fabs(deltaPhi(mevent.gen_lsp_phi[0], vtx_ntuple2_phi)) < 2.7:
+                             nsv_ntuple2 += 1
+                             #print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
 
-        # fill the histogram -- obviously you'll need to make the relevant ones
-        h_2D_nsv.Fill(len(vertices_from_ntuple1),len(vertices_from_ntuple2))
-    
+                    # fill the histogram -- obviously you'll need to make the relevant ones
+                    h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
+    #####
+
     # reset event2
     events_ntuple2.toBegin()
 
