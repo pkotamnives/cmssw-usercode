@@ -56,8 +56,9 @@ for event1 in events_ntuple1 :
     event1.getByLabel (mfv_event1_label1, mfv_event1_handle1)
     mevent1 = mfv_event1_handle1.product()
 
+ 
     for event2 in events_ntuple2 :
-
+        
         run_lumi_event_number2 = (event2.eventAuxiliary().id().run(), event2.eventAuxiliary().id().luminosityBlock(), event2.eventAuxiliary().id().event())
 
         # FIXME don't forget, you'll need to think about how you want to handle cases where an event is present in one ntuple but not the other
@@ -115,6 +116,7 @@ for event1 in events_ntuple1 :
 
                     # fill the histogram -- obviously you'll need to make the relevant ones
                     h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
+                    break
     #####
 
     # reset event2
