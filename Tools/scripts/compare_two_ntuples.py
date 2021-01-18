@@ -85,7 +85,7 @@ for event1 in events_ntuple1 :
                 vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
                 vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
 
-                if math.fabs(math.fmod(mevent.gen_lsp_phi[0]-vtx_ntuple1_phi,2*math.pi)) < 2.7 and math.fabs(math.fmod(mevent.gen_lsp_phi[0]- vtx_ntuple2_phi,2*math.pi)) < 2.7 :
+                if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 2.7 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 2.7 :
                    h_2D_nsv.Fill(1,1) 
 
             if  len(vertices_from_ntuple2) >= 2:
