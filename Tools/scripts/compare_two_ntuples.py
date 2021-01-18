@@ -88,35 +88,65 @@ for event1 in events_ntuple1 :
                 if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 2.7 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 2.7 :
                    h_2D_nsv.Fill(1,1) 
 
-            if  len(vertices_from_ntuple2) >= 2:
-                sv0_ntuple1 =  vertices_from_ntuple1[0]
-                sv1_ntuple1 =  vertices_from_ntuple1[1]
-                sv0_ntuple1_phi = math.atan2(sv0_ntuple1.y - mevent.bsy_at_z(sv0_ntuple1.z), sv0_ntuple1.x - mevent.bsx_at_z(sv0_ntuple1.z))
-                sv1_ntuple1_phi = math.atan2(sv1_ntuple1.y - mevent.bsy_at_z(sv1_ntuple1.z), sv1_ntuple1.x - mevent.bsx_at_z(sv1_ntuple1.z))
+            if  len(vertices_from_ntuple2) >= 2 :
+                if len(vertices_from_ntuple1) >= 2 :
+                    sv0_ntuple1 =  vertices_from_ntuple1[0]
+                    sv1_ntuple1 =  vertices_from_ntuple1[1]
+                    sv0_ntuple1_phi = math.atan2(sv0_ntuple1.y - mevent.bsy_at_z(sv0_ntuple1.z), sv0_ntuple1.x - mevent.bsx_at_z(sv0_ntuple1.z))
+                    sv1_ntuple1_phi = math.atan2(sv1_ntuple1.y - mevent.bsy_at_z(sv1_ntuple1.z), sv1_ntuple1.x - mevent.bsx_at_z(sv1_ntuple1.z))
+                    sv0_ntuple2 =  vertices_from_ntuple2[0]
+                    sv1_ntuple2 =  vertices_from_ntuple2[1]
+                    sv0_ntuple2_phi = math.atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
+                    sv1_ntuple2_phi = math.atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
      
-                sv0_ntuple2 =  vertices_from_ntuple2[0]
-                sv1_ntuple2 =  vertices_from_ntuple2[1]
-                sv0_ntuple2_phi = math.atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
-                sv1_ntuple2_phi = math.atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
-     
-                if math.fabs(ROOT.reco.deltaPhi(sv0_ntuple1_phi,sv1_ntuple1_phi)) > 1.57 and math.fabs(ROOT.reco.deltaPhi(sv0_ntuple2_phi,sv1_ntuple2_phi)) > 1.57:
-                    nsv_ntuple1 = 0
-                    for vtx_ntuple1 in vertices_from_ntuple1 :
-                         vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
-                         if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 2.7:
-                             nsv_ntuple1 += 1
-                             #print vtx_ntuple1.bs2derr, vtx_ntuple1.pt[0], vtx_ntuple1.eta[0], vtx_ntuple1.mass[0] # etc to access other vars
+                    if math.fabs(ROOT.reco.deltaPhi(sv0_ntuple1_phi,sv1_ntuple1_phi)) > 1.57 and math.fabs(ROOT.reco.deltaPhi(sv0_ntuple2_phi,sv1_ntuple2_phi)) > 1.57:
+                        nsv_ntuple1 = 0
+                        for vtx_ntuple1 in vertices_from_ntuple1 :
+                            vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
+                            if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 2.7:
+                                nsv_ntuple1 += 1
+                                #print vtx_ntuple1.bs2derr, vtx_ntuple1.pt[0], vtx_ntuple1.eta[0], vtx_ntuple1.mass[0] # etc to access other vars
                     
-                    nsv_ntuple2 = 0
-                    for vtx_ntuple2 in vertices_from_ntuple2 :
-                         vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
-                         if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 2.7:
-                             nsv_ntuple2 += 1
-                             #print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
+                        nsv_ntuple2 = 0
+                        for vtx_ntuple2 in vertices_from_ntuple2 :
+                            vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
+                            if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 2.7:
+                                nsv_ntuple2 += 1
+                                #print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
 
-                    # fill the histogram -- obviously you'll need to make the relevant ones
-                    h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
-                    break
+                            # fill the histogram -- obviously you'll need to make the relevant ones
+                        h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
+                        break
+                else:
+                    sv0_ntuple1 =  vertices_from_ntuple1[0]
+
+                    sv0_ntuple2 =  vertices_from_ntuple2[0]
+                    sv1_ntuple2 =  vertices_from_ntuple2[1]
+                    sv0_ntuple2_phi = math.atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
+                    sv1_ntuple2_phi = math.atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
+     
+                    if math.fabs(ROOT.reco.deltaPhi(sv0_ntuple2_phi,sv1_ntuple2_phi)) > 1.57:
+                        nsv_ntuple1 = 0
+                        for vtx_ntuple1 in vertices_from_ntuple1 :
+                            vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
+                            if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 2.7:
+                                nsv_ntuple1 += 1
+                                #print vtx_ntuple1.bs2derr, vtx_ntuple1.pt[0], vtx_ntuple1.eta[0], vtx_ntuple1.mass[0] # etc to access other vars
+                    
+                        nsv_ntuple2 = 0
+                        for vtx_ntuple2 in vertices_from_ntuple2 :
+                            vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
+                            if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 2.7:
+                                nsv_ntuple2 += 1
+                                #print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
+
+                            # fill the histogram -- obviously you'll need to make the relevant ones
+                        print(nsv_ntuple1)
+                        h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
+                        break
+
+
+                
     #####
 
     # reset event2
