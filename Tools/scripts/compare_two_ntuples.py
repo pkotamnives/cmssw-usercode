@@ -41,7 +41,7 @@ nevents_processed = 0
 for event1 in events_ntuple1 :
 
     if nevents_processed % 1000 == 0 :
-        print "Processing event #%s" % (nevents_processed)
+        #print "Processing event #%s" % (nevents_processed)
 
     run_lumi_event_number1 = (event1.eventAuxiliary().id().run(), event1.eventAuxiliary().id().luminosityBlock(), event1.eventAuxiliary().id().event())
 
@@ -73,8 +73,8 @@ for event1 in events_ntuple1 :
         event2.getByLabel (vertices_label2, vertices_handle2)
         vertices_from_ntuple2 = vertices_handle2.product()
 
-        print "lsp2d ntuple1 %s" % mevent1.lspdist2d()
-        print "lsp2d ntuple2 %s" % mevent.lspdist2d()
+        #print "lsp2d ntuple1 %s" % mevent1.lspdist2d()
+        #print "lsp2d ntuple2 %s" % mevent.lspdist2d()
         
         if  0.0150 < mevent.lspdist2d() < 2 :   # apply fiducial cuts
             if  len(vertices_from_ntuple2) == 0 :
@@ -145,7 +145,7 @@ for event1 in events_ntuple1 :
                                 #print vtx_ntuple2.bs2derr, vtx_ntuple2.pt[0], vtx_ntuple2.eta[0], vtx_ntuple2.mass[0] # etc to access other vars
 
                             # fill the histogram -- obviously you'll need to make the relevant ones
-                    print "nsv ntuple1 (should always be 1) %s" % nsv_ntuple1 
+                    
                     h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
                     break
 
