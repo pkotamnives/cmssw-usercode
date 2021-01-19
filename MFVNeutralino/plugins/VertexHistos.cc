@@ -50,6 +50,7 @@ class MFVVertexHistos : public edm::EDAnalyzer {
   TH2F* h_sv0pvdz_v_sv1pvdz;
   TH2F* h_sv0pvdzsig_v_sv1pvdzsig;
   TH1F* h_absdeltaphi01;
+  TH1F* h_lsp_absdeltaphi01;
   /*
   TH2F* h_pvmosttracksshared;
   TH1F* h_fractrackssharedwpv01;
@@ -408,6 +409,8 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet& cfg)
 	h_sv0pvdz_v_sv1pvdz = fs->make<TH2F>("h_sv0pvdz_v_sv1pvdz", ";sv #1 dz to PV (cm);sv #0 dz to PV (cm)", 100, 0, 0.5, 100, 0, 0.5);
 	h_sv0pvdzsig_v_sv1pvdzsig = fs->make<TH2F>("h_sv0pvdzsig_v_sv1pvdzsig", ";N#sigma(sv #1 dz to PV);sv N#sigma(#0 dz to PV)", 100, 0, 50, 100, 0, 50);
 	h_absdeltaphi01 = fs->make<TH1F>("h_absdeltaphi01", ";abs(delta(phi of sv #0, phi of sv #1));arb. units", 315, 0, 3.15);
+	h_lsp_absdeltaphi01 = fs->make<TH1F>("h_lsp_absdeltaphi01", ";abs(delta(phi of lsp #0, phi of lsp #1));arb. units", 315, 0, 3.15);
+
 	/*
 	h_fractrackssharedwpv01 = fs->make<TH1F>("h_fractrackssharedwpv01", ";fraction of sv #0 and sv #1 tracks shared with the PV;arb. units", 41, 0, 1.025);
 	h_fractrackssharedwpvs01 = fs->make<TH1F>("h_fractrackssharedwpvs01", ";fraction of sv #0 and sv #1 tracks shared with any PV;arb. units", 41, 0, 1.025);
@@ -863,7 +866,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double lsp0_y = mevent->gen_lsp_decay[1];
 				double sv0_phi = atan2(sv0.y - mevent->bsy_at_z(sv0.z), sv0.x - mevent->bsx_at_z(sv0.z));
 
-				if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], sv0_phi)) < 2.7) {
+				if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], sv0_phi)) < 1.57) {
 					h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
 					h_nsv1_ntracks_sv_lsp0->Fill(int(sv0.ntracks()), w);
 					h_nsv1_rescale_dBV_sv_lsp0->Fill(mag(sv0.x - mevent->bsx_at_z(sv0.z), sv0.y - mevent->bsy_at_z(sv0.z)), w);
@@ -888,6 +891,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double phi0 = atan2(sv0.y - bsy, sv0.x - bsx);
 				double phi1 = atan2(sv1.y - bsy, sv1.x - bsx);
 				h_absdeltaphi01->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
+				h_lsp_absdeltaphi01->Fill(fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
 
 				/*
 				h_fractrackssharedwpv01->Fill(float(sv0.ntrackssharedwpv() + sv1.ntrackssharedwpv()) / (sv0.ntracks() + sv1.ntracks()), w);
@@ -933,7 +937,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				}
 				*/
 
-				if (fabs(reco::deltaPhi(phi0, phi1)) > 1.57) {	  // back-to-back sv0 sv1 
+				//if (fabs(reco::deltaPhi(phi0, phi1)) > 1.57) {	  // back-to-back sv0 sv1 
 					int nsv_lsp0 = 0;
 					double lsp0_z = mevent->gen_lsp_decay[2];
 					double lsp0_x = mevent->gen_lsp_decay[0];
@@ -941,7 +945,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					for (int isv = 0; isv < nsv; ++isv) {
 						const MFVVertexAux& aux = auxes->at(isv);
 						double aux_phi = atan2(aux.y - mevent->bsy_at_z(aux.z), aux.x - mevent->bsx_at_z(aux.z));
-						if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], aux_phi)) < 2.7) {	// lsp0's hemisphere 
+						if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], aux_phi)) < 1.57) {	// lsp0's hemisphere 
 							nsv_lsp0 += 1;
 							h_dist3d_sv_lsp0->Fill(double(mag(aux.x - lsp0_x, aux.y - lsp0_y, aux.z - lsp0_z)), w);
 							h_ntracks_sv_lsp0->Fill(int(aux.ntracks()), w);
@@ -969,7 +973,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						}
 					}
 					h_nsv_lsp0->Fill(nsv_lsp0, w);
-				}
+				//}
 
 			}
 		}
