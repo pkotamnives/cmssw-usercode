@@ -40,8 +40,8 @@ h_2D_nsv = ROOT.TH2F ("h_2D_nsv", ";# of SVs (4sigma);# of SVs in (default)", 15
 nevents_processed = 0
 for event1 in events_ntuple1 :
 
-    #if nevents_processed % 1000 == 0 :
-        #print "Processing event #%s" % (nevents_processed)
+    if nevents_processed % 1000 == 0 :
+        print "Processing event #%s" % (nevents_processed)
 
     run_lumi_event_number1 = (event1.eventAuxiliary().id().run(), event1.eventAuxiliary().id().luminosityBlock(), event1.eventAuxiliary().id().event())
 
@@ -122,12 +122,12 @@ for event1 in events_ntuple1 :
                     h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
                     break
                 else:
-                    sv0_ntuple1 =  vertices_from_ntuple1[0]
+                    #sv0_ntuple1 =  vertices_from_ntuple1[0]
 
-                    sv0_ntuple2 =  vertices_from_ntuple2[0]
-                    sv1_ntuple2 =  vertices_from_ntuple2[1]
-                    sv0_ntuple2_phi = math.atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
-                    sv1_ntuple2_phi = math.atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
+                    #sv0_ntuple2 =  vertices_from_ntuple2[0]
+                    #sv1_ntuple2 =  vertices_from_ntuple2[1]
+                    #sv0_ntuple2_phi = math.atan2(sv0_ntuple2.y - mevent.bsy_at_z(sv0_ntuple2.z), sv0_ntuple2.x - mevent.bsx_at_z(sv0_ntuple2.z))
+                    #sv1_ntuple2_phi = math.atan2(sv1_ntuple2.y - mevent.bsy_at_z(sv1_ntuple2.z), sv1_ntuple2.x - mevent.bsx_at_z(sv1_ntuple2.z))
      
                     #if math.fabs(ROOT.reco.deltaPhi(sv0_ntuple2_phi,sv1_ntuple2_phi)) > 1.57:
                     nsv_ntuple1 = 0
