@@ -40,7 +40,7 @@ h_2D_nsv = ROOT.TH2F ("h_2D_nsv", ";# of SVs (4sigma);# of SVs in (default)", 15
 nevents_processed = 0
 for event1 in events_ntuple1 :
 
- if nevents_processed % 1000 == 0 :
+    #if nevents_processed % 1000 == 0 :
         #print "Processing event #%s" % (nevents_processed)
 
     run_lumi_event_number1 = (event1.eventAuxiliary().id().run(), event1.eventAuxiliary().id().luminosityBlock(), event1.eventAuxiliary().id().event())
