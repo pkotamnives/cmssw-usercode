@@ -865,9 +865,9 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double lsp0_x = mevent->gen_lsp_decay[0];
 				double lsp0_y = mevent->gen_lsp_decay[1];
 				double sv0_phi = atan2(sv0.y - mevent->bsy_at_z(sv0.z), sv0.x - mevent->bsx_at_z(sv0.z));
-				int nsv_lsp0 = 0
+				int nsv_lsp0 = 0;
 				if (fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], sv0_phi)) < 1.57) {
-					nsv_lsp0 += 1
+					nsv_lsp0 += 1;
 					h_nsv1_dist3d_sv_lsp0->Fill(double(mag(sv0.x - lsp0_x, sv0.y - lsp0_y, sv0.z - lsp0_z)), w);
 					h_nsv1_ntracks_sv_lsp0->Fill(int(sv0.ntracks()), w);
 					h_nsv1_rescale_dBV_sv_lsp0->Fill(mag(sv0.x - mevent->bsx_at_z(sv0.z), sv0.y - mevent->bsy_at_z(sv0.z)), w);
