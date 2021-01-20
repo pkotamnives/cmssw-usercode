@@ -83,14 +83,25 @@ for event1 in events_ntuple1 :
 
 
             if  len(vertices_from_ntuple2) == 1 :
-                vtx_ntuple1 =  vertices_from_ntuple1[0]
-                vtx_ntuple2 =  vertices_from_ntuple2[0]
-                vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
-                vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
+                if  len(vertices_from_ntuple1) == 1 :
+                    vtx_ntuple1 =  vertices_from_ntuple1[0]
+                    vtx_ntuple2 =  vertices_from_ntuple2[0]
+                    vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
+                    vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
 
-                if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 1.57 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 1.57 :
-                      h_2D_nsv.Fill(1,1) 
-                      break
+                    if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 1.57 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 1.57 :
+                        h_2D_nsv.Fill(1,1) 
+                        break
+
+                else :
+                    
+                    vtx_ntuple2 =  vertices_from_ntuple2[0]
+                    vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
+
+                    if  math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 1.57 :
+                        h_2D_nsv.Fill(0,1) 
+                        break
+
 
             if  len(vertices_from_ntuple2) >= 2 :
                 if len(vertices_from_ntuple1) >= 2 :
