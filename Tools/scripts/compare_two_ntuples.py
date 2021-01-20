@@ -117,12 +117,12 @@ for event1 in events_ntuple1 :
 
 
                 
-            #####
+    #####
 
-            # reset event2
-        events_ntuple2.toBegin()
+    # reset event2
+    events_ntuple2.toBegin()
 
-        nevents_processed += 1
+    nevents_processed += 1
 
 
 print "Total processed event (fiducial) #%s" % (nevents_processed)
