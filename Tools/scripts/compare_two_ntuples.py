@@ -93,22 +93,20 @@ for event1 in events_ntuple1 :
             for vtx_ntuple1 in vertices_from_ntuple1 :
                  vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
                  if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 1.57:
-                    #if exclude_beampipe and !jmt.Geometry.inside_beampipe(is_mc, vtx_ntuple1.x, vtx_ntuple1.y): 
                     
                     dBV_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
                    
-                    if vtx_ntuple1.ntracks()>=5 and np.linalg.norm(dBV_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
+                    if math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and vtx_ntuple1.ntracks()>=5 and np.linalg.norm(dBV_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                           nsv_ntuple1 += 1
                         
             nsv_ntuple2 = 0
             for vtx_ntuple2 in vertices_from_ntuple2 :
                  vtx_ntuple2_phi = math.atan2(vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z), vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z))
                  if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 1.57:
-                    #if exclude_beampipe and !jmt.Geometry.inside_beampipe(is_mc, vtx_ntuple2.x, vtx_ntuple2.y):
                     
                     dBV_ntuple2 = np.array([vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z),vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z)])
 
-                    if vtx_ntuple2.ntracks()>=5 and np.linalg.norm(dBV_ntuple2) > 0.0100 and vtx_ntuple2.rescale_bs2derr < 0.0025:
+                    if math.sqrt(vtx_ntuple2.x**2 + vtx_ntuple2.y**2) < 2.09 and vtx_ntuple2.ntracks()>=5 and np.linalg.norm(dBV_ntuple2) > 0.0100 and vtx_ntuple2.rescale_bs2derr < 0.0025:
                           nsv_ntuple2 += 1
                             
             h_2D_nsv.Fill(nsv_ntuple1,nsv_ntuple2)
