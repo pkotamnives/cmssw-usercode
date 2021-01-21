@@ -854,6 +854,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 
 			//////////////////////////////////////////////////////////////////////
+			h_lsp_absdeltaphi01->Fill(fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
 			if (nsv == 0) {
 				h_nsv01_lsp0->Fill(nsv, w);
 			}
@@ -893,7 +894,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double phi0 = atan2(sv0.y - bsy, sv0.x - bsx);
 				double phi1 = atan2(sv1.y - bsy, sv1.x - bsx);
 				h_absdeltaphi01->Fill(fabs(reco::deltaPhi(phi0, phi1)), w);
-				h_lsp_absdeltaphi01->Fill(fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
+				
 
 				/*
 				h_fractrackssharedwpv01->Fill(float(sv0.ntrackssharedwpv() + sv1.ntrackssharedwpv()) / (sv0.ntracks() + sv1.ntracks()), w);
