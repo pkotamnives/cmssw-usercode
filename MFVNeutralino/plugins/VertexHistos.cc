@@ -498,7 +498,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 		edm::Handle<MFVVertexAuxCollection> auxes;
 		event.getByToken(vertex_token, auxes);
-		if (0.0150 < mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2 && 0.0150 < mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2) {
+		if (0.0150 < mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2 && 0.0150 < mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2 && fabs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])) > 2.7) {
 			const int nsv = int(auxes->size());
 			h_nsv->Fill(nsv, w);
 
