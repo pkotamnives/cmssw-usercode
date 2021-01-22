@@ -36,7 +36,7 @@ ROOT.gROOT.SetBatch() # don't pop up canvases
 outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
-h_2D_nsv = ROOT.TH2F ("h_2D_nsv", ";# of SVs (4sigma);# of SVs in (default)", 15, 0, 15, 15, 0, 15)
+h_2D_nsv = ROOT.TH2F ("h_2D_nsv", ";# of SVs in lsp0's hemisphere (4sigma);# of SVs in lsp0's hemisphere (default)", 15, 0, 15, 15, 0, 15)
 
 nevents_processed = 0
 nevents_presel_nsv01_ntuple1 = 0
@@ -80,7 +80,7 @@ for event1 in events_ntuple1 :
         #print "lsp2d ntuple1 %s" % mevent1.lspdist2d()
         #print "lsp2d ntuple2 %s" % mevent.lspdist2d()
         
-        if  0.0150 < mevent.lspdist2d() < 2 :   # apply fiducial cuts
+        if  0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
             if  len(vertices_from_ntuple1) < 2 :
                 nevents_presel_nsv01_ntuple1 += 1
             if  len(vertices_from_ntuple2) < 2 :
@@ -105,7 +105,7 @@ for event1 in events_ntuple1 :
                  if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple2_phi)) < 1.57:
                     
                     dBV_ntuple2 = np.array([vtx_ntuple2.x - mevent.bsx_at_z(vtx_ntuple2.z),vtx_ntuple2.y - mevent.bsy_at_z(vtx_ntuple2.z)])
-
+                    
                     if math.sqrt(vtx_ntuple2.x**2 + vtx_ntuple2.y**2) < 2.09 and vtx_ntuple2.ntracks()>=5 and np.linalg.norm(dBV_ntuple2) > 0.0100 and vtx_ntuple2.rescale_bs2derr < 0.0025:
                           nsv_ntuple2 += 1
                             
