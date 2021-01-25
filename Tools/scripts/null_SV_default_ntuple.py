@@ -33,6 +33,7 @@ ROOT.gROOT.SetBatch() # don't pop up canvases
 outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
+h_qual_nsv = ROOT.TH1F ("h_qual_nsv", ";# of >=5trk-SVs in LSP0 or LSP1's hemisphere", 15, 0, 15)
 h_nsv = ROOT.TH1F ("h_nsv", ";# of <5trk-SVs in LSP0 or LSP1's hemisphere", 15, 0, 15)
 h_dist3d_to_lsp_SV0 = ROOT.TH1F ("h_dist3d_to_lsp_SV0", ";dist3d(<5trk-SV0, closest gen vtx) (cm)", 200, 0, 0.2)
 h_significance_dist3d_to_lsp_SV0 = ROOT.TH1F ("h_significance_dist3d_to_lsp_SV0", ";N#sigma(dist3d(<5trk-SV0, closest gen vtx))", 200, 0, 100)
@@ -104,9 +105,12 @@ for event1 in events_ntuple1 :
                         if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09: 
                           ls_of_unqual_nsv_lsp1.append(vtx_ntuple1)
                
-
+               
                if qual_nsv < 2:
                    nevents_nsv01_fiducial_cuts += 1
+
+               h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp0))
+               h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp1))
 
                if len(ls_of_qual_nsv_lsp0) == 0:
                    h_nsv.Fill(len(ls_of_unqual_nsv_lsp0))
@@ -160,11 +164,16 @@ for event1 in events_ntuple1 :
 
 
 
-print "Total processed event (5000 events) #%s" % (nevents_processed)
+print "Total processed event (5000 events) #%s" % (nevents_processed-1)
 print "Total processed event (fiducial) #%s" % (nevents_fiducial_cuts)
 print "Total nsv<2 events in ntuple1 (ficudial) #%s" % (nevents_nsv01_fiducial_cuts)
 
 # make a canvas, draw, and save it
+c0 = ROOT.TCanvas()
+h_qual_nsv.Draw("colz")
+c0.Print (outputdir+"h_qual_nsv.png")
+c0.Print (outputdir+"h_qual_nsv.root")
+
 c1 = ROOT.TCanvas()
 h_nsv.Draw("colz")
 c1.Print (outputdir+"h_nsv.png")
