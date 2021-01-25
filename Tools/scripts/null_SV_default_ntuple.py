@@ -93,14 +93,16 @@ for event1 in events_ntuple1 :
                    if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 1.57:
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                            ls_of_qual_nsv_lsp0.append(vtx_ntuple1)
-                        if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
+                        #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
+                        else:
                            ls_of_unqual_nsv_lsp0.append(vtx_ntuple1)
 
                    if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],vtx_ntuple1_phi)) < 1.57:
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                            ls_of_qual_nsv_lsp1.append(vtx_ntuple1)
-                        if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
-                           ls_of_unqual_nsv_lsp1.append(vtx_ntuple1)
+                        #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
+                        else: 
+                          ls_of_unqual_nsv_lsp1.append(vtx_ntuple1)
                
 
                if qual_nsv < 2:
