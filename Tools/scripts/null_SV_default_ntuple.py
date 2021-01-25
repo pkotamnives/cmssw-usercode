@@ -107,7 +107,7 @@ for event1 in events_ntuple1 :
                    nevents_nsv01_fiducial_cuts += 1
 
                if len(ls_of_qual_nsv_lsp0) == 0:
-                   h_nsv.fill(len(ls_of_unqual_nsv_lsp0))
+                   h_nsv.Fill(len(ls_of_unqual_nsv_lsp0))
                    unqual_nsv_lsp0 = 0
                    for unqual_vtx in ls_of_unqual_nsv_lsp0:
                            unqual_nsv_lsp0 += 1
@@ -130,7 +130,7 @@ for event1 in events_ntuple1 :
                                h_mass_SV2.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
 
                if len(ls_of_qual_nsv_lsp1) == 0:
-                   h_nsv.fill(len(ls_of_unqual_nsv_lsp1))
+                   h_nsv.Fill(len(ls_of_unqual_nsv_lsp1))
                    unqual_nsv_lsp1 = 0
                    for unqual_vtx in ls_of_unqual_nsv_lsp1:
                            unqual_nsv_lsp1 += 1
