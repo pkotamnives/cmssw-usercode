@@ -94,14 +94,14 @@ for event1 in events_ntuple1 :
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                            ls_of_qual_nsv_lsp0.append(vtx_ntuple1)
                         #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
-                        else:
+                        if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09:
                            ls_of_unqual_nsv_lsp0.append(vtx_ntuple1)
 
                    if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],vtx_ntuple1_phi)) < 1.57:
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                            ls_of_qual_nsv_lsp1.append(vtx_ntuple1)
                         #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
-                        else: 
+                        if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09: 
                           ls_of_unqual_nsv_lsp1.append(vtx_ntuple1)
                
 
@@ -117,19 +117,19 @@ for event1 in events_ntuple1 :
                                h_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV0.Fill(unqual_vtx.ntracks())
-                               h_mass_SV0.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
+                               h_mass_SV0.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
                            
                            if unqual_nsv_lsp0 == 2 :
                                h_dist3d_to_lsp_SV1.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV1.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV1.Fill(unqual_vtx.ntracks())
-                               h_mass_SV1.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
+                               h_mass_SV1.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
 
                            if unqual_nsv_lsp0 == 3 :
                                h_dist3d_to_lsp_SV2.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV2.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV2.Fill(unqual_vtx.ntracks())
-                               h_mass_SV2.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
+                               h_mass_SV2.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
 
                if len(ls_of_qual_nsv_lsp1) == 0:
                    h_nsv.Fill(len(ls_of_unqual_nsv_lsp1))
@@ -140,19 +140,19 @@ for event1 in events_ntuple1 :
                                h_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV0.Fill(unqual_vtx.ntracks())
-                               h_mass_SV0.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
+                               h_mass_SV0.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
                            
                            if unqual_nsv_lsp1 == 2 :
                                h_dist3d_to_lsp_SV1.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV1.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV1.Fill(unqual_vtx.ntracks())
-                               h_mass_SV1.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
+                               h_mass_SV1.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
 
                            if unqual_nsv_lsp1 == 3 :
                                h_dist3d_to_lsp_SV2.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV2.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV2.Fill(unqual_vtx.ntracks())
-                               h_mass_SV2.Fill(unqual_vtx.mass[mfv.PTracksPlusJetsByNtracks])
+                               h_mass_SV2.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
                    
 
     else:
