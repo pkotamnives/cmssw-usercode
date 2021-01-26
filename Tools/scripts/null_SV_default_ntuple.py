@@ -33,8 +33,9 @@ ROOT.gROOT.SetBatch() # don't pop up canvases
 outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
-h_qual_nsv = ROOT.TH1F ("h_qual_nsv", ";# of >=5trk-SVs in LSP0 or LSP1's hemisphere", 15, 0, 15)
-h_nsv = ROOT.TH1F ("h_nsv", ";# of <5trk-SVs in LSP0 or LSP1's hemisphere", 15, 0, 15)
+h_unqual_nsv = ROOT.TH1F ("h_unqual_nsv", ";Categories of unqualified SVs/LSP", 7, 0, 7)
+h_qual_nsv = ROOT.TH1F ("h_qual_nsv", ";# of >=5trk-SVs/LSP", 15, 0, 15)
+h_nsv = ROOT.TH1F ("h_nsv", ";# of unqualified SVs/LSP", 15, 0, 15)
 h_dist3d_to_lsp_SV0 = ROOT.TH1F ("h_dist3d_to_lsp_SV0", ";dist3d(<5trk-SV0, closest gen vtx) (cm)", 200, 0, 0.2)
 h_significance_dist3d_to_lsp_SV0 = ROOT.TH1F ("h_significance_dist3d_to_lsp_SV0", ";N#sigma(dist3d(<5trk-SV0, closest gen vtx))", 200, 0, 100)
 h_ntracks_SV0 = ROOT.TH1F ("h_ntracks_SV0", ";# of tracks/<5trk-SV0", 10, 0, 10)
@@ -81,8 +82,8 @@ for event1 in events_ntuple1 :
 
     nevents_processed += 1
     if nevents_processed <= 5000 :
-        #if 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
-         if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
+         if 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
+        #if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # no apply fiducial cuts
             
                nevents_fiducial_cuts += 1
                n_vertex_seed_tracks = mevent.n_vertex_seed_tracks()
@@ -106,14 +107,16 @@ for event1 in events_ntuple1 :
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                            ls_of_qual_nsv_lsp0.append(vtx_ntuple1)
                         #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
-                        if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09:
+                        #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09:
+                        else:
                            ls_of_unqual_nsv_lsp0.append(vtx_ntuple1)
 
                    if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],vtx_ntuple1_phi)) < 1.57:
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                            ls_of_qual_nsv_lsp1.append(vtx_ntuple1)
                         #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
-                        if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09: 
+                        #if vtx_ntuple1.ntracks()<5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09: 
+                        else:
                           ls_of_unqual_nsv_lsp1.append(vtx_ntuple1)
                
                
@@ -155,6 +158,21 @@ for event1 in events_ntuple1 :
                        if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],mevent.vertex_seed_track_phi[i])) < 1.57 :
                            count_seed_tracks += 1
                    h_non_qual_nsv_lsp_seed_tracks.Fill(count_seed_tracks)
+
+                   if len(ls_of_unqual_nsv_lsp0) == 0:
+                        h_unqual_nsv.Fill(1)
+                   if len(ls_of_unqual_nsv_lsp0) == 1:
+                        if ls_of_unqual_nsv_lsp0[0].ntracks()==3:
+                            h_unqual_nsv.Fill(2)
+                        if ls_of_unqual_nsv_lsp0[0].ntracks()==4:
+                            h_unqual_nsv.Fill(3)
+                        if ls_of_unqual_nsv_lsp0[0].ntracks()>=5:
+                            h_unqual_nsv.Fill(4)
+                   if len(ls_of_unqual_nsv_lsp0) == 2:
+                        if ls_of_unqual_nsv_lsp0[0].ntracks()<5 and ls_of_unqual_nsv_lsp0[1].ntracks()<5 :
+                            h_unqual_nsv.Fill(5)
+                        if ls_of_unqual_nsv_lsp0[0].ntracks()>=5 or ls_of_unqual_nsv_lsp0[1].ntracks()>=5 :
+                            h_unqual_nsv.Fill(6)
 
                else:
 
@@ -200,6 +218,21 @@ for event1 in events_ntuple1 :
                            count_seed_tracks += 1
                    h_non_qual_nsv_lsp_seed_tracks.Fill(count_seed_tracks)
 
+                   if len(ls_of_unqual_nsv_lsp1) == 0:
+                        h_unqual_nsv.Fill(1)
+                   if len(ls_of_unqual_nsv_lsp1) == 1:
+                        if ls_of_unqual_nsv_lsp1[0].ntracks()==3:
+                            h_unqual_nsv.Fill(2)
+                        if ls_of_unqual_nsv_lsp1[0].ntracks()==4:
+                            h_unqual_nsv.Fill(3)
+                        if ls_of_unqual_nsv_lsp1[0].ntracks()>=5:
+                            h_unqual_nsv.Fill(4)
+                   if len(ls_of_unqual_nsv_lsp1) == 2:
+                        if ls_of_unqual_nsv_lsp1[0].ntracks()<5 and ls_of_unqual_nsv_lsp1[1].ntracks()<5 :
+                            h_unqual_nsv.Fill(5)
+                        if ls_of_unqual_nsv_lsp1[0].ntracks()>=5 or ls_of_unqual_nsv_lsp1[1].ntracks()>=5 :
+                            h_unqual_nsv.Fill(6)
+
                else:
 
                    h_qual_nsv_lsp_r.Fill(math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
@@ -222,6 +255,12 @@ print "Total processed event (fiducial) #%s" % (nevents_fiducial_cuts)
 print "Total nsv<2 events in ntuple1 (ficudial) #%s" % (nevents_nsv01_fiducial_cuts)
 
 # make a canvas, draw, and save it
+
+c00 = ROOT.TCanvas()
+h_unqual_nsv.Draw("colz")
+c00.Print (outputdir+"h_unqual_nsv.png")
+c00.Print (outputdir+"h_unqual_nsv.root")
+
 c0 = ROOT.TCanvas()
 h_qual_nsv.Draw("colz")
 c0.Print (outputdir+"h_qual_nsv.png")
