@@ -48,6 +48,13 @@ h_significance_dist3d_to_lsp_SV2 = ROOT.TH1F ("h_significance_dist3d_to_lsp_SV2"
 h_ntracks_SV2 = ROOT.TH1F ("h_ntracks_SV2", ";# of tracks/<5trk-SV2", 10, 0, 10)
 h_mass_SV2 = ROOT.TH1F ("h_mass_SV2", ";SV2 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000)
 
+h_non_qual_nsv_lsp_r =  ROOT.TH1F ("h_non_qual_nsv_lsp_r", "LSP r (cm)", 100, 0, 4)
+h_non_qual_nsv_lsp_z =  ROOT.TH1F ("h_non_qual_nsv_lsp_z", "LSP z (cm)", 100, -25, 25)
+h_non_qual_nsv_lsp_seed_tracks =  ROOT.TH1F ("h_non_qual_nsv_lsp_seed_tracks", "# of seed tracks/LSP", 50, 0, 50)
+h_qual_nsv_lsp_r =  ROOT.TH1F ("h_qual_nsv_lsp_r", "LSP r (cm)", 100, 0, 4)
+h_qual_nsv_lsp_z =  ROOT.TH1F ("h_qual_nsv_lsp_z", "LSP z (cm)", 100, -25, 25)
+h_qual_nsv_lsp_seed_tracks =  ROOT.TH1F ("h_qual_nsv_lsp_seed_tracks", "# of seed tracks/LSP", 50, 0, 50)
+
 nevents_processed = 0
 nevents_fiducial_cuts = 0
 nevents_nsv01_fiducial_cuts = 0
@@ -70,11 +77,16 @@ for event1 in events_ntuple1 :
     event1.getByLabel (mfv_event1_label1, mfv_event1_handle1)
     mevent = mfv_event1_handle1.product()
 
+    weight_event1_handle1 = Handle ("double")
+    weight_event1_label1 = ("mfvEvent")
+    event1.getByLabel (weight_event1_label1, weight_event1_handle1)
+    w = weight_event1_handle1.product()
+
     nevents_processed += 1
     if nevents_processed <= 5000 :
-        if  0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
+        if w > 0.5 and 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
                nevents_fiducial_cuts += 1
-
+               n_vertex_seed_tracks = mevent.n_vertex_seed_tracks()
                qual_nsv = 0
 
                ls_of_qual_nsv_lsp0 = []
@@ -135,6 +147,28 @@ for event1 in events_ntuple1 :
                                h_ntracks_SV2.Fill(unqual_vtx.ntracks())
                                h_mass_SV2.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
 
+                   h_non_qual_nsv_lsp_r.Fill(math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
+                   h_non_qual_nsv_lsp_z.Fill(mevent.gen_lsp_decay[2])
+
+                   
+                   count_seed_tracks = 0
+                   for i in range(n_vertex_seed_tracks):
+                       if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],mevent.vertex_seed_track_phi[i])) < 1.57 :
+                           count_seed_tracks += 1
+                   h_non_qual_nsv_lsp_seed_tracks.Fill(count_seed_tracks)
+
+               else:
+
+                   h_qual_nsv_lsp_r.Fill(math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
+                   h_qual_nsv_lsp_z.Fill(mevent.gen_lsp_decay[2])
+                   
+                   
+                   count_seed_tracks = 0
+                   for i in range(n_vertex_seed_tracks):
+                       if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],mevent.vertex_seed_track_phi[i])) < 1.57 :
+                           count_seed_tracks += 1
+                   h_qual_nsv_lsp_seed_tracks.Fill(count_seed_tracks)
+
                if len(ls_of_qual_nsv_lsp1) == 0:
                    h_nsv.Fill(len(ls_of_unqual_nsv_lsp1))
                    unqual_nsv_lsp1 = 0
@@ -157,6 +191,26 @@ for event1 in events_ntuple1 :
                                h_significance_dist3d_to_lsp_SV2.Fill(unqual_vtx.gen3dsig())
                                h_ntracks_SV2.Fill(unqual_vtx.ntracks())
                                h_mass_SV2.Fill(unqual_vtx.mass[ROOT.mfv.PTracksPlusJetsByNtracks])
+
+                   h_non_qual_nsv_lsp_r.Fill(math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
+                   h_non_qual_nsv_lsp_z.Fill(mevent.gen_lsp_decay[5])
+                   
+                   count_seed_tracks = 0
+                   for i in range(n_vertex_seed_tracks):
+                       if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],mevent.vertex_seed_track_phi[i])) < 1.57 :
+                           count_seed_tracks += 1
+                   h_non_qual_nsv_lsp_seed_tracks.Fill(count_seed_tracks)
+
+               else:
+
+                   h_qual_nsv_lsp_r.Fill(math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
+                   h_qual_nsv_lsp_z.Fill(mevent.gen_lsp_decay[5])
+                   
+                   count_seed_tracks = 0
+                   for i in range(n_vertex_seed_tracks):
+                       if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],mevent.vertex_seed_track_phi[i])) < 1.57 :
+                           count_seed_tracks += 1
+                   h_qual_nsv_lsp_seed_tracks.Fill(count_seed_tracks)
                    
 
     else:
@@ -238,3 +292,34 @@ c13 = ROOT.TCanvas()
 h_mass_SV2.Draw("colz")
 c13.Print (outputdir+"h_mass_SV2.png")
 c13.Print (outputdir+"h_mass_SV2.root")
+
+c14 = ROOT.TCanvas()
+h_non_qual_nsv_lsp_r.Draw("colz")
+c14.Print (outputdir+"h_non_qual_nsv_lsp_r.png")
+c14.Print (outputdir+"h_non_qual_nsv_lsp_r.root")
+
+c15 = ROOT.TCanvas()
+h_non_qual_nsv_lsp_z.Draw("colz")
+c15.Print (outputdir+"h_non_qual_nsv_lsp_z.png")
+c15.Print (outputdir+"h_non_qual_nsv_lsp_z.root")
+
+c16 = ROOT.TCanvas()
+h_non_qual_nsv_lsp_seed_tracks.Draw("colz")
+c16.Print (outputdir+"h_non_qual_nsv_lsp_seed_tracks.png")
+c16.Print (outputdir+"h_non_qual_nsv_lsp_seed_tracks.root")
+
+c17 = ROOT.TCanvas()
+h_qual_nsv_lsp_r.Draw("colz")
+c17.Print (outputdir+"h_qual_nsv_lsp_r.png")
+c17.Print (outputdir+"h_qual_nsv_lsp_r.root")
+
+c18 = ROOT.TCanvas()
+h_qual_nsv_lsp_z.Draw("colz")
+c18.Print (outputdir+"h_qual_nsv_lsp_z.png")
+c18.Print (outputdir+"h_qual_nsv_lsp_z.root")
+
+c19 = ROOT.TCanvas()
+h_qual_nsv_lsp_seed_tracks.Draw("colz")
+c19.Print (outputdir+"h_qual_nsv_lsp_seed_tracks.png")
+c19.Print (outputdir+"h_qual_nsv_lsp_seed_tracks.root")
+
