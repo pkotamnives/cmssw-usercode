@@ -77,14 +77,11 @@ for event1 in events_ntuple1 :
     event1.getByLabel (mfv_event1_label1, mfv_event1_handle1)
     mevent = mfv_event1_handle1.product()
 
-    weight_event1_handle1 = Handle ("double")
-    weight_event1_label1 = ("mfvEvent")
-    event1.getByLabel (weight_event1_label1, weight_event1_handle1)
-    w = weight_event1_handle1.product()
+   
 
     nevents_processed += 1
     if nevents_processed <= 5000 :
-        if w > 0.5 and 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
+        if 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
                nevents_fiducial_cuts += 1
                n_vertex_seed_tracks = mevent.n_vertex_seed_tracks()
                qual_nsv = 0
