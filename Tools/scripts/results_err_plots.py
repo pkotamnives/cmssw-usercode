@@ -30,9 +30,9 @@ outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 n = 4
 x = [1.0,2.0,3.0,4.0]
-y1 = [39.5,69.3,79.0,88.1]
+y1 = [41.1,66.9,73.8,80.6]
 ex = [0.0,0.0,0.0,0.0]
-ey1 = [1.2,0.9,0.9,0.4]
+ey1 = [1.3,0.9,1.0,0.5]
 
 x = np.array(x)
 y1 = np.array(y1)
@@ -40,17 +40,17 @@ ex = np.array(ex)
 ey1 = np.array(ey1)
 
 
-y2 = [39.5,85.2,93.4,98.3]
-ey2 = [1.2,0.7,0.6,0.2]
+y2 = [41.1,85.6,90.2,95.9]
+ey2 = [1.3,0.7,0.7,0.2]
 y2 = np.array(y2)
 ey2 = np.array(ey2)
 
-y3 = [43.4,67.9,76.5,86.4]
-ey3 = [1.3,0.9,1.0,0.4]
+y3 = [44.7,65.1,71.4,79.4]
+ey3 = [1.3,0.9,1.0,0.5]
 y3 = np.array(y3)
 ey3 = np.array(ey3)
 
-y4 = [28.1,76.8,87.4,95.5]
+y4 = [31.5,76.8,83.6,93.2]
 ey4 = [1.2,0.8,0.8,0.3]
 y4 = np.array(y4)
 ey4 = np.array(ey4)
@@ -83,7 +83,7 @@ mg.Add(g3)
 mg.Add(g4)
 
 
-mg.SetTitle("Dijets: Validation of pT variables by varying shared-track ratios; # major vtx's shared tracks/ # of minor vtx's shared tracks; signal efficiency (%)")
+mg.SetTitle("Multijets: Validation of pT variables by varying shared-track ratios; # major vtx's shared tracks/ # of minor vtx's shared tracks; signal efficiency (%)")
 
 
 # make a canvas, draw, and save it
@@ -92,6 +92,6 @@ mg.SetTitle("Dijets: Validation of pT variables by varying shared-track ratios; 
 c0 = ROOT.TCanvas()
 mg.Draw("ALP")
 c0.BuildLegend(0.45,0.21,0.75,0.51)
-c0.Print (outputdir+"plot_dd.png")
-c0.Print (outputdir+"plot_dd.root")
+c0.Print (outputdir+"plot_tbs.png")
+c0.Print (outputdir+"plot_tbs.root")
 
