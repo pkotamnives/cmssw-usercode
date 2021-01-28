@@ -91,7 +91,7 @@ mg.SetTitle("Dijets: Validation of pT variables by varying shared-track ratios; 
 
 c0 = ROOT.TCanvas()
 mg.Draw("ACP")
-c0.BuildLegend(0.3,0.21,0.5,0.41)
+c0.BuildLegend(0.35,0.21,0.75,0.61)
 c0.Print (outputdir+"plot_dd.png")
 c0.Print (outputdir+"plot_dd.root")
 
