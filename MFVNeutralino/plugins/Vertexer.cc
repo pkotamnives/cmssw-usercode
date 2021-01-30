@@ -366,7 +366,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     if (verbose)
       printf("no seed tracks -> putting empty vertex collection into event\n");
     finish(event, seed_tracks, std::move(vertices), std::move(vpeffs), vpeffs_tracks);
-	h_n_category_no_vertices->Fill(0.0);
+	std::count << __LINE__ << std::endl;
+	h_n_category_no_vertices->Fill(0);
     return;
   }
 
@@ -750,12 +751,15 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     }
   }
 
+  std::count << __LINE__ << std::endl;
   if (vertices->size() == 0) {
-	  std::cout << "total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record->size() << std::endl;
+	  std::cout << "total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
 	  for (int i = 0, ie = seed_vertices; i < ie; ++i) {
+		  std::count << __LINE__ << std::endl; 
 		  h_n_category_no_vertices->Fill(erase_record[i]);
 	  }
   }
+  std::count << __LINE__ << std::endl;
 
   
 
