@@ -758,7 +758,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   if (seed_vertices == erase_vertices) {
 	  std::cout << "total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_vertices << std::endl;
 	  std::cout << "total vertices now are " << vertices->size() << std::endl;
-	  for (int i = 0, ie = seed_vertices; i < ie, ++i) {
+	  for (size_t i = 0, ie = seed_vertices; i < ie; ++i) {
 		  h_n_category_no_vertices->Fill(erase_record[i]);
 	  }
   }
