@@ -165,6 +165,8 @@ private:
   TH1F* h_max_noshare_track_multiplicity;
   TH1F* h_n_output_vertices;
 
+  TH1F* h_n_category_no_vertices;
+
   TH2F* h_2D_close_dvv_its_significance_before_merge;
   TH2F* h_2D_close_dvv_its_significance_passed_merge_pairs;
   TH2F* h_2D_close_dvv_its_significance_failed_merge_pairs;
@@ -254,6 +256,8 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
     h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
+
+	h_n_category_no_vertices = fs->make<TH1F>("h_n_category_no_vertices", "; Categories of no output vertices", 5, 0, 5);
 
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -362,6 +366,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     if (verbose)
       printf("no seed tracks -> putting empty vertex collection into event\n");
     finish(event, seed_tracks, std::move(vertices), std::move(vpeffs), vpeffs_tracks);
+	h_n_category_no_vertices->Fill(0.0);
     return;
   }
 
@@ -465,6 +470,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   std::vector<reco::Vertex>::iterator v[2];	   // pk: v[2] is an iterator?
   std::vector<reco::Vertex>::iterator nv[2];
   size_t ivtx[2];
+
+  
+  const int seed_vertices = vertices->size();
+  std::vector<int> erase_record;
   for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
     track_set tracks[2];			// pk: tracks[2] isn't defined anywhere	and what is track_set
     ivtx[0] = v[0] - vertices->begin();
@@ -475,6 +484,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         printf("track-sharing: vertex-0 #%lu is down to one track, junking it\n", ivtx[0]);
       v[0] = vertices->erase(v[0]) - 1;
       ++n_onetracks;
+	  erase_record.push_back(1);
       continue;
     }
 
@@ -494,6 +504,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           printf("track-sharing: vertex-1 #%lu is down to one track, junking it\n", ivtx[1]);
         v[1] = vertices->erase(v[1]) - 1;
         ++n_onetracks;
+		erase_record.push_back(1);
         continue;
       }
 
@@ -611,6 +622,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
     if (duplicate) {
       vertices->erase(v[1]);
+	  erase_record.push_back(2);
     }
     else if (merge) {
       if (verbose)
@@ -664,6 +676,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
         vertices->erase(v[1]);
         *v[0] = reco::Vertex(new_vertices[0]); // ok to use v[0] after the erase(v[1]) because v[0] is by construction before v[1]
+		erase_record.push_back(3);
       }
       else {
         if (verbose)
@@ -713,6 +726,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           *v[i] = new_vertices[0];
         else
           erase[i] = true;
+		  erase_record.push_back(4);
       }
 
       if (vpeff && (erase[0] || erase[1]))
@@ -735,6 +749,15 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
       //  throw "I'm dumb";
     }
   }
+
+  if (vertices->size() == 0) {
+	  std::cout << "total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record->size() << std::endl;
+	  for (int i = 0, ie = seed_vertices; i < ie; ++i) {
+		  h_n_category_no_vertices->Fill(erase_record[i]);
+	  }
+  }
+
+  
 
   if (verbose)
     printf("n_resets: %i  n_onetracks: %i  n_noshare_vertices: %lu\n", n_resets, n_onetracks, vertices->size());
@@ -823,13 +846,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     printf("fun2! before merge loop, # vertices = %lu\n", vertices->size());
   
   
-  
+
   if (merge_anyway_sig > 0 || merge_anyway_dist > 0){
 	  double v0x;
 	  double v0y;
 	  //double v0z;
 	  double phi0;
-	  
+
     for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
       ivtx[0] = v[0] - vertices->begin();
 	  
@@ -840,10 +863,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
       bool merge = false;
       for (v[1] = v[0] + 1; v[1] != vertices->end(); ++v[1]) {
-		
-		
         ivtx[1] = v[1] - vertices->begin();
-		
+
         if (verbose)
           printf("close-merge: # vertices = %lu. considering vertices #%lu (ntk = %i) and #%lu (ntk = %i):", vertices->size(), ivtx[0], v[0]->nTracks(), ivtx[1], v[1]->nTracks());
 
@@ -868,22 +889,15 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
             printf("          dist < %7.3f || sig < %7.3f, breaking to merge\n", merge_anyway_dist, merge_anyway_sig);
           merge = true;
 		  
-		  
-		  
+
 			  std::vector<reco::TransientTrack> ttks;
-			  
-			  for (int i = 0; i < 2; ++i) {
-				  
-				  
-				  for (auto tk : vertex_track_set(*v[i])) {
-					  
+			  for (int i = 0; i < 2; ++i)
+				  for (auto tk : vertex_track_set(*v[i]))
 					  ttks.push_back(tt_builder->build(tk));
-					  
-				  }
 
-			  }
 
-			  
+
+
 			  reco::VertexCollection new_vertices;
 			  for (const TransientVertex& tv : kv_reco_dropin(ttks))
 			  {
@@ -899,7 +913,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 				  h_merged_vertex_dBV->Fill(dBV);
 				  h_merged_vertex_bs2derr->Fill(bs2derr);
-				  
+
 				  for (auto it = new_vertices[0].tracks_begin(), ite = new_vertices[0].tracks_end(); it != ite; ++it) {
 
 					  reco::TransientTrack seed_track;
@@ -924,39 +938,33 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  printf("\n");
 			  }
 			  // pk: change vertices
-			  
 			  if (new_vertices.size() == 1)
 			  {
 				  if (reco::deltaPhi(phi0, phi1) < 0.5) {
 					  h_2D_close_dvv_its_significance_passed_merge_pairs->Fill(v_dist.value(), v_dist.significance());
 				  }
 
-				  //std::cout << "check no mem out of ranges (before) : " << v[1] - vertices->begin() << std::endl;
+				  std::cout << "check no mem out of ranges (before) : " << v[1] - vertices->begin() << std::endl;
 				  *v[0] = new_vertices[0];
-				  //std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
-				  
-				  
-				  v[1] = vertices->erase(v[1]) -1 ;
-				  
+				  std::cout << "check no mem out of ranges (after) : " << v[1] - vertices->begin() << std::endl;
+				  vertices->erase(v[1]);
 			  }
 			  // pk: change vertices
 			  else {	// pk: size is zero 
 				  if (reco::deltaPhi(phi0, phi1) < 0.5)
 					  h_2D_close_dvv_its_significance_failed_merge_pairs->Fill(v_dist.value(), v_dist.significance());
 			  }
-			 
+
 
 		  
         }
       }
 
-	  
 
       if (!merge) { //until the last one in vertices 
 		  h_non_merged_vertex_chi2->Fill(double(v[0]->normalizedChi2()));
 		  h_non_merged_vertex_ntracks->Fill(double(v[0]->nTracks()));
 		  h_non_merged_vertex_mass->Fill(double(v[0]->p4().mass()));
-		  
 
 		  const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
 		  Measurement1D dBV_Meas1D = vertex_dist_2d.distance(*v[0], fake_bs_vtx); // where vtx is your reco::Vertex, which maybe means *v[0] but I don't remember offhand. make sure you use the 2D distance here, since that's what we actually use for dBV!!
@@ -966,16 +974,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  h_non_merged_vertex_dBV->Fill(dBV);
 		  h_non_merged_vertex_bs2derr->Fill(bs2derr);
 
-		  
 		  for (auto it = v[0]->tracks_begin(), ite = v[0]->tracks_end(); it != ite; ++it) {
 			  
 			  reco::TransientTrack seed_track;
 			  seed_track = tt_builder->build(*it.operator*());
 			  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(seed_track, *v[0]);
-			  
 			  h_non_merged_vertex_tkvtxdist->Fill(tk_vtx_dist.second.value());
 			  h_non_merged_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
-			  
 		  }
 	  }
 	  
@@ -985,7 +990,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	double nv0y;
 	//double nv0z;
 	double nvphi0;
-	
+
 	for (nv[0] = vertices->begin(); nv[0] != vertices->end(); ++nv[0]) {
 		
 		double nv1x;
@@ -995,7 +1000,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 		for (nv[1] = nv[0] + 1; nv[1] != vertices->end(); ++nv[1]) {
 
-			
 			Measurement1D nv_dist = vertex_dist(*nv[0], *nv[1]);
 			if (verbose)
 				printf("  new vertex dist (2d? %i) %7.3f  sig %7.3f\n", use_2d_vertex_dist, nv_dist.value(), nv_dist.significance());
@@ -1008,15 +1012,14 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			nv1y = nv[1]->y() - bsy;
 			//nv1z = nv[1]->z() - bsz;
 			nvphi1 = atan2(nv1y, nv1x);
-			
+
 			if (reco::deltaPhi(nvphi0, nvphi1) < 0.5)
 				h_2D_close_dvv_its_significance_after_merge->Fill(nv_dist.value(), nv_dist.significance());
 		}
-		
+
 	}
   }
 
-  
   //////////////////////////////////////////////////////////////////////
   // Drop tracks that "move" the vertex too much by refitting without each track.
   //////////////////////////////////////////////////////////////////////
