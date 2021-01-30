@@ -165,6 +165,8 @@ private:
   TH1F* h_max_noshare_track_multiplicity;
   TH1F* h_n_output_vertices;
 
+  TH1F* h_n_category_no_vertices;
+
   TH2F* h_2D_close_dvv_its_significance_before_merge;
   TH2F* h_2D_close_dvv_its_significance_passed_merge_pairs;
   TH2F* h_2D_close_dvv_its_significance_failed_merge_pairs;
@@ -254,6 +256,8 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
     h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
+
+	h_n_category_no_vertices = fs->make<TH1F>("h_n_category_no_vertices", "; Categories of no output vertices", 50, 0, 50);
 
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -362,6 +366,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     if (verbose)
       printf("no seed tracks -> putting empty vertex collection into event\n");
     finish(event, seed_tracks, std::move(vertices), std::move(vpeffs), vpeffs_tracks);
+	h_n_category_no_vertices->Fill(0.0);
     return;
   }
 
@@ -465,6 +470,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   std::vector<reco::Vertex>::iterator v[2];	   // pk: v[2] is an iterator?
   std::vector<reco::Vertex>::iterator nv[2];
   size_t ivtx[2];
+
+  int erase_vertices = 0;
+  int seed_vertices = vertices->size();
+  std::vector<int> erase_record;
   for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
     track_set tracks[2];			// pk: tracks[2] isn't defined anywhere	and what is track_set
     ivtx[0] = v[0] - vertices->begin();
@@ -475,6 +484,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         printf("track-sharing: vertex-0 #%lu is down to one track, junking it\n", ivtx[0]);
       v[0] = vertices->erase(v[0]) - 1;
       ++n_onetracks;
+	  ++erase_vertices;
+	  erase_record.push_back(1.0);
       continue;
     }
 
@@ -494,6 +505,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           printf("track-sharing: vertex-1 #%lu is down to one track, junking it\n", ivtx[1]);
         v[1] = vertices->erase(v[1]) - 1;
         ++n_onetracks;
+		++erase_vertices;
+		erase_record.push_back(1.0);
         continue;
       }
 
@@ -611,6 +624,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
     if (duplicate) {
       vertices->erase(v[1]);
+	  ++erase_vertices;
+	  erase_record.push_back(2.0);
     }
     else if (merge) {
       if (verbose)
@@ -664,6 +679,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
         vertices->erase(v[1]);
         *v[0] = reco::Vertex(new_vertices[0]); // ok to use v[0] after the erase(v[1]) because v[0] is by construction before v[1]
+		++erase_vertices;
+		erase_record.push_back(3.0);
       }
       else {
         if (verbose)
@@ -713,6 +730,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           *v[i] = new_vertices[0];
         else
           erase[i] = true;
+		  ++erase_vertices;
+		  erase_record.push_back(4.0);
       }
 
       if (vpeff && (erase[0] || erase[1]))
@@ -735,6 +754,16 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
       //  throw "I'm dumb";
     }
   }
+
+  if (seed_vertices == erase_vertices) {
+	  std::cout << "total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_vertices << std::endl;
+	  std::cout << "total vertices now are " << vertices->size() << std::endl;
+	  for (int i = 0, ie = seed_vertices; i < ie, ++i) {
+		  h_n_category_no_vertices->Fill(erase_record[i]);
+	  }
+  }
+
+  
 
   if (verbose)
     printf("n_resets: %i  n_onetracks: %i  n_noshare_vertices: %lu\n", n_resets, n_onetracks, vertices->size());
