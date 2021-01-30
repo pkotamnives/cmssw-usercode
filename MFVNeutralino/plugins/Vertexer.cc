@@ -257,7 +257,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
     h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
 
-	h_n_category_no_vertices = fs->make<TH1F>("h_n_category_no_vertices", "; Categories of no output vertices", 50, 0, 50);
+	h_n_category_no_vertices = fs->make<TH1F>("h_n_category_no_vertices", "; Categories of no output vertices", 5, 0, 5);
 
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -473,7 +473,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
   int erase_vertices = 0;
   int seed_vertices = vertices->size();
-  std::vector<int> erase_record;
+  std::vector<double> erase_record;
   for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
     track_set tracks[2];			// pk: tracks[2] isn't defined anywhere	and what is track_set
     ivtx[0] = v[0] - vertices->begin();
