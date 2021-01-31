@@ -796,27 +796,27 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  const double vchi2 = vsave[i].normalizedChi2();
 		  before_erase_chi2.push_back(vchi2);
 
-		  reco::Vertex* erase_v = 0;
+		  reco::Vertex erase_v = 0;
 		  for (const TransientVertex& tv : kv_reco_dropin_nocut(ttks))
-			  erase_v = tv;
+			  erase_v = reco::Vertex(tv);
 		  double dZ = mag(erase_v->z() - vsave[i].z());
 		  after_erase_dZ.push_back(dZ);
 		  double erase_vchi2 = erase_v->normalizedChi2();
 		  after_erase_chi2.push_back(erase_vchi2);
 
 		  
-		  for (auto it = ttks.begin(), ite = ttks.end(); it != ite; ++it){
+		  for (int i = 0; i < ttks.size(); ++i){
 			  reco::TransientTrack keep_track;
-			  keep_track = tt_builder->build(*it.operator*());
+			  keep_track = ttks[i];
 			  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(keep_track, vsave[i]);
 			  before_erase_keep_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
 
 			  std::pair<bool, Measurement1D> tk_erase_vtx_dist = track_dist(keep_track, erase_v);
 			  after_erase_keep_tkvtxdistsig.push_back(tk_erase_vtx_dist.second.significance());
 		  }
-		  for (auto it = removed_ttks.begin(), ite = removed_ttks.end(); it != ite; ++it) {
+		  for (int i = 0; i < removed_ttks.size(); ++i) {
 			  reco::TransientTrack removed_track;
-			  removed_track = tt_builder->build(*it.operator*());
+			  removed_track = removed_ttks[i];
 			  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(removed_track, vsave[i]);
 			  before_erase_discard_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
 		  }
@@ -828,9 +828,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  merged_ttks.push_back(tt_builder->build(tk));
 			  }
 		  }
-		  reco::Vertex* merged_v = 0;
+		  reco::Vertex merged_v = 0;
 		  for (const TransientVertex& tv : kv_reco_dropin_nocut(merged_ttks))
-			  merged_v = tv;
+			  merged_v = reco::Vertex(tv);
 		  double merged_vchi2 = merged_v->normalizedChi2();
 		  merged_pair_erase_chi2.push_back(merged_vchi2);
 		  merged_pair_erase_ntracks.push_back(merged_ttks.size());
