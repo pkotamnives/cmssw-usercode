@@ -796,25 +796,25 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  const double vchi2 = vsave[i].normalizedChi2();
 		  before_erase_chi2.push_back(vchi2);
 
+		  const reco::Vertex* erase_v = 0;
 		  for (const TransientVertex& tv : kv_reco_dropin_nocut(ttks))
 			  erase_v = reco::Vertex(tv);
-		  const double dZ = mag(erase_v.z() - vsave[i]->z());
+		  const double dZ = mag(erase_v.z() - vsave[i].z());
 		  after_erase_dZ.push_back(dZ);
 		  const double erase_vchi2 = erase_v.normalizedChi2();
 		  after_erase_chi2.push_back(erase_vchi2);
 
-		  const size_t ntks = ttks.size();
-		  for (size_t i = 0; i < ntks; ++i) {
-			  keep_track = tt_builder->build(ttks[i]);
+		  
+		  for (auto it = ttks.begin(), ite = ttks.end(); it != ite; ++it){
+			  keep_track = tt_builder->build(ttks[*it.operator*()]);
 			  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(keep_track, vsave[i]);
 			  before_erase_keep_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
 
 			  std::pair<bool, Measurement1D> tk_erase_vtx_dist = track_dist(keep_track, erase_v);
 			  after_erase_keep_tkvtxdistsig.push_back(tk_erase_vtx_dist.second.significance());
 		  }
-		  const size_t removed_ntks = removed_ttks.size();
-		  for (size_t i = 0; i < removed_ntks; ++i) {
-			  removed_track = tt_builder->build(removed_ttks[i]);
+		  for (auto it = removed_ttks.begin(), ite = removed_ttks.end(); it != ite; ++it) {
+			  removed_track = tt_builder->build(removed_ttks[*it.operator*()]);
 			  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(removed_track, vsave[i]);
 			  before_erase_discard_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
 		  }
@@ -826,6 +826,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  merged_ttks.push_back(tt_builder->build(tk));
 			  }
 		  }
+		  const reco::Vertex* merged_v = 0;
 		  for (const TransientVertex& tv : kv_reco_dropin_nocut(merged_ttks))
 			  merged_v = reco::Vertex(tv);
 		  const double merged_vchi2 = merged_v.normalizedChi2();
