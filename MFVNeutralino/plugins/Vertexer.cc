@@ -163,12 +163,15 @@ private:
   TH1F* h_noshare_vertex_pairdphi;
   TH1F* h_noshare_track_multiplicity;
   TH1F* h_max_noshare_track_multiplicity;
-  TH1F* h_n_output_vertices;
 
   TH1F* h_n_category_no_vertices;
   TH1F* h_n_category_poor_one_vertices;
   TH1F* h_n_category_good_one_vertices;
+  TH1F* h_n_seed_tracks_no_vertices;
+  TH1F* h_n_seed_tracks_poor_one_vertices;
+  TH1F* h_n_seed_tracks_good_one_vertices;
 
+  TH1F* h_n_output_vertices;
 
   TH2F* h_2D_close_dvv_its_significance_before_merge;
   TH2F* h_2D_close_dvv_its_significance_passed_merge_pairs;
@@ -224,7 +227,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
   if (histos) {
     edm::Service<TFileService> fs;
 
-    h_n_seed_vertices                = fs->make<TH1F>("h_n_seed_vertices",                "",  50,   0,    200);
+    h_n_seed_vertices                = fs->make<TH1F>("h_n_seed_vertices",                "",  200,   0,    200);		 // change 50 bins to 200 bins 
     h_seed_vertex_track_weights      = fs->make<TH1F>("h_seed_vertex_track_weights",      "",  21,   0,      1.05);
     h_seed_vertex_chi2               = fs->make<TH1F>("h_seed_vertex_chi2",               "",  20,   0, max_seed_vertex_chi2);
     h_seed_vertex_ndof               = fs->make<TH1F>("h_seed_vertex_ndof",               "",  10,   0,     20);
@@ -258,11 +261,15 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_vertex_pairdphi        = fs->make<TH1F>("h_noshare_vertex_pairdphi",           "", 100,  -3.15,   3.15);
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
-    h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
-
-	h_n_category_no_vertices = fs->make<TH1F>("h_n_category_no_vertices", "; Categories of no output vertices/event", 5, 0, 5);
-	h_n_category_poor_one_vertices = fs->make<TH1F>("h_n_category_poor_one_vertices", "; Categories of poor-track 1vtx/event", 5, 0, 5);
-	h_n_category_good_one_vertices = fs->make<TH1F>("h_n_category_good_one_vertices", "; Categories of good-track 1vtx/event", 5, 0, 5);
+	
+	h_n_category_no_vertices = fs->make<TH1F>("h_n_category_no_vertices", "; Categories of no vertices/event", 5, 0, 5);
+	h_n_category_poor_one_vertices = fs->make<TH1F>("h_n_category_poor_one_vertices", "; Categories of <3trk/1vtx/event", 5, 0, 5);
+	h_n_category_good_one_vertices = fs->make<TH1F>("h_n_category_good_one_vertices", "; Categories of >=3trk/1vtx/event", 5, 0, 5);
+	h_n_seed_tracks_no_vertices = fs->make<TH1F>("h_n_seed_tracks_no_vertices", "; # of seed tracks (no vertices/event)", 100, 0, 100);
+	h_n_seed_tracks_poor_one_vertices = fs->make<TH1F>("h_n_seed_tracks_poor_one_vertices", "; # of seed tracks (<3trk/vtx/event)", 100, 0, 100);
+	h_n_seed_tracks_good_one_vertices = fs->make<TH1F>("h_n_seed_tracks_good_one_vertices", "; # of seed tracks (>=3trk/vtx/event)", 100, 0, 100);
+    
+	h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
 
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -762,6 +769,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  
 		  h_n_category_no_vertices->Fill(erase_record[i]);
 	  }
+	  h_n_seed_tracks_no_vertices->Fill(seed_tracks->size());
   }
 
   if (noshare_vertices == 1) {
@@ -773,6 +781,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 			  h_n_category_poor_one_vertices->Fill(erase_record[i]);
 		  }
+		  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks->size());
 	  }
 	  else {
 		  std::cout << ">=3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
@@ -780,6 +789,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 			  h_n_category_good_one_vertices->Fill(erase_record[i]);
 		  }
+		  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks->size());
 	  }
   }
   
