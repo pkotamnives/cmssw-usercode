@@ -769,7 +769,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  
 		  h_n_category_no_vertices->Fill(erase_record[i]);
 	  }
-	  h_n_seed_tracks_no_vertices->Fill(seed_tracks->size());
+	  h_n_seed_tracks_no_vertices->Fill(seed_tracks.size());
   }
 
   if (noshare_vertices == 1) {
@@ -781,7 +781,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 			  h_n_category_poor_one_vertices->Fill(erase_record[i]);
 		  }
-		  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks->size());
+		  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks.size());
 	  }
 	  else {
 		  std::cout << ">=3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
@@ -789,7 +789,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 			  h_n_category_good_one_vertices->Fill(erase_record[i]);
 		  }
-		  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks->size());
+		  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks.size());
 	  }
   }
   
