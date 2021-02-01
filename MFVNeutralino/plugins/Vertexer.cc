@@ -910,6 +910,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  }
 	  }
 	  else {
+		  const reco::Vertex& v = vertices->at(0);
+		  const int ntracks = v.nTracks();
 		  if (ntracks < 3) {
 			  std::cout << "<3trk-1vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
 			  h_n_poor_one_seed_vertices->Fill(seed_vertices);
