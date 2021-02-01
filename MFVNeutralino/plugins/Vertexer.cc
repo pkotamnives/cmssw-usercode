@@ -177,6 +177,7 @@ private:
   TH1F* h_n_seed_tracks_no_vertices;
   TH1F* h_n_seed_tracks_poor_one_vertices;
   TH1F* h_n_seed_tracks_good_one_vertices;
+  TH1F* h_n_no_vertex_seed_vertices;
   TH1F* h_n_poor_one_seed_vertices;
   TH1F* h_n_good_one_seed_vertices;
 
@@ -287,6 +288,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_n_seed_tracks_no_vertices = fs->make<TH1F>("h_n_seed_tracks_no_vertices", "; # of seed tracks (no vertices/event)", 100, 0, 100);
 	h_n_seed_tracks_poor_one_vertices = fs->make<TH1F>("h_n_seed_tracks_poor_one_vertices", "; # of seed tracks (<3trk/vtx/event)", 100, 0, 100);
 	h_n_seed_tracks_good_one_vertices = fs->make<TH1F>("h_n_seed_tracks_good_one_vertices", "; # of seed tracks (>=3trk/vtx/event)", 100, 0, 100);
+	h_n_no_vertex_seed_vertices = fs->make<TH1F>("h_n_no_vertex_seed_vertices", "; # of seed vertices(no vertices/event)", 50, 0, 50);
 	h_n_poor_one_seed_vertices = fs->make<TH1F>("h_n_poor_one_seed_vertices", "; # of seed vertices(<3trk/vtx/event)", 50, 0, 50);
 	h_n_good_one_seed_vertices = fs->make<TH1F>("h_n_good_one_seed_vertices", "; # of seed vertices(>=3trk/vtx/event)", 50, 0, 50);
 
@@ -853,15 +855,19 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	 
 	  if (erase_record.size() != 0) {
 		  std::cout << "no-vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
+		  h_n_no_vertex_seed_vertices->Fill(seed_vertices);
+		  h_n_seed_tracks_no_vertices->Fill(seed_tracks.size());
 		  for (int i = 0, ie = seed_vertices; i < ie; ++i) {
 
 			  h_n_category_no_vertices->Fill(erase_record[i]);
 		  }
-		  h_n_seed_tracks_no_vertices->Fill(seed_tracks.size());
+		  
 	  }
 	  else {
 		  std::cout << "no-vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
 		  h_n_category_no_vertices->Fill(0);
+		  h_n_no_vertex_seed_vertices->Fill(seed_vertices);
+		  h_n_seed_tracks_no_vertices->Fill(seed_tracks.size());
 	  }
   }
 
@@ -873,6 +879,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  if (ntracks < 3) {
 			  std::cout << "<3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
 			  h_n_poor_one_seed_vertices->Fill(seed_vertices);
+			  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks.size());
 			  for (int i = 0, ie = seed_vertices - 1; i < ie; ++i) {
 
 				  h_n_category_poor_one_vertices->Fill(erase_record[i]);
@@ -897,16 +904,17 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  h_poor_one_before_erase_vertex_discard_tkvtxdistsig->Fill(before_erase_discard_tkvtxdistsig[i]);
 			  }
 
-			  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks.size());
+			  
 		  }
 		  else {
 			  std::cout << ">=3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
 			  h_n_good_one_seed_vertices->Fill(seed_vertices);
+			  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks.size());
 			  for (int i = 0, ie = seed_vertices - 1; i < ie; ++i) {
 
 				  h_n_category_good_one_vertices->Fill(erase_record[i]);
 			  }
-			  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks.size());
+			  
 		  }
 	  }
 	  else {
@@ -916,11 +924,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  std::cout << "<3trk-1vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
 			  h_n_poor_one_seed_vertices->Fill(seed_vertices);
 			  h_n_category_poor_one_vertices->Fill(0);
+			  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks.size());
 		  }
 		  else {
 			  std::cout << ">=3trk-1vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
 			  h_n_good_one_seed_vertices->Fill(seed_vertices);
 			  h_n_category_good_one_vertices->Fill(0);
+			  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks.size());
 		  }
 	  }
 
