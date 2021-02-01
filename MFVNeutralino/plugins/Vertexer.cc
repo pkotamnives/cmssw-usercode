@@ -185,9 +185,7 @@ private:
   TH1F* h_poor_one_before_erase_vertex_keep_tkvtxdistsig;
   TH1F* h_poor_one_before_erase_vertex_discard_tkvtxdistsig;
 
-  TH1F* h_poor_one_after_erase_selfpairdz;
-  TH1F* h_poor_one_after_erase_vertex_chi2;
-  TH1F* h_poor_one_after_erase_vertex_keep_tkvtxdistsig;
+  TH1F* h_poor_one_after_erase_ntracks;
 
   TH1F* h_poor_one_merged_pair_chi2;
   TH1F* h_poor_one_merged_pair_ntracks;
@@ -298,10 +296,8 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_poor_one_before_erase_vertex_keep_tkvtxdistsig = fs->make<TH1F>("h_poor_one_before_erase_vertex_keep_tkvtxdistsig", "<3trk/vtx/event's track arbitration before erase; missdist 3d significance (kept tracks, vtx)", 100, 0, 6);
 	h_poor_one_before_erase_vertex_discard_tkvtxdistsig = fs->make<TH1F>("h_poor_one_before_erase_vertex_discard_tkvtxdistsig", "<3trk/vtx/event's track arbitration before erase; missdist 3d significance (removed tracks, vtx)", 100, 0, 6);
 	
-	h_poor_one_after_erase_selfpairdz = fs->make<TH1F>("h_poor_one_after_erase_selfpairdz", "<3trk/vtx/event's track arbitration after erase; dZ of vertex shifts (cm)", 100, 0, 0.1);
-	h_poor_one_after_erase_vertex_chi2 = fs->make<TH1F>("h_poor_one_after_erase_vertex_chi2", "<3trk/vtx/event's track arbitration after erase; ch2/d.o.f./vtx (w/o cut)", 20, 0, max_seed_vertex_chi2);
-	h_poor_one_after_erase_vertex_keep_tkvtxdistsig = fs->make<TH1F>("h_poor_one_after_erase_vertex_keep_tkvtxdistsig", "<3trk/vtx/event's track arbitration after erase; missdist 3d significance (kept tracks, vtx)", 100, 0, 6);
-
+	h_poor_one_after_erase_ntracks = fs->make<TH1F>("h_poor_one_after_erase_ntracks", "<3trk/vtx/event's track arbitration after erase; # of tracks/erase vtx", 30, 0, 30);
+	
 	h_poor_one_merged_pair_chi2 = fs->make<TH1F>("h_poor_one_merged_pair_chi2", "<3trk/vtx/event's track arbitration by merging pairs involved erase; ch2/d.o.f./vtx (w/o cut)", 20, 0, max_seed_vertex_chi2);
 	h_poor_one_merged_pair_ntracks = fs->make<TH1F>("h_poor_one_merged_pair_ntracks", "<3trk/vtx/event's track arbitration by merging pairs involved erase; # of tracks/merged-vtx pair", 30, 0, 30);
 	
@@ -526,9 +522,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   std::vector<double> before_erase_keep_tkvtxdistsig; // pk: it assumes that all doubles filled in a single hist
   std::vector<double> before_erase_discard_tkvtxdistsig;	// pk: it assumes that all doubles filled in a single hist
   
-  std::vector<double> after_erase_dZ;
-  std::vector<double> after_erase_chi2;
-  std::vector<double> after_erase_keep_tkvtxdistsig; // pk: it assumes that all doubles filled in a single hist
+  std::vector<int> after_erase_ntracks;
 
   std::vector<double> merged_pair_erase_chi2;
   std::vector<int> merged_pair_erase_ntracks;
@@ -791,19 +785,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         else
           erase[i] = true;
 		  erase_record.push_back(4);
-		  if (ttks.size() >= 2) {
+		  
 			  Measurement1D v_dist = vertex_dist(*v[0], *v[1]);
 			  before_erase_dVV.push_back(v_dist.significance());
-			  const double vchi2 = vsave[i].normalizedChi2();
+			  double vchi2 = vsave[i].normalizedChi2();
 			  before_erase_chi2.push_back(vchi2);
 
-			  reco::Vertex erase_v;
-			  for (const TransientVertex& tv : kv_reco_dropin_nocut(ttks))
-				  erase_v = reco::Vertex(tv);
-			  double dZ = mag(erase_v.z() - vsave[i].z());
-			  after_erase_dZ.push_back(dZ);
-			  double erase_vchi2 = erase_v.normalizedChi2();
-			  after_erase_chi2.push_back(erase_vchi2);
+			  after_erase_ntracks.push_back(ttks.size());
 
 
 			  for (unsigned int i = 0; i < ttks.size(); ++i) {
@@ -811,9 +799,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				  keep_track = ttks[i];
 				  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(keep_track, vsave[i]);
 				  before_erase_keep_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
-
-				  std::pair<bool, Measurement1D> tk_erase_vtx_dist = track_dist(keep_track, erase_v);
-				  after_erase_keep_tkvtxdistsig.push_back(tk_erase_vtx_dist.second.significance());
 			  }
 			  for (unsigned int i = 0; i < removed_ttks.size(); ++i) {
 				  reco::TransientTrack removed_track;
@@ -836,7 +821,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  merged_pair_erase_chi2.push_back(merged_vchi2);
 			  merged_pair_erase_ntracks.push_back(merged_ttks.size());
 
-		  }
+		  
 		  
 		  
 		  
@@ -866,7 +851,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   int noshare_vertices = vertices->size();
   if (noshare_vertices == 0) {
 	 
-	  if (seed_vertices != 0) {
+	  if (erase_record.size() != 0) {
 		  std::cout << "no-vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
 		  for (int i = 0, ie = seed_vertices; i < ie; ++i) {
 
@@ -875,53 +860,68 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  h_n_seed_tracks_no_vertices->Fill(seed_tracks.size());
 	  }
 	  else {
-		  std::cout << "no-vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
+		  std::cout << "no-vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
 		  h_n_category_no_vertices->Fill(0);
 	  }
   }
 
   if (noshare_vertices == 1) {
-	  const reco::Vertex& v = vertices->at(0);
-	  const int ntracks = v.nTracks();
-	  if (ntracks < 3) {
-		  std::cout << "<3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
-		  h_n_poor_one_seed_vertices->Fill(seed_vertices);
-		  for (int i = 0, ie = seed_vertices - 1; i < ie; ++i) {
 
-			  h_n_category_poor_one_vertices->Fill(erase_record[i]);
+	  if (erase_record.size() != 0) {
+		  const reco::Vertex& v = vertices->at(0);
+		  const int ntracks = v.nTracks();
+		  if (ntracks < 3) {
+			  std::cout << "<3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
+			  h_n_poor_one_seed_vertices->Fill(seed_vertices);
+			  for (int i = 0, ie = seed_vertices - 1; i < ie; ++i) {
 
+				  h_n_category_poor_one_vertices->Fill(erase_record[i]);
+
+			  }
+			  for (int i = 0, ie = before_erase_chi2.size(); i < ie; ++i) {
+
+				  h_poor_one_before_erase_pairdistsig->Fill(before_erase_dVV[i]);
+				  h_poor_one_before_erase_vertex_chi2->Fill(before_erase_chi2[i]);
+
+				  
+				  h_poor_one_after_erase_ntracks->Fill(after_erase_ntracks[i]);
+
+				  h_poor_one_merged_pair_chi2->Fill(merged_pair_erase_chi2[i]);
+				  h_poor_one_merged_pair_ntracks->Fill(merged_pair_erase_ntracks[i]);
+			  }
+
+			  for (int i = 0, ie = before_erase_keep_tkvtxdistsig.size(); i < ie; ++i) {
+				  h_poor_one_before_erase_vertex_keep_tkvtxdistsig->Fill(before_erase_keep_tkvtxdistsig[i]);
+			  }
+			  for (int i = 0, ie = before_erase_discard_tkvtxdistsig.size(); i < ie; ++i) {
+				  h_poor_one_before_erase_vertex_discard_tkvtxdistsig->Fill(before_erase_discard_tkvtxdistsig[i]);
+			  }
+
+			  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks.size());
 		  }
-		  for (int i = 0, ie = before_erase_chi2.size(); i < ie; ++i) {
+		  else {
+			  std::cout << ">=3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
+			  h_n_good_one_seed_vertices->Fill(seed_vertices);
+			  for (int i = 0, ie = seed_vertices - 1; i < ie; ++i) {
 
-			  h_poor_one_before_erase_pairdistsig->Fill(before_erase_dVV[i]);
-			  h_poor_one_before_erase_vertex_chi2->Fill(before_erase_chi2[i]);
-
-			  h_poor_one_after_erase_selfpairdz->Fill(after_erase_dZ[i]);
-			  h_poor_one_after_erase_vertex_chi2->Fill(after_erase_chi2[i]);
-
-			  h_poor_one_merged_pair_chi2->Fill(merged_pair_erase_chi2[i]);
-			  h_poor_one_merged_pair_ntracks->Fill(merged_pair_erase_ntracks[i]);
+				  h_n_category_good_one_vertices->Fill(erase_record[i]);
+			  }
+			  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks.size());
 		  }
-
-		  for (int i = 0, ie = before_erase_keep_tkvtxdistsig.size(); i < ie; ++i) {
-			  h_poor_one_before_erase_vertex_keep_tkvtxdistsig->Fill(before_erase_keep_tkvtxdistsig[i]);
-			  h_poor_one_after_erase_vertex_keep_tkvtxdistsig->Fill(after_erase_keep_tkvtxdistsig[i]);
-		  }
-		  for (int i = 0, ie = before_erase_discard_tkvtxdistsig.size(); i < ie; ++i) {
-			  h_poor_one_before_erase_vertex_discard_tkvtxdistsig->Fill(before_erase_discard_tkvtxdistsig[i]);
-		  }
-
-		  h_n_seed_tracks_poor_one_vertices->Fill(seed_tracks.size());
 	  }
 	  else {
-		  std::cout << ">=3trk-1vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
-		  h_n_good_one_seed_vertices->Fill(seed_vertices);
-		  for (int i = 0, ie = seed_vertices-1; i < ie; ++i) {
-
-			  h_n_category_good_one_vertices->Fill(erase_record[i]);
+		  if (ntracks < 3) {
+			  std::cout << "<3trk-1vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << std::endl;
+			  h_n_poor_one_seed_vertices->Fill(seed_vertices);
+			  h_n_category_poor_one_vertices->Fill(0);
 		  }
-		  h_n_seed_tracks_good_one_vertices->Fill(seed_tracks.size());
+		  else {
+			  std::cout << ">=3trk-1vtx(no erase): total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
+			  h_n_good_one_seed_vertices->Fill(seed_vertices);
+			  h_n_category_good_one_vertices->Fill(0);
+		  }
 	  }
+
   }
   
 
