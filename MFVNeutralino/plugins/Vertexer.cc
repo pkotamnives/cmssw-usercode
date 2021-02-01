@@ -156,6 +156,7 @@ private:
   TH1F* h_noshare_vertex_tkvtxdisterr;
   TH1F* h_noshare_vertex_tkvtxdistsig;
   TH1F* h_n_noshare_vertices;
+  TH1F* h_n_noshare_moreor5trks_vertices;
   TH1F* h_noshare_vertex_ntracks;
   TH1F* h_noshare_vertex_track_weights;
   TH1F* h_noshare_vertex_chi2;
@@ -263,8 +264,9 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_n_resets                       = fs->make<TH1F>("h_n_resets",                       "", 50,   0,   500);
     h_n_onetracks                    = fs->make<TH1F>("h_n_onetracks",                    "",  5,   0,     5);
 
-    h_n_noshare_vertices             = fs->make<TH1F>("h_n_noshare_vertices",             "", 50,   0,    50);
-    h_noshare_vertex_tkvtxdist       = fs->make<TH1F>("h_noshare_vertex_tkvtxdist",       "", 100,  0,   0.1);
+    h_n_noshare_vertices             = fs->make<TH1F>("h_n_noshare_vertices",             "; # of vertices/event(no shared tracks)", 50,   0,    50);
+	h_n_noshare_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_moreor5trks_vertices", "; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
+	h_noshare_vertex_tkvtxdist       = fs->make<TH1F>("h_noshare_vertex_tkvtxdist",       "", 100,  0,   0.1);
     h_noshare_vertex_tkvtxdisterr    = fs->make<TH1F>("h_noshare_vertex_tkvtxdisterr",    "", 100,  0,   0.1);
     h_noshare_vertex_tkvtxdistsig    = fs->make<TH1F>("h_noshare_vertex_tkvtxdistsig",    "", 100,  0,     6);
     h_noshare_vertex_ntracks         = fs->make<TH1F>("h_noshare_vertex_ntracks",         "",  30,  0, 30);
@@ -943,6 +945,17 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     h_n_resets->Fill(n_resets);
     h_n_onetracks->Fill(n_onetracks);
     h_n_noshare_vertices->Fill(vertices->size());
+
+	int count_moreor5trks_vertices = 0;
+	for (int i = 0; i < vertices->size(); ++i) {
+		const reco::Vertex& v = vertices->at(i);
+		const int ntracks = v.nTracks();
+		if (ntracks >= 5) {
+			++count_moreor5trks_vertices;
+		}
+	}
+
+	h_n_noshare_moreor5trks_vertices->Fill(count_moreor5trks_vertices);
   }
 
   if (histos || verbose) {
