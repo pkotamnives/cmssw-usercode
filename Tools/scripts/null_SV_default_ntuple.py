@@ -33,6 +33,7 @@ ROOT.gROOT.SetBatch() # don't pop up canvases
 outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
+h_qual_nsv_event = ROOT.TH1F ("h_qual_nsv_event", ";# of >=5trk-SVs/event", 50, 0, 50)
 h_unqual_nsv = ROOT.TH1F ("h_unqual_nsv", ";Categories of unqualified SVs/LSP", 7, 0, 7)
 h_qual_nsv = ROOT.TH1F ("h_qual_nsv", ";# of >=5trk-SVs/LSP", 15, 0, 15)
 h_nsv = ROOT.TH1F ("h_nsv", ";# of unqualified SVs/LSP", 15, 0, 15)
@@ -125,6 +126,7 @@ for event1 in events_ntuple1 :
 
                h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp0))
                h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp1))
+               h_qual_nsv_event.Fill(len(ls_of_qual_nsv_lsp0)+len(ls_of_qual_nsv_lsp1))
 
                if len(ls_of_qual_nsv_lsp0) == 0:
                    h_nsv.Fill(len(ls_of_unqual_nsv_lsp0))
@@ -260,6 +262,11 @@ c00 = ROOT.TCanvas()
 h_unqual_nsv.Draw("colz")
 c00.Print (outputdir+"h_unqual_nsv.png")
 c00.Print (outputdir+"h_unqual_nsv.root")
+
+c01 = ROOT.TCanvas()                                                      F
+h_qual_nsv_event.Draw("colz")
+c01.Print (outputdir+"h_qual_nsv_event.png")
+c01.Print (outputdir+"h_qual_nsv_event.root")
 
 c0 = ROOT.TCanvas()
 h_qual_nsv.Draw("colz")
