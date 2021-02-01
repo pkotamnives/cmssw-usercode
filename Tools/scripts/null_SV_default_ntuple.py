@@ -263,7 +263,7 @@ h_unqual_nsv.Draw("colz")
 c00.Print (outputdir+"h_unqual_nsv.png")
 c00.Print (outputdir+"h_unqual_nsv.root")
 
-c01 = ROOT.TCanvas()                                                      F
+c01 = ROOT.TCanvas()                                                      
 h_qual_nsv_event.Draw("colz")
 c01.Print (outputdir+"h_qual_nsv_event.png")
 c01.Print (outputdir+"h_qual_nsv_event.root")
