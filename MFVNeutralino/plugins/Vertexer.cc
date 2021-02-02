@@ -862,7 +862,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
     h_n_noshare_vertices->Fill(vertices->size());
 
 	int count_moreor5trks_vertices = 0;
-	for (int i = 0; i < vertices->size(); ++i) {
+	for (unsigned int i = 0; i < vertices->size(); ++i) {
 		const reco::Vertex& v = vertices->at(i);
 		const int ntracks = v.nTracks();
 		if (ntracks >= 5) {
@@ -872,7 +872,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 	h_n_noshare_moreor5trks_vertices->Fill(count_moreor5trks_vertices);
 
-	int noshare_vertices = vertices->size();
+	//int noshare_vertices = vertices->size();
 	if (count_moreor5trks_vertices == 0) {
 
 		if (erase_record.size() != 0) {
