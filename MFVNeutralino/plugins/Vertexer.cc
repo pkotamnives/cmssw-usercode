@@ -277,7 +277,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 
     h_n_noshare_vertices             = fs->make<TH1F>("h_n_noshare_vertices",             "; # of vertices/event(no shared tracks)", 50,   0,    50);
 	h_n_noshare_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_moreor5trks_vertices", "; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
-	h_n_noshare_moreor5trks_no_vertex_noshare_vertices = = fs->make<TH1F>("h_n_noshare_moreor5trks_no_vertex_noshare_vertices", "; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
+	h_n_noshare_moreor5trks_no_vertex_noshare_vertices = fs->make<TH1F>("h_n_noshare_moreor5trks_no_vertex_noshare_vertices", "; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
 	h_noshare_vertex_tkvtxdist       = fs->make<TH1F>("h_noshare_vertex_tkvtxdist",       "", 100,  0,   0.1);
     h_noshare_vertex_tkvtxdisterr    = fs->make<TH1F>("h_noshare_vertex_tkvtxdisterr",    "", 100,  0,   0.1);
     h_noshare_vertex_tkvtxdistsig    = fs->make<TH1F>("h_noshare_vertex_tkvtxdistsig",    "", 100,  0,     6);
@@ -968,8 +968,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		if (noshare_vertices > 1) {
 
 			if (erase_record.size() != 0) {
-				const reco::Vertex& v = vertices->at(0);
-				const int ntracks = v.nTracks();
 
 				std::cout << "<5trk->=2vtx: total seed vertices were " << seed_vertices << " ==  total erase vertices are " << erase_record.size() << " + 1" << std::endl;
 				h_n_good_one_seed_vertices->Fill(seed_vertices);
