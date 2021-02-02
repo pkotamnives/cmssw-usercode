@@ -184,7 +184,9 @@ private:
   TH1F* h_n_good_one_seed_vertices;
 
   TH1F* h_poor_one_before_erase_pairdistsig;
+  TH1F* h_poor_one_all_pairdistsig;
   TH1F* h_poor_one_before_erase_vertex_chi2;
+  TH1F* h_poor_one_all_pair_vertex_chi2;
   TH1F* h_poor_one_before_erase_vertex_keep_tkvtxdistsig;
   TH1F* h_poor_one_before_erase_vertex_discard_tkvtxdistsig;
 
@@ -194,7 +196,9 @@ private:
   TH1F* h_poor_one_merged_pair_ntracks;
 
   TH1F* h_good_one_before_erase_pairdistsig;
+  TH1F* h_good_one_all_pairdistsig;
   TH1F* h_good_one_before_erase_vertex_chi2;
+  TH1F* h_good_one_all_pair_vertex_chi2;
   TH1F* h_good_one_before_erase_vertex_keep_tkvtxdistsig;
   TH1F* h_good_one_before_erase_vertex_discard_tkvtxdistsig;
 
@@ -205,6 +209,7 @@ private:
 
   TH1F* h_n_output_vertices;
 
+  /*
   TH2F* h_2D_close_dvv_its_significance_before_merge;
   TH2F* h_2D_close_dvv_its_significance_passed_merge_pairs;
   TH2F* h_2D_close_dvv_its_significance_failed_merge_pairs;
@@ -223,6 +228,7 @@ private:
   TH1F* h_non_merged_vertex_dBV;
   TH1F* h_merged_vertex_bs2derr;
   TH1F* h_non_merged_vertex_bs2derr;
+  */
 };
 
 MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
@@ -307,29 +313,33 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_n_good_one_seed_vertices = fs->make<TH1F>("h_n_good_one_seed_vertices", "; # of seed vertices(<5trk->=2vtx/event)", 200, 0, 200);
 
     
-	h_poor_one_before_erase_pairdistsig = fs->make<TH1F>("h_poor_one_before_erase_pairdistsig", "<5trk-1vtx/event's track arbitration before erase; dVV 3d significance of refit pairs", 100, 0, 10);
-	h_poor_one_before_erase_vertex_chi2 = fs->make<TH1F>("h_poor_one_before_erase_vertex_chi2", "<5trk-1vtx/event's track arbitration before erase; ch2/d.o.f./vtx", 20, 0, max_seed_vertex_chi2);
-	h_poor_one_before_erase_vertex_keep_tkvtxdistsig = fs->make<TH1F>("h_poor_one_before_erase_vertex_keep_tkvtxdistsig", "<5trk-1vtx/event's track arbitration before erase; missdist 3d significance (kept tracks, vtx)", 100, 0, 6);
-	h_poor_one_before_erase_vertex_discard_tkvtxdistsig = fs->make<TH1F>("h_poor_one_before_erase_vertex_discard_tkvtxdistsig", "<5trk-1vtx/event's track arbitration before erase; missdist 3d significance (removed tracks, vtx)", 100, 0, 6);
+	h_poor_one_before_erase_pairdistsig = fs->make<TH1F>("h_poor_one_before_erase_pairdistsig", "<5trk-1vtx/event's track arbitration before erase; dVV 3d significance of refit pairs", 40, 0, 100);
+	h_poor_one_all_pairdistsig = fs->make<TH1F>("h_poor_one_all_pairdistsig", "<5trk-1vtx/event's shared-track vertex pairs; dVV 3d significance of all pairs", 40, 0, 100);
+	h_poor_one_before_erase_vertex_chi2 = fs->make<TH1F>("h_poor_one_before_erase_vertex_chi2", "<5trk-1vtx/event's track arbitration before erase; ch2/d.o.f./vtx", 30, 0, 30);
+	h_poor_one_all_pair_vertex_chi2 = fs->make<TH1F>("h_poor_one_all_pair_vertex_chi2", "<5trk-1vtx/event's shared-track vertex pairs; ch2/d.o.f./merged-vtx", 30, 0, 30);
+	h_poor_one_before_erase_vertex_keep_tkvtxdistsig = fs->make<TH1F>("h_poor_one_before_erase_vertex_keep_tkvtxdistsig", "<5trk-1vtx/event's track arbitration before erase; missdist 3d significance (kept tracks, vtx)",40, 0, 20);
+	h_poor_one_before_erase_vertex_discard_tkvtxdistsig = fs->make<TH1F>("h_poor_one_before_erase_vertex_discard_tkvtxdistsig", "<5trk-1vtx/event's track arbitration before erase; missdist 3d significance (removed tracks, vtx)", 40, 0, 20);
 	
 	h_poor_one_after_erase_ntracks = fs->make<TH1F>("h_poor_one_after_erase_ntracks", "<5trk-1vtx/event's track arbitration after erase; # of tracks/erase vtx", 30, 0, 30);
 	
-	h_poor_one_merged_pair_chi2 = fs->make<TH1F>("h_poor_one_merged_pair_chi2", "<5trk-1vtx/event's track arbitration by merging pairs involved erase; ch2/d.o.f./vtx (w/o cut)", 20, 0, max_seed_vertex_chi2);
+	h_poor_one_merged_pair_chi2 = fs->make<TH1F>("h_poor_one_merged_pair_chi2", "<5trk-1vtx/event's track arbitration by merging pairs involved erase; ch2/d.o.f./vtx (w/o cut)", 30, 0, 30);
 	h_poor_one_merged_pair_ntracks = fs->make<TH1F>("h_poor_one_merged_pair_ntracks", "<5trk-1vtx/event's track arbitration by merging pairs involved erase; # of tracks/merged-vtx pair", 30, 0, 30);
 	
-	h_good_one_before_erase_pairdistsig = fs->make<TH1F>("h_good_one_before_erase_pairdistsig", "<5trk->=2vtx/event's track arbitration before erase; dVV 3d significance of refit pairs", 100, 0, 10);
-	h_good_one_before_erase_vertex_chi2 = fs->make<TH1F>("h_good_one_before_erase_vertex_chi2", "<5trk->=2vtx/event's track arbitration before erase; ch2/d.o.f./vtx", 20, 0, max_seed_vertex_chi2);
-	h_good_one_before_erase_vertex_keep_tkvtxdistsig = fs->make<TH1F>("h_good_one_before_erase_vertex_keep_tkvtxdistsig", "<5trk->=2vtx/event's track arbitration before erase; missdist 3d significance (kept tracks, vtx)", 100, 0, 6);
-	h_good_one_before_erase_vertex_discard_tkvtxdistsig = fs->make<TH1F>("h_good_one_before_erase_vertex_discard_tkvtxdistsig", "<5trk->=2vtx/event's track arbitration before erase; missdist 3d significance (removed tracks, vtx)", 100, 0, 6);
+	h_good_one_before_erase_pairdistsig = fs->make<TH1F>("h_good_one_before_erase_pairdistsig", "<5trk->=2vtx/event's track arbitration before erase; dVV 3d significance of refit pairs", 40, 0, 100);
+	h_good_one_all_pairdistsig = fs->make<TH1F>("h_good_one_all_pairdistsig", "<5trk->=2vtx/event's shared-track vertex pairs; dVV 3d significance of all pairs", 40, 0, 100);
+	h_good_one_before_erase_vertex_chi2 = fs->make<TH1F>("h_good_one_before_erase_vertex_chi2", "<5trk->=2vtx/event's track arbitration before erase; ch2/d.o.f./vtx", 30, 0, 30);
+	h_good_one_all_pair_vertex_chi2 = fs->make<TH1F>("h_good_one_all_pair_vertex_chi2", "<5trk->=2vtx/event's shared-track vertex pairs; ch2/d.o.f./merged-vtx", 30, 0, 30);
+	h_good_one_before_erase_vertex_keep_tkvtxdistsig = fs->make<TH1F>("h_good_one_before_erase_vertex_keep_tkvtxdistsig", "<5trk->=2vtx/event's track arbitration before erase; missdist 3d significance (kept tracks, vtx)", 40, 0, 20);
+	h_good_one_before_erase_vertex_discard_tkvtxdistsig = fs->make<TH1F>("h_good_one_before_erase_vertex_discard_tkvtxdistsig", "<5trk->=2vtx/event's track arbitration before erase; missdist 3d significance (removed tracks, vtx)", 40, 0, 20);
 
 	h_good_one_after_erase_ntracks = fs->make<TH1F>("h_good_one_after_erase_ntracks", "<5trk->=2vtx/event's track arbitration after erase; # of tracks/erase vtx", 30, 0, 30);
 
-	h_good_one_merged_pair_chi2 = fs->make<TH1F>("h_good_one_merged_pair_chi2", "<5trk->=2vtx/event's track arbitration by merging pairs involved erase; ch2/d.o.f./vtx (w/o cut)", 20, 0, max_seed_vertex_chi2);
+	h_good_one_merged_pair_chi2 = fs->make<TH1F>("h_good_one_merged_pair_chi2", "<5trk->=2vtx/event's track arbitration by merging pairs involved erase; ch2/d.o.f./vtx (w/o cut)", 30, 0, 30);
 	h_good_one_merged_pair_ntracks = fs->make<TH1F>("h_good_one_merged_pair_ntracks", "<5trk->=2vtx/event's track arbitration by merging pairs involved erase; # of tracks/merged-vtx pair", 30, 0, 30);
 
 
 	h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
-
+	/*
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_failed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_failed_merge_pairs", "Only failed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -348,7 +358,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_non_merged_vertex_dBV = fs->make<TH1F>("h_non_merged_vertex_dBV", "After merging by sigma<4: non-merged vertices; bvdist2d (cm)", 50, 0, 0.1);
 	h_merged_vertex_bs2derr = fs->make<TH1F>("h_merged_vertex_bs2derr", "After merging by sigma<4: merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
 	h_non_merged_vertex_bs2derr = fs->make<TH1F>("h_non_merged_vertex_bs2derr", "After merging by sigma<4: non-merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
-
+	*/
   }
 }
 
@@ -543,6 +553,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   const int seed_vertices = vertices->size();
   std::vector<int> erase_record;
 
+  std::vector<double> all_pairs_dVV;
+  std::vector<double> all_pairs_chi2;
   std::vector<double> before_erase_dVV;
   std::vector<double> before_erase_chi2;
   std::vector<double> before_erase_keep_tkvtxdistsig; // pk: it assumes that all doubles filled in a single hist
@@ -641,6 +653,27 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         Measurement1D v_dist = vertex_dist(*v[0], *v[1]);
         if (verbose)
           printf("   vertex dist (2d? %i) %7.3f  sig %7.3f\n", use_2d_vertex_dist, v_dist.value(), v_dist.significance());
+
+		//pk: try to merge all vertex pairs 
+		all_pairs_dVV.push_back(v_dist.significance());
+
+		if (v_dist.significance()<20) {
+
+			std::vector<reco::TransientTrack> merged_ttks;
+
+			for (int i = 0; i < 2; ++i) {
+				for (auto tk : vertex_track_set(*v[i])) {
+					merged_ttks.push_back(tt_builder->build(tk));
+				}
+			}
+
+			reco::Vertex merged_v;
+			for (const TransientVertex& tv : kv_reco_dropin_nocut(merged_ttks))
+				merged_v = reco::Vertex(tv);
+			double merged_vchi2 = merged_v.normalizedChi2();
+			all_pairs_chi2.push_back(merged_vchi2);
+		}
+		
 
         if (v_dist.value() < merge_shared_dist || v_dist.significance() < merge_shared_sig) {
           if (verbose) printf("          dist < %7.3f || sig < %7.3f, will try using merge result first before arbitration\n", merge_shared_dist, merge_shared_sig);
@@ -931,6 +964,18 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					h_n_category_poor_one_vertices->Fill(erase_record[i]);
 
 				}
+				for (int i = 0, ie = all_pairs_dVV.size(); i < ie; ++i) {
+
+					h_poor_one_all_pairdistsig->Fill(all_pairs_dVV[i]);
+
+				}
+
+				for (int i = 0, ie = all_pairs_chi2.size(); i < ie; ++i) {
+
+					h_poor_one_all_pair_vertex_chi2->Fill(all_pairs_chi2[i]);
+
+				}
+
 				for (int i = 0, ie = before_erase_chi2.size(); i < ie; ++i) {
 
 					h_poor_one_before_erase_pairdistsig->Fill(before_erase_dVV[i]);
@@ -975,6 +1020,18 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				for (int i = 0, ie = erase_record.size(); i < ie; ++i) {
 
 					h_n_category_good_one_vertices->Fill(erase_record[i]);
+
+				}
+
+				for (int i = 0, ie = all_pairs_dVV.size(); i < ie; ++i) {
+
+					h_good_one_all_pairdistsig->Fill(all_pairs_dVV[i]);
+
+				}
+
+				for (int i = 0, ie = all_pairs_chi2.size(); i < ie; ++i) {
+
+					h_good_one_all_pair_vertex_chi2->Fill(all_pairs_chi2[i]);
 
 				}
 
@@ -1087,7 +1144,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   //////////////////////////////////////////////////////////////////////
   // Merge vertices that are still "close". JMTBAD this doesn't do anything currently, only run in verbose mode
   //////////////////////////////////////////////////////////////////////
-
+  /*
   if (verbose)
     printf("fun2! before merge loop, # vertices = %lu\n", vertices->size());
   
@@ -1284,7 +1341,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		
 	}
   }
-
+  */
   
   //////////////////////////////////////////////////////////////////////
   // Drop tracks that "move" the vertex too much by refitting without each track.
