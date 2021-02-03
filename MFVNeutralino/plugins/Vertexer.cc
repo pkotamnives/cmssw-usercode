@@ -724,11 +724,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
               remove_from_0 = true;
 			reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.1;
           }
-		  else
+		  else if ((t_dist_0.second.significance() < t_dist_1.second.significance()) || (t_dist_0.second.significance() > t_dist_1.second.significance()))
 		  {
 			  if (t_dist_0.second.significance() < t_dist_1.second.significance())
 				  remove_from_1 = true;
-			  else
+			  if (t_dist_0.second.significance() > t_dist_1.second.significance())
 				  remove_from_0 = true;
 			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.2;
 		  }
