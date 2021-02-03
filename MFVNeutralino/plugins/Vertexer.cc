@@ -711,15 +711,20 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
             printf("      track-vertex1 dist (2d? %i) calc success? %i  dist %7.3f  sig %7.3f\n", use_2d_track_dist, t_dist_1.first, t_dist_1.second.value(), t_dist_1.second.significance());
           }
 
-		  reasons_track_remove = (!t_dist_0.first) || (!t_dist_1.first);
-          t_dist_0.first = t_dist_0.first && (t_dist_0.second.value() < max_track_vertex_dist || t_dist_0.second.significance() < max_track_vertex_sig);
-          t_dist_1.first = t_dist_1.first && (t_dist_1.second.value() < max_track_vertex_dist || t_dist_1.second.significance() < max_track_vertex_sig);
+		  if ((!t_dist_0.first) || (!t_dist_1.first)){
+			  reasons_track_remove = ((!t_dist_0.first) || (!t_dist_1.first))*1.0;
+		  }
+		  
+          //t_dist_0.first = t_dist_0.first && (t_dist_0.second.value() < max_track_vertex_dist || t_dist_0.second.significance() < max_track_vertex_sig);
+          //t_dist_1.first = t_dist_1.first && (t_dist_1.second.value() < max_track_vertex_dist || t_dist_1.second.significance() < max_track_vertex_sig);
+		  t_dist_0.first = t_dist_0.first && (t_dist_0.second.significance() < 5.0);
+		  t_dist_1.first = t_dist_1.first && (t_dist_1.second.significance() < 5.0);
           bool remove_from_0 = !t_dist_0.first;
           bool remove_from_1 = !t_dist_1.first;
 		  if ((remove_from_0) || (remove_from_1)) {
 			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.3;
 		  }
-          else if (t_dist_0.second.significance() < min_track_vertex_sig_to_remove && t_dist_1.second.significance() < min_track_vertex_sig_to_remove) {
+          else if (t_dist_0.second.significance() < 1.5 && t_dist_1.second.significance() < 1.5) {
             if (tracks[0].size() > tracks[1].size())
               remove_from_1 = true;
             else
