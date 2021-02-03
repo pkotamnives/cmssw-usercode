@@ -309,9 +309,9 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
 	
-	h_2D_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_track_miss_dist_all_pairs", "all events' track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 20, 40, 0, 20);
-	h_2D_poor_one_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_poor_one_track_miss_dist_all_pairs", "<5trk-1vtx/event's track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 20, 40, 0, 20);
-	h_2D_good_one_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_good_one_track_miss_dist_all_pairs", "<5trk->=2vtx/event's track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 20, 40, 0, 20);
+	h_2D_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_track_miss_dist_all_pairs", "all events' track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
+	h_2D_poor_one_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_poor_one_track_miss_dist_all_pairs", "<5trk-1vtx/event's track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
+	h_2D_good_one_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_good_one_track_miss_dist_all_pairs", "<5trk->=2vtx/event's track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
 	h_n_category_tracks = fs->make<TH1F>("h_n_category_tracks", "all events; Categories of reasons for tracks got removed", 4, 1, 1.4);
 	h_n_category_poor_one_tracks = fs->make<TH1F>("h_n_category_poor_one_tracks", "events with only one vertex with <5trk/vtx; Categories of reasons for tracks got removed", 4, 1, 1.4);
 	h_n_category_good_one_tracks = fs->make<TH1F>("h_n_category_good_one_tracks", "events with at least two vertices with <5trk/vtx; Categories of reasons for tracks got removed", 4, 1, 1.4);
@@ -724,11 +724,14 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
               remove_from_0 = true;
 			reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.1;
           }
-          else if (t_dist_0.second.significance() < t_dist_1.second.significance())
-            remove_from_1 = true;
-          else
-            remove_from_0 = true;
-		  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.2;
+		  else
+		  {
+			  if (t_dist_0.second.significance() < t_dist_1.second.significance())
+				  remove_from_1 = true;
+			  else
+				  remove_from_0 = true;
+			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.2;
+		  }
 
           if (verbose) {
             printf("   for tk %u:\n", tk.key());
