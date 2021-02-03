@@ -721,8 +721,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		  t_dist_1.first = t_dist_1.first && (t_dist_1.second.significance() < 5.0);
           bool remove_from_0 = !t_dist_0.first;
           bool remove_from_1 = !t_dist_1.first;
+		  bool turn_on_five = 0;
 		  if ((remove_from_0) || (remove_from_1)) {
 			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.3;
+			  turn_on_five = 1;
 		  }
           else if (t_dist_0.second.significance() < 1.5 && t_dist_1.second.significance() < 1.5) {
             if (tracks[0].size() > tracks[1].size())
@@ -731,7 +733,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
               remove_from_0 = true;
 			 reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.1;
           }
-		  else 
+		  else if (!turn_on_five)
 		  {
 			  if (t_dist_0.second.significance() < t_dist_1.second.significance())
 				  remove_from_1 = true;
