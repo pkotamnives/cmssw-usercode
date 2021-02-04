@@ -174,6 +174,8 @@ private:
   TH1F* h_max_noshare_track_multiplicity;
 
   TH2F* h_2D_track_miss_dist_all_pairs;
+  TH2F* h_2D_track_ntracks_inner_pairs;
+  TH2F* h_2D_track_ntracks_subouter_pairs;
   TH2F* h_2D_poor_one_track_miss_dist_all_pairs;
   TH2F* h_2D_good_one_track_miss_dist_all_pairs;
   TH1F* h_n_category_tracks;
@@ -310,6 +312,8 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
 	
 	h_2D_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_track_miss_dist_all_pairs", "all events' track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
+	h_2D_track_ntracks_inner_pairs = fs->make<TH2F>("h_2D_track_ntracks_inner_pairs", "all events' track arbitration with 1.1;vtx0's ntracks;vtx1's ntracks", 30, 0, 30, 30, 0, 30);
+	h_2D_track_ntracks_subouter_pairs = fs->make<TH2F>("h_2D_track_ntracks_subouter_pairs", "all events' track arbitration with 1.2;vtx0's ntracks;vtx1's ntracks", 30, 0, 30, 30, 0, 30);
 	h_2D_poor_one_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_poor_one_track_miss_dist_all_pairs", "<5trk-1vtx/event's track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
 	h_2D_good_one_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_good_one_track_miss_dist_all_pairs", "<5trk->=2vtx/event's track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
 	h_n_category_tracks = fs->make<TH1F>("h_n_category_tracks", "all events; Categories of reasons for tracks got removed", 4, 1, 1.4);
@@ -722,6 +726,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           bool remove_from_0 = !t_dist_0.first;
           bool remove_from_1 = !t_dist_1.first;
 		  bool turn_on_five = 0;
+		  bool turn_on_oneptfive = 0;
 		  if ((remove_from_0) || (remove_from_1)) {
 			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.3;
 			  turn_on_five = 1;
@@ -732,14 +737,17 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
             else
               remove_from_0 = true;
 			 reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.1;
+			 turn_on_oneptfive = 1;
+			 h_2D_track_ntracks_inner_pairs->Fill(v[0]->nTracks(), v[1]->nTracks());
           }
-		  else if (!turn_on_five)
+		  if (!turn_on_five && !turn_on_oneptfive)
 		  {
 			  if (t_dist_0.second.significance() < t_dist_1.second.significance())
 				  remove_from_1 = true;
 			  if (t_dist_0.second.significance() > t_dist_1.second.significance())
 				  remove_from_0 = true;
 			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.2;
+			  h_2D_track_ntracks_subouter_pairs->Fill(v[0]->nTracks(), v[1]->nTracks());
 		  }
 
           if (verbose) {
@@ -944,7 +952,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
       v[0] = vertices->begin() - 1;  // -1 because about to ++sv
       ++n_resets;
       if (verbose) printf("   resetting from vertices %lu and %lu. # of resets: %i\n", ivtx[0], ivtx[1], n_resets);
-      
       //if (n_resets == 3000)
       //  throw "I'm dumb";
     }
