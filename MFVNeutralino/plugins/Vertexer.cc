@@ -719,10 +719,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  reasons_track_remove = ((!t_dist_0.first) || (!t_dist_1.first))*1.0;
 		  }
 		  
-          //t_dist_0.first = t_dist_0.first && (t_dist_0.second.value() < max_track_vertex_dist || t_dist_0.second.significance() < max_track_vertex_sig);
-          //t_dist_1.first = t_dist_1.first && (t_dist_1.second.value() < max_track_vertex_dist || t_dist_1.second.significance() < max_track_vertex_sig);
-		  t_dist_0.first = t_dist_0.first && (t_dist_0.second.significance() < 5.0);
-		  t_dist_1.first = t_dist_1.first && (t_dist_1.second.significance() < 5.0);
+          t_dist_0.first = t_dist_0.first && (t_dist_0.second.value() < max_track_vertex_dist || t_dist_0.second.significance() < max_track_vertex_sig);
+          t_dist_1.first = t_dist_1.first && (t_dist_1.second.value() < max_track_vertex_dist || t_dist_1.second.significance() < max_track_vertex_sig);
+		  
           bool remove_from_0 = !t_dist_0.first;
           bool remove_from_1 = !t_dist_1.first;
 		  bool turn_on_five = 0;
@@ -731,7 +730,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  reasons_track_remove = ((remove_from_0) || (remove_from_1)) * 1.3;
 			  turn_on_five = 1;
 		  }
-          else if (t_dist_0.second.significance() < 1.5 && t_dist_1.second.significance() < 1.5) {
+          else if (t_dist_0.second.significance() < min_track_vertex_sig_to_remove && t_dist_1.second.significance() < min_track_vertex_sig_to_remove) {
             if (tracks[0].size() > tracks[1].size())
               remove_from_1 = true;
             else
