@@ -903,23 +903,23 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			  after_erase_ntracks.push_back(ttks.size());
 
 
-			  for (unsigned int i = 0; i < ttks.size(); ++i) {
+			  for (unsigned int j = 0; j < ttks.size(); ++j) {
 				  reco::TransientTrack keep_track;
-				  keep_track = ttks[i];
+				  keep_track = ttks[j];
 				  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(keep_track, vsave[i]);
 				  before_erase_keep_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
 			  }
-			  for (unsigned int i = 0; i < removed_ttks.size(); ++i) {
+			  for (unsigned int j = 0; j < removed_ttks.size(); ++j) {
 				  reco::TransientTrack removed_track;
-				  removed_track = removed_ttks[i];
+				  removed_track = removed_ttks[j];
 				  std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(removed_track, vsave[i]);
 				  before_erase_discard_tkvtxdistsig.push_back(tk_vtx_dist.second.significance());
 			  }
 
 			  std::vector<reco::TransientTrack> merged_ttks;
 
-			  for (int i = 0; i < 2; ++i) {
-				  for (auto tk : vertex_track_set(*v[i])) {
+			  for (int j = 0; j < 2; ++j) {
+				  for (auto tk : vertex_track_set(*v[j])) {
 					  merged_ttks.push_back(tt_builder->build(tk));
 				  }
 			  }

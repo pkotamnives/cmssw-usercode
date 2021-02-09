@@ -57,7 +57,7 @@ h_qual_nsv_lsp_r =  ROOT.TH1F ("h_qual_nsv_lsp_r", ";LSP r (cm)", 100, 0, 4)
 h_qual_nsv_lsp_z =  ROOT.TH1F ("h_qual_nsv_lsp_z", ";LSP z (cm)", 100, -25, 25)
 h_qual_nsv_lsp_seed_tracks =  ROOT.TH1F ("h_qual_nsv_lsp_seed_tracks", ";# of seed tracks/LSP", 50, 0, 50)
 
-h_qual_nsv_distr_sv_lsp =  ROOT.TH1F ("h_qual_nsv_distr_sv_lsp", ";>=5trk-SV's r - closest gen LSP's r (cm)", 200, 0, 0.2)
+h_qual_nsv_distr_sv_lsp =  ROOT.TH1F ("h_qual_nsv_distr_sv_lsp", ";>=5trk-SV's r - closest gen LSP's r (cm)", 200, -0.08, 0.08)
 h_qual_nsv_dphi_sv_lsp =  ROOT.TH1F ("h_qual_nsv_dphi_sv_lsp", ";deltaPhi(>=5trk-SV, closest gen LSP)", 314, 0, 3.14)
 h_qual_nsv_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_dist3d_sv_lsp", ";dist3d(>=5trk-SV, closest gen LSP) (cm)", 200, 0, 0.2)
 h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist3d_sv_lsp", ";N#sigma(dist3d(>=5trk-SV, closest gen LSP))", 200, 0, 100)
