@@ -105,7 +105,7 @@ private:
     if (ttks.size() < 2)
       return std::vector<TransientVertex>();
     std::vector<TransientVertex> v(1, kv_reco->vertex(ttks));
-    if (v[0].normalisedChiSquared() > 5)
+    if (v[0].normalisedChiSquared() > 15)
       return std::vector<TransientVertex>();
     return v;
   }
@@ -172,6 +172,11 @@ private:
   TH1F* h_noshare_vertex_pairdphi;
   TH1F* h_noshare_track_multiplicity;
   TH1F* h_max_noshare_track_multiplicity;
+
+  // extra plots
+  TH1F* h_noshare_missdist4sigma_vertex_chi2;
+  TH1F* h_n_noshare_missdist4sigma_moreor5trks_vertices;
+  TH1F* h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices;
 
   TH2F* h_2D_track_miss_dist_all_pairs;
   TH2F* h_2D_track_ntracks_inner_pairs;
@@ -293,12 +298,12 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_n_noshare_vertices             = fs->make<TH1F>("h_n_noshare_vertices",             "; # of vertices/event(no shared tracks)", 50,   0,    50);
 	h_n_noshare_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_moreor5trks_vertices", "; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
 	h_n_noshare_moreor5trks_no_vertex_noshare_vertices = fs->make<TH1F>("h_n_noshare_moreor5trks_no_vertex_noshare_vertices", "; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
-	h_noshare_vertex_tkvtxdist       = fs->make<TH1F>("h_noshare_vertex_tkvtxdist",       "", 100,  0,   0.1);
-    h_noshare_vertex_tkvtxdisterr    = fs->make<TH1F>("h_noshare_vertex_tkvtxdisterr",    "", 100,  0,   0.1);
-    h_noshare_vertex_tkvtxdistsig    = fs->make<TH1F>("h_noshare_vertex_tkvtxdistsig",    "", 100,  0,     6);
+	h_noshare_vertex_tkvtxdist       = fs->make<TH1F>("h_noshare_vertex_tkvtxdist",       ";3D missdist (cm)", 100,  0,   0.1);
+    h_noshare_vertex_tkvtxdisterr    = fs->make<TH1F>("h_noshare_vertex_tkvtxdisterr",    ";missdist err (cm)", 100,  0,   0.1);
+    h_noshare_vertex_tkvtxdistsig    = fs->make<TH1F>("h_noshare_vertex_tkvtxdistsig",    ";missdist sig", 100,  0,     6);
     h_noshare_vertex_ntracks         = fs->make<TH1F>("h_noshare_vertex_ntracks",         "",  30,  0, 30);
     h_noshare_vertex_track_weights   = fs->make<TH1F>("h_noshare_vertex_track_weights",   "",  21,   0,      1.05);
-    h_noshare_vertex_chi2            = fs->make<TH1F>("h_noshare_vertex_chi2",            "", 20,   0, max_seed_vertex_chi2);
+    h_noshare_vertex_chi2            = fs->make<TH1F>("h_noshare_vertex_chi2",            ";chi2/dof", 20,   0, max_seed_vertex_chi2);
     h_noshare_vertex_ndof            = fs->make<TH1F>("h_noshare_vertex_ndof",            "", 10,   0,     20);
     h_noshare_vertex_x               = fs->make<TH1F>("h_noshare_vertex_x",               "", 100,  -1,      1);
     h_noshare_vertex_y               = fs->make<TH1F>("h_noshare_vertex_y",               "", 100,  -1,      1);
@@ -310,7 +315,11 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_vertex_pairdphi        = fs->make<TH1F>("h_noshare_vertex_pairdphi",           "", 100,  -3.15,   3.15);
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
-	
+
+	h_noshare_missdist4sigma_vertex_chi2 = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_chi2", "vertices applied track miss dist sig < 4;chi2/dof", 20, 0, max_seed_vertex_chi2);
+	h_n_noshare_missdist4sigma_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_vertices", "vertices applied track miss dist sig < 4; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
+	h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices", "vertices applied track miss dist sig < 4; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
+
 	h_2D_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_track_miss_dist_all_pairs", "all events' track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
 	h_2D_track_ntracks_inner_pairs = fs->make<TH2F>("h_2D_track_ntracks_inner_pairs", "all events' track arbitration with 1.1;vtx0's ntracks;vtx1's ntracks", 30, 0, 30, 30, 0, 30);
 	h_2D_track_ntracks_subouter_pairs = fs->make<TH2F>("h_2D_track_ntracks_subouter_pairs", "all events' track arbitration with 1.2;vtx0's ntracks;vtx1's ntracks", 30, 0, 30, 30, 0, 30);
@@ -1135,6 +1144,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
   if (histos || verbose) {
     std::map<reco::TrackRef, int> track_use;
+	int count_missdist4sigma_moreor5trks_vertices = 0;
+
     for (size_t i = 0, ie = vertices->size(); i < ie; ++i) {
       const reco::Vertex& v = vertices->at(i);
       const int ntracks = v.nTracks();
@@ -1158,6 +1169,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
       if (histos) {
         h_noshare_vertex_ntracks->Fill(ntracks);
+		std::vector<reco::TransientTrack> missdist4sigma_ttks;
         for (auto it = v.tracks_begin(), ite = v.tracks_end(); it != ite; ++it) {
 	  h_noshare_vertex_track_weights->Fill(v.trackWeight(*it));
 
@@ -1167,6 +1179,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  h_noshare_vertex_tkvtxdist->Fill(tk_vtx_dist.second.value());
 	  h_noshare_vertex_tkvtxdisterr->Fill(tk_vtx_dist.second.error());
 	  h_noshare_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
+	  if (tk_vtx_dist.second.significance() < 4) {
+		  missdist4sigma_ttks.push_back(seed_track);
+	  }
 	}
         h_noshare_vertex_chi2->Fill(vchi2);
         h_noshare_vertex_ndof->Fill(vndof);
@@ -1176,6 +1191,16 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         h_noshare_vertex_phi->Fill(phi);
         h_noshare_vertex_z->Fill(vz);
         h_noshare_vertex_r->Fill(r);
+
+		reco::Vertex missdist4sigma_v;
+		for (const TransientVertex& tv : kv_reco_dropin_nocut(missdist4sigma_ttks))
+			missdist4sigma_v = reco::Vertex(tv);
+		double missdist4sigma_vchi2 = missdist4sigma_v.normalizedChi2();
+		h_noshare_missdist4sigma_vertex_chi2->Fill(missdist4sigma_vchi2);
+		if (missdist4sigma_v.nTracks() >= 5) {
+			++count_missdist4sigma_moreor5trks_vertices;
+		}
+
 
         for (size_t j = i+1, je = vertices->size(); j < je; ++j) {
           const reco::Vertex& vj = vertices->at(j);
@@ -1187,6 +1212,12 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         }
       }
     }
+
+	h_n_noshare_missdist4sigma_moreor5trks_vertices->Fill(count_missdist4sigma_moreor5trks_vertices);
+	int noshare_vertices = vertices->size();
+	if (count_missdist4sigma_moreor5trks_vertices == 0) {
+		h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices->Fill(noshare_vertices);
+	}
     
     if (verbose)
       printf("track multiple uses:\n");
