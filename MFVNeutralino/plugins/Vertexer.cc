@@ -1196,7 +1196,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  h_noshare_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
 	  if (tk_vtx_dist.second.significance() < 4) {
 		  missdist4sigma_ttks.push_back(seed_track);
-		  trim_ttks.push_back(seed_track);
 
 	  }
 	  
@@ -1222,6 +1221,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(missdist4sigma_track, missdist4sigma_v);
 			h_noshare_missdist4sigma_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
 			missdist4sigma_trim_ttks_missdist_sig.push_back(tk_vtx_dist.second.significance());
+			trim_ttks.push_back(missdist4sigma_track);
 		}
 		
 		if (missdist4sigma_v.nTracks() >= 5) {
@@ -1234,16 +1234,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		
 			while (!missdist4sigma_trim_ttks_missdist_sig.empty() && *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) > 4) {
 				++count_trim_worsttrack;
+
 				int max_missdist_sig_idx = std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) - missdist4sigma_trim_ttks_missdist_sig.begin();
-
-				std::vector<reco::TransientTrack> ttks;
-				for (auto tk : tracks[i])
-					if (tk != trim_ttks[max_missdist_sig_idx]) {
-						ttks.push_back(seed_tracks[seed_track_ref_map[tk]]);
-					}
-				trim_ttks = ttks; 
-
-
+				trim_ttks.erase(std::remove(trim_ttks.begin(), trim_ttks.end(), max_missdist_sig_idx), trim_ttks.end());
 
 				double trim_v0x = trim_v.position().x() - bsx;
 				double trim_v0y = trim_v.position().y() - bsy;
