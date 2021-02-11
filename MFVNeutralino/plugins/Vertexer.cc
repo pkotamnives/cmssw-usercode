@@ -175,8 +175,14 @@ private:
 
   // extra plots
   TH1F* h_noshare_missdist4sigma_vertex_chi2;
+  TH1F* h_noshare_missdist4sigma_vertex_tkvtxdistsig;
   TH1F* h_n_noshare_missdist4sigma_moreor5trks_vertices;
   TH1F* h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices;
+
+  TH1F* h_noshare_trim_vertex_chi2;
+  TH1F* h_noshare_trim_vertex_tkvtxdistsig;
+  TH1F* h_noshare_trim_vertex_distr_shift;
+  TH1F* h_n_noshare_trim_moreor5trks_vertices;
 
   TH2F* h_2D_track_miss_dist_all_pairs;
   TH2F* h_2D_track_ntracks_inner_pairs;
@@ -317,9 +323,15 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
 
 	h_noshare_missdist4sigma_vertex_chi2 = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_chi2", "vertices applied track miss dist sig < 4;chi2/dof", 20, 0, max_seed_vertex_chi2);
+	h_noshare_missdist4sigma_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_tkvtxdistsig", "vertices applied track miss dist sig < 4;missdist sig", 100, 0, 6);
 	h_n_noshare_missdist4sigma_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_vertices", "vertices applied track miss dist sig < 4; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
 	h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices", "vertices applied track miss dist sig < 4; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
 
+	h_noshare_trim_vertex_chi2 = fs->make<TH1F>("h_noshare_trim_vertex_chi2", "vertices applied track miss dist sig < 4 && trimmed worst track ;chi2/dof", 20, 0, max_seed_vertex_chi2);
+	h_noshare_trim_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_trim_vertex_tkvtxdistsig", "vertices applied track miss dist sig < 4  && trimmed worst track ;missdist sig", 100, 0, 6);
+	h_noshare_trim_vertex_distr_shift = fs->make<TH1F>("h_noshare_trim_vertex_distr_shift", "vertices applied track miss dist sig < 4  && trimmed worst track ;vtx after'r - vtx before'r (cm)", 200, -0.08, 0.08);
+	h_n_noshare_trim_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_trim_moreor5trks_vertices", "vertices applied track miss dist sig < 4  && trimmed worst track ; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
+	
 	h_2D_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_track_miss_dist_all_pairs", "all events' track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
 	h_2D_track_ntracks_inner_pairs = fs->make<TH2F>("h_2D_track_ntracks_inner_pairs", "all events' track arbitration with 1.1;vtx0's ntracks;vtx1's ntracks", 30, 0, 30, 30, 0, 30);
 	h_2D_track_ntracks_subouter_pairs = fs->make<TH2F>("h_2D_track_ntracks_subouter_pairs", "all events' track arbitration with 1.2;vtx0's ntracks;vtx1's ntracks", 30, 0, 30, 30, 0, 30);
@@ -1145,6 +1157,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   if (histos || verbose) {
     std::map<reco::TrackRef, int> track_use;
 	int count_missdist4sigma_moreor5trks_vertices = 0;
+	int count_trim_moreor5trks_vertices = 0;
 
     for (size_t i = 0, ie = vertices->size(); i < ie; ++i) {
       const reco::Vertex& v = vertices->at(i);
@@ -1170,6 +1183,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
       if (histos) {
         h_noshare_vertex_ntracks->Fill(ntracks);
 		std::vector<reco::TransientTrack> missdist4sigma_ttks;
+		std::vector<double> missdist4sigma_trim_ttks_missdist_sig;
         for (auto it = v.tracks_begin(), ite = v.tracks_end(); it != ite; ++it) {
 	  h_noshare_vertex_track_weights->Fill(v.trackWeight(*it));
 
@@ -1181,7 +1195,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  h_noshare_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
 	  if (tk_vtx_dist.second.significance() < 4) {
 		  missdist4sigma_ttks.push_back(seed_track);
+
 	  }
+	  
 	}
         h_noshare_vertex_chi2->Fill(vchi2);
         h_noshare_vertex_ndof->Fill(vndof);
@@ -1191,14 +1207,73 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         h_noshare_vertex_phi->Fill(phi);
         h_noshare_vertex_z->Fill(vz);
         h_noshare_vertex_r->Fill(r);
-
+		
 		reco::Vertex missdist4sigma_v;
 		for (const TransientVertex& tv : kv_reco_dropin_nocut(missdist4sigma_ttks))
 			missdist4sigma_v = reco::Vertex(tv);
 		double missdist4sigma_vchi2 = missdist4sigma_v.normalizedChi2();
 		h_noshare_missdist4sigma_vertex_chi2->Fill(missdist4sigma_vchi2);
+
+		for (auto it = missdist4sigma_v.tracks_begin(), ite = missdist4sigma_v.tracks_end(); it != ite; ++it) {
+			reco::TransientTrack missdist4sigma_track;
+			missdist4sigma_track = tt_builder->build(*it.operator*());
+			std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(missdist4sigma_track, missdist4sigma_v);
+			h_noshare_missdist4sigma_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
+			missdist4sigma_trim_ttks_missdist_sig.push_back(tk_vtx_dist.second.significance());
+		}
+		
 		if (missdist4sigma_v.nTracks() >= 5) {
 			++count_missdist4sigma_moreor5trks_vertices;
+		}
+
+		int count_trim_worsttrack = 0;
+		std::vector<reco::TransientTrack> trim_ttks;
+		reco::Vertex trim_v = missdist4sigma_v;
+		trim_ttks = missdist4sigma_ttks;
+		
+			while (!missdist4sigma_trim_ttks_missdist_sig.empty() && *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) > 4) {
+				++count_trim_worsttrack;
+				double max_missdist_sig = *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end());
+				int max_missdist_sig_idx = std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) - missdist4sigma_trim_ttks_missdist_sig.begin();
+
+				trim_ttks.erase(std::remove(trim_ttks.begin(), trim_ttks.end(), max_missdist_sig_idx), trim_ttks.end());
+
+				double trim_v0x = trim_v.position().x() - bsx;
+				double trim_v0y = trim_v.position().y() - bsy;
+				double trim_v0r = mag(trim_v0x, trim_v0y);
+
+				for (const TransientVertex& tv : kv_reco_dropin_nocut(trim_ttks))
+					trim_v = reco::Vertex(tv);
+
+				double trim_v1x = trim_v.position().x() - bsx;
+				double trim_v1y = trim_v.position().y() - bsy;
+				double trim_v1r = mag(trim_v1x, trim_v1y);
+
+				double distr = trim_v1r - trim_v0r;
+				h_noshare_trim_vertex_distr_shift->Fill(distr);
+
+				missdist4sigma_trim_ttks_missdist_sig.clear();
+				for (auto it = trim_v.tracks_begin(), ite = trim_v.tracks_end(); it != ite; ++it) {
+					reco::TransientTrack trim_track;
+					trim_track = tt_builder->build(*it.operator*());
+					std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(trim_track, trim_v);
+					missdist4sigma_trim_ttks_missdist_sig.push_back(tk_vtx_dist.second.significance());
+				}
+
+
+			}
+		
+
+		std::cout << "the number of trimming is " << count_trim_worsttrack << std::endl;
+		double trim_vchi2 = trim_v.normalizedChi2();
+		h_noshare_trim_vertex_chi2->Fill(trim_vchi2);
+
+		for (unsigned int i = 0, ie = missdist4sigma_trim_ttks_missdist_sig.size(); i < ie; ++i) {
+			h_noshare_trim_vertex_tkvtxdistsig->Fill(missdist4sigma_trim_ttks_missdist_sig[i]);
+		}
+
+		if (trim_v.nTracks() >= 5) {
+			++count_trim_moreor5trks_vertices;
 		}
 
 
@@ -1211,6 +1286,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           h_noshare_vertex_pairdphi->Fill(reco::deltaPhi(phi, phij));
         }
       }
+	  vertices->at(i) = trim_v;
     }
 
 	h_n_noshare_missdist4sigma_moreor5trks_vertices->Fill(count_missdist4sigma_moreor5trks_vertices);
@@ -1218,6 +1294,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	if (count_missdist4sigma_moreor5trks_vertices == 0) {
 		h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices->Fill(noshare_vertices);
 	}
+
+	h_n_noshare_trim_moreor5trks_vertices->Fill(count_trim_moreor5trks_vertices);
     
     if (verbose)
       printf("track multiple uses:\n");
