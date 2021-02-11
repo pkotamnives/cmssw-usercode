@@ -1236,7 +1236,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				++count_trim_worsttrack;
 
 				int max_missdist_sig_idx = std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) - missdist4sigma_trim_ttks_missdist_sig.begin();
-				trim_ttks.erase(std::remove(trim_ttks.begin(), trim_ttks.end(), max_missdist_sig_idx), trim_ttks.end());
+				trim_ttks.erase(trim_ttks.begin() + max_missdist_sig_idx);
 
 				double trim_v0x = trim_v.position().x() - bsx;
 				double trim_v0y = trim_v.position().y() - bsy;
