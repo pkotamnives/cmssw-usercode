@@ -1233,7 +1233,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		
 			while (!missdist4sigma_trim_ttks_missdist_sig.empty() && *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) > 4) {
 				++count_trim_worsttrack;
-				double max_missdist_sig = *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end());
 				int max_missdist_sig_idx = std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) - missdist4sigma_trim_ttks_missdist_sig.begin();
 
 				trim_ttks.erase(std::remove(trim_ttks.begin(), trim_ttks.end(), max_missdist_sig_idx), trim_ttks.end());
@@ -1285,8 +1284,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           h_noshare_vertex_paird2d->Fill(mag(vx - vjx, vy - vjy));
           h_noshare_vertex_pairdphi->Fill(reco::deltaPhi(phi, phij));
         }
+
+		vertices->at(i) = trim_v;
       }
-	  vertices->at(i) = trim_v;
+	  
     }
 
 	h_n_noshare_missdist4sigma_moreor5trks_vertices->Fill(count_missdist4sigma_moreor5trks_vertices);
