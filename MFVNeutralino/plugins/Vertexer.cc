@@ -1160,7 +1160,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	int count_trim_moreor5trks_vertices = 0;
 
     for (size_t i = 0, ie = vertices->size(); i < ie; ++i) {
-      const reco::Vertex& v = vertices->at(i);
+      reco::Vertex& v = vertices->at(i);
       const int ntracks = v.nTracks();
       const double vchi2 = v.normalizedChi2();
       const double vndof = v.ndof();
@@ -1212,7 +1212,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
         h_noshare_vertex_r->Fill(r);
 
 		for (auto tk : set_missdist4sigma_tks) {
-			missdist4sigma_ttks.push_back(tt_builder->build(tks))
+			missdist4sigma_ttks.push_back(tt_builder->build(tk));
 		}
 		
 		reco::Vertex missdist4sigma_v;
@@ -1240,8 +1240,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 		int count_trim_worsttrack = 0;
 		reco::Vertex trim_v = missdist4sigma_v;
+
+		for (auto tk : set_trim_tks) {
+			trim_ttks.push_back(tt_builder->build(tk));
+		}
 		
-		/*
 		
 			while (missdist4sigma_trim_ttks_missdist_sig.size() > 2 && *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) > 4) {
 				++count_trim_worsttrack;
@@ -1266,16 +1269,16 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 				missdist4sigma_trim_ttks_missdist_sig.clear();
 
-				for (unsigned int j = 0; j < trim_ttks.size(); ++j) {
+				for (auto it = trim_v.tracks_begin(), ite = trim_v.tracks_end(); it != ite; ++it) {
 					reco::TransientTrack trim_track;
-					trim_track = trim_ttks[j];
+					trim_track = tt_builder->build(*it.operator*());
 					std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(trim_track, trim_v);
 					missdist4sigma_trim_ttks_missdist_sig.push_back(tk_vtx_dist.second.significance());
 				}
 
 			}
 		
-		*/
+		
 		std::cout << "the number of trimming is " << count_trim_worsttrack << std::endl;
 		double trim_vchi2 = trim_v.normalizedChi2();
 		h_noshare_trim_vertex_chi2->Fill(trim_vchi2);
@@ -1298,23 +1301,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
           h_noshare_vertex_pairdphi->Fill(reco::deltaPhi(phi, phij));
         }
 
-		const track_vec tks = vertex_track_vec(v);
-		const size_t ntks = tks.size();
-
-		std::vector<reco::TransientTrack> ttks(ntks - 1);
-		for (size_t i = 0; i < ntks; ++i) {
-			
-					ttks[j - (j >= i)] = tt_builder->build(tks[j]);
-
-			reco::Vertex vnm1(TransientVertex(kv_reco->vertex(ttks)));
-			
-			
-
-				v = trim_v;
-				
-			
-		}
-		//vertices->at(i) = trim_v;
+		v = trim_v;
       }
 	  
     }
