@@ -421,3 +421,18 @@ h_qual_nsv_significance_dist3d_sv_lsp.Draw("colz")
 c23.Print (outputdir+"h_qual_nsv_significance_dist3d_sv_lsp.png")
 c23.Print (outputdir+"h_qual_nsv_significance_dist3d_sv_lsp.root")
 
+c24 = ROOT.TCanvas()
+h_unqual_type4_dBV.Draw("colz")
+c24.Print (outputdir+"h_unqual_type4_dBV.png")
+c24.Print (outputdir+"h_unqual_type4_dBV.root")
+
+c25 = ROOT.TCanvas()
+h_unqual_type4_distr.Draw("colz")
+c25.Print (outputdir+"h_unqual_type4_distr.png")
+c25.Print (outputdir+"h_unqual_type4_distr.root")
+
+c26 = ROOT.TCanvas()
+h_unqual_type4_bs2derr.Draw("colz")
+c26.Print (outputdir+"h_unqual_type4_bs2derr.png")
+c26.Print (outputdir+"h_unqual_type4_bs2derr.root")
+
