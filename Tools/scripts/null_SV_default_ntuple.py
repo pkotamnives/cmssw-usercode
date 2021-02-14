@@ -62,6 +62,10 @@ h_qual_nsv_dphi_sv_lsp =  ROOT.TH1F ("h_qual_nsv_dphi_sv_lsp", ";deltaPhi(>=5trk
 h_qual_nsv_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_dist3d_sv_lsp", ";dist3d(>=5trk-SV, closest gen LSP) (cm)", 200, 0, 0.2)
 h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist3d_sv_lsp", ";N#sigma(dist3d(>=5trk-SV, closest gen LSP))", 200, 0, 100)
 
+h_unqual_type4_dBV =  ROOT.TH1F("h_unqual_type4_dBV", ";dist2d(beamspot, unqual >=5trk-SV in a hemisphere) (cm);arb. units", 500, 0, 2.5); 
+h_unqual_type4_distr =  ROOT.TH1F("h_unqual_type4_dr", "; unqual >=5trk-SV's r (cm);arb. units", 100, 0, 4);
+h_unqual_type4_bs2derr =  ROOT.TH1F("h_unqual_type4_bs2derr", "; unqual >=5trk-SV's bs2derr (cm);arb. units", 1000, 0, 0.05);
+
 nevents_processed = 0
 nevents_fiducial_cuts = 0
 nevents_nsv01_fiducial_cuts = 0
@@ -175,6 +179,12 @@ for event1 in events_ntuple1 :
                             h_unqual_nsv.Fill(3)
                         if ls_of_unqual_nsv_lsp0[0].ntracks()>=5:
                             h_unqual_nsv.Fill(4)
+                            vtx_ntuple1 = ls_of_unqual_nsv_lsp0[0]
+                            dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
+                            h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
+                            h_unqual_type4_distr.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
+                            h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
+
                    if len(ls_of_unqual_nsv_lsp0) == 2:
                         if ls_of_unqual_nsv_lsp0[0].ntracks()<5 and ls_of_unqual_nsv_lsp0[1].ntracks()<5 :
                             h_unqual_nsv.Fill(5)
@@ -240,6 +250,11 @@ for event1 in events_ntuple1 :
                             h_unqual_nsv.Fill(3)
                         if ls_of_unqual_nsv_lsp1[0].ntracks()>=5:
                             h_unqual_nsv.Fill(4)
+                            vtx_ntuple1 = ls_of_unqual_nsv_lsp1[0]
+                            dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
+                            h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
+                            h_unqual_type4_distr.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
+                            h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                    if len(ls_of_unqual_nsv_lsp1) == 2:
                         if ls_of_unqual_nsv_lsp1[0].ntracks()<5 and ls_of_unqual_nsv_lsp1[1].ntracks()<5 :
                             h_unqual_nsv.Fill(5)
