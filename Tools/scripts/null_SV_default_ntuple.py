@@ -50,10 +50,10 @@ h_significance_dist3d_to_lsp_SV2 = ROOT.TH1F ("h_significance_dist3d_to_lsp_SV2"
 h_ntracks_SV2 = ROOT.TH1F ("h_ntracks_SV2", ";# of tracks/<5trk-SV2", 10, 0, 10)
 h_mass_SV2 = ROOT.TH1F ("h_mass_SV2", ";SV2 tracks-plus-jets-by-ntracks mass (GeV)", 100, 0, 5000)
 
-h_non_qual_nsv_lsp_r =  ROOT.TH1F ("h_non_qual_nsv_lsp_r", ";LSP r (cm)", 100, 0, 4)
+h_non_qual_nsv_lsp_r =  ROOT.TH1F ("h_non_qual_nsv_lsp_r", ";LSP r (cm)", 100, 0, 0.5)
 h_non_qual_nsv_lsp_z =  ROOT.TH1F ("h_non_qual_nsv_lsp_z", ";LSP z (cm)", 100, -25, 25)
 h_non_qual_nsv_lsp_seed_tracks =  ROOT.TH1F ("h_non_qual_nsv_lsp_seed_tracks", ";# of seed tracks/LSP", 50, 0, 50)
-h_qual_nsv_lsp_r =  ROOT.TH1F ("h_qual_nsv_lsp_r", ";LSP r (cm)", 100, 0, 4)
+h_qual_nsv_lsp_r =  ROOT.TH1F ("h_qual_nsv_lsp_r", ";LSP r (cm)", 100, 0, 0.5)
 h_qual_nsv_lsp_z =  ROOT.TH1F ("h_qual_nsv_lsp_z", ";LSP z (cm)", 100, -25, 25)
 h_qual_nsv_lsp_seed_tracks =  ROOT.TH1F ("h_qual_nsv_lsp_seed_tracks", ";# of seed tracks/LSP", 50, 0, 50)
 
@@ -63,8 +63,10 @@ h_qual_nsv_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_dist3d_sv_lsp", ";dist3d(>=5tr
 h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist3d_sv_lsp", ";N#sigma(dist3d(>=5trk-SV, closest gen LSP))", 200, 0, 100)
 
 h_unqual_type4_dBV =  ROOT.TH1F("h_unqual_type4_dBV", ";dist2d(beamspot, unqual >=5trk-SV in a hemisphere) (cm);arb. units", 100, 0, 0.02); 
-h_unqual_type4_distr =  ROOT.TH1F("h_unqual_type4_dr", "; unqual >=5trk-SV's r (cm);arb. units", 100, 0, 4);
+h_unqual_type4_r =  ROOT.TH1F("h_unqual_type4_r", "; unqual >=5trk-SV's r (cm);arb. units", 100, 0, 2);
 h_unqual_type4_bs2derr =  ROOT.TH1F("h_unqual_type4_bs2derr", "; unqual >=5trk-SV's bs2derr (cm);arb. units", 100, 0, 0.01);
+h_unqual_type4_distr_sv_lsp =  ROOT.TH1F("h_unqual_type4_distr_sv_lsp", "; unqual >=5trk-SV's r - closest gen LSP's r (cm);arb. units", 200, -0.08, 0.08);
+h_non_qual_nsv_distr_sv_lsp =  ROOT.TH1F ("h_non_qual_nsv_distr_sv_lsp", ";unqualified-SV's r - closest gen LSP's r (cm)", 200, -0.08, 0.08)
 
 nevents_processed = 0
 nevents_fiducial_cuts = 0
@@ -91,7 +93,7 @@ for event1 in events_ntuple1 :
    
 
     nevents_processed += 1
-    if nevents_processed <= 80 :
+    if nevents_processed <= 1000 :
          if 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
         #if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # no apply fiducial cuts
             
@@ -142,6 +144,7 @@ for event1 in events_ntuple1 :
                    unqual_nsv_lsp0 = 0
                    for unqual_vtx in ls_of_unqual_nsv_lsp0:
                            unqual_nsv_lsp0 += 1
+                           h_non_qual_nsv_distr_sv_lsp.Fill(math.sqrt(unqual_vtx.x**2 + unqual_vtx.y**2)- math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
                            if unqual_nsv_lsp0 == 1 :
                                h_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3dsig())
@@ -182,8 +185,9 @@ for event1 in events_ntuple1 :
                             vtx_ntuple1 = ls_of_unqual_nsv_lsp0[0]
                             dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
                             h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
-                            h_unqual_type4_distr.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
+                            h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
+                            h_unqual_type4_distr_sv_lsp.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2)- math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
 
                    if len(ls_of_unqual_nsv_lsp0) == 2:
                         if ls_of_unqual_nsv_lsp0[0].ntracks()<5 and ls_of_unqual_nsv_lsp0[1].ntracks()<5 :
@@ -214,6 +218,7 @@ for event1 in events_ntuple1 :
                    unqual_nsv_lsp1 = 0
                    for unqual_vtx in ls_of_unqual_nsv_lsp1:
                            unqual_nsv_lsp1 += 1
+                           h_non_qual_nsv_distr_sv_lsp.Fill(math.sqrt(unqual_vtx.x**2 + unqual_vtx.y**2)- math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
                            if unqual_nsv_lsp1 == 1 :
                                h_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3ddist)
                                h_significance_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3dsig())
@@ -253,8 +258,10 @@ for event1 in events_ntuple1 :
                             vtx_ntuple1 = ls_of_unqual_nsv_lsp1[0]
                             dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
                             h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
-                            h_unqual_type4_distr.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
+                            h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
+                            h_unqual_type4_distr_sv_lsp.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2)- math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
+
                    if len(ls_of_unqual_nsv_lsp1) == 2:
                         if ls_of_unqual_nsv_lsp1[0].ntracks()<5 and ls_of_unqual_nsv_lsp1[1].ntracks()<5 :
                             h_unqual_nsv.Fill(5)
@@ -285,9 +292,9 @@ for event1 in events_ntuple1 :
 
 
 
-print "Total processed event (5000 events) #%s" % (nevents_processed-1)
+print "Total processed event #%s" % (nevents_processed-1)
 print "Total processed event (fiducial) #%s" % (nevents_fiducial_cuts)
-print "Total nsv<2 events in ntuple1 (ficudial) #%s" % (nevents_nsv01_fiducial_cuts)
+print "Total nsv<2 events (ficudial) #%s" % (nevents_nsv01_fiducial_cuts)
 
 # make a canvas, draw, and save it
 
@@ -427,12 +434,22 @@ c24.Print (outputdir+"h_unqual_type4_dBV.png")
 c24.Print (outputdir+"h_unqual_type4_dBV.root")
 
 c25 = ROOT.TCanvas()
-h_unqual_type4_distr.Draw("colz")
-c25.Print (outputdir+"h_unqual_type4_distr.png")
-c25.Print (outputdir+"h_unqual_type4_distr.root")
+h_unqual_type4_r.Draw("colz")
+c25.Print (outputdir+"h_unqual_type4_r.png")
+c25.Print (outputdir+"h_unqual_type4_r.root")
 
 c26 = ROOT.TCanvas()
 h_unqual_type4_bs2derr.Draw("colz")
 c26.Print (outputdir+"h_unqual_type4_bs2derr.png")
 c26.Print (outputdir+"h_unqual_type4_bs2derr.root")
+
+c27 = ROOT.TCanvas()
+h_unqual_type4_distr_sv_lsp.Draw("colz")
+c27.Print (outputdir+"h_unqual_type4_distr_sv_lsp.png")
+c27.Print (outputdir+"h_unqual_type4_distr_sv_lsp.root")
+
+c28 = ROOT.TCanvas()
+h_non_qual_nsv_distr_sv_lsp.Draw("colz")
+c28.Print (outputdir+"h_non_qual_nsv_distr_sv_lsp.png")
+c28.Print (outputdir+"h_non_qual_nsv_distr_sv_lsp.root")
 
