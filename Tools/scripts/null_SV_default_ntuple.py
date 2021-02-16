@@ -62,9 +62,9 @@ h_qual_nsv_dphi_sv_lsp =  ROOT.TH1F ("h_qual_nsv_dphi_sv_lsp", ";deltaPhi(>=5trk
 h_qual_nsv_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_dist3d_sv_lsp", ";dist3d(>=5trk-SV, closest gen LSP) (cm)", 200, 0, 0.2)
 h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist3d_sv_lsp", ";N#sigma(dist3d(>=5trk-SV, closest gen LSP))", 200, 0, 100)
 
-h_unqual_type4_dBV =  ROOT.TH1F("h_unqual_type4_dBV", ";dist2d(beamspot, unqual >=5trk-SV in a hemisphere) (cm);arb. units", 500, 0, 2.5); 
+h_unqual_type4_dBV =  ROOT.TH1F("h_unqual_type4_dBV", ";dist2d(beamspot, unqual >=5trk-SV in a hemisphere) (cm);arb. units", 100, 0, 0.02); 
 h_unqual_type4_distr =  ROOT.TH1F("h_unqual_type4_dr", "; unqual >=5trk-SV's r (cm);arb. units", 100, 0, 4);
-h_unqual_type4_bs2derr =  ROOT.TH1F("h_unqual_type4_bs2derr", "; unqual >=5trk-SV's bs2derr (cm);arb. units", 1000, 0, 0.05);
+h_unqual_type4_bs2derr =  ROOT.TH1F("h_unqual_type4_bs2derr", "; unqual >=5trk-SV's bs2derr (cm);arb. units", 100, 0, 0.01);
 
 nevents_processed = 0
 nevents_fiducial_cuts = 0
