@@ -57,7 +57,7 @@ h_qual_nsv_lsp_r =  ROOT.TH1F ("h_qual_nsv_lsp_r", ";LSP r w.r.t bsp  (cm)", 100
 h_qual_nsv_lsp_z =  ROOT.TH1F ("h_qual_nsv_lsp_z", ";LSP z (cm)", 100, -25, 25)
 h_qual_nsv_lsp_seed_tracks =  ROOT.TH1F ("h_qual_nsv_lsp_seed_tracks", ";# of seed tracks/LSP", 50, 0, 50)
 
-h_qual_nsv_distr_sv_lsp =  ROOT.TH1F ("h_qual_nsv_distr_sv_lsp", ";>=5trk-SV's r - closest gen LSP's r (cm)", 200, -0.08, 0.08)
+h_qual_nsv_distr_sv_lsp =  ROOT.TH1F ("h_qual_nsv_distr_sv_lsp", ";>=5trk-SV's r - closest gen LSP's r w.r.t bsp (cm)", 200, -0.08, 0.08)
 h_qual_nsv_dphi_sv_lsp =  ROOT.TH1F ("h_qual_nsv_dphi_sv_lsp", ";deltaPhi(>=5trk-SV, closest gen LSP)", 314, 0, 3.14)
 h_qual_nsv_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_dist3d_sv_lsp", ";dist3d(>=5trk-SV, closest gen LSP) (cm)", 200, 0, 0.2)
 h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist3d_sv_lsp", ";N#sigma(dist3d(>=5trk-SV, closest gen LSP))", 200, 0, 100)
@@ -216,7 +216,8 @@ for event1 in events_ntuple1 :
                    
                    for i in range(len(ls_of_qual_nsv_lsp0)):
                        sv_phi = math.atan2(ls_of_qual_nsv_lsp0[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp0[i].z), ls_of_qual_nsv_lsp0[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp0[i].z))
-                       h_qual_nsv_distr_sv_lsp.Fill( math.sqrt(ls_of_qual_nsv_lsp0[i].x**2 + ls_of_qual_nsv_lsp0[i].y**2) - math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
+                       dBV_vtx_ntuple1 = np.array([ls_of_qual_nsv_lsp0[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp0[i].z),ls_of_qual_nsv_lsp0[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp0[i].z)])
+                       h_qual_nsv_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP0_vtx_ntuple1))
                        h_qual_nsv_dphi_sv_lsp.Fill(math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],sv_phi)))
                        h_qual_nsv_dist3d_sv_lsp.Fill(ls_of_qual_nsv_lsp0[i].gen3ddist)
                        h_qual_nsv_significance_dist3d_sv_lsp.Fill(ls_of_qual_nsv_lsp0[i].gen3dsig())
@@ -296,7 +297,8 @@ for event1 in events_ntuple1 :
 
                    for i in range(len(ls_of_qual_nsv_lsp1)):
                        sv_phi = math.atan2(ls_of_qual_nsv_lsp1[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp1[i].z), ls_of_qual_nsv_lsp1[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp1[i].z))
-                       h_qual_nsv_distr_sv_lsp.Fill( math.sqrt(ls_of_qual_nsv_lsp1[i].x**2 + ls_of_qual_nsv_lsp1[i].y**2) - math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
+                       dBV_vtx_ntuple1 = np.array([ls_of_qual_nsv_lsp1[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp1[i].z),ls_of_qual_nsv_lsp1[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp1[i].z)])
+                       h_qual_nsv_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP1_vtx_ntuple1))
                        h_qual_nsv_dphi_sv_lsp.Fill(math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],sv_phi)))
                        h_qual_nsv_dist3d_sv_lsp.Fill(ls_of_qual_nsv_lsp1[i].gen3ddist)
                        h_qual_nsv_significance_dist3d_sv_lsp.Fill(ls_of_qual_nsv_lsp1[i].gen3dsig())
