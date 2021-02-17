@@ -64,6 +64,8 @@ h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist
 
 h_unqual_type4_dBV =  ROOT.TH1F("h_unqual_type4_dBV", ";dist2d(beamspot, unqual >=5trk-SV in a hemisphere) (cm);arb. units", 100, 0, 0.02); 
 h_unqual_type4_r =  ROOT.TH1F("h_unqual_type4_r", "; unqual >=5trk-SV's r (cm);arb. units", 100, 0, 2);
+h_unqual_type4_LSP_r =  ROOT.TH1F("h_unqual_type4_LSP_r", "; LSP's r (cm);arb. units", 100, 0, 2);
+h_unqual_type4_beamspot_r =  ROOT.TH1F("h_unqual_type4_beamspot_r", "; beamspot's r (cm);arb. units", 100, 0, 2);
 h_unqual_type4_bs2derr =  ROOT.TH1F("h_unqual_type4_bs2derr", "; unqual >=5trk-SV's bs2derr (cm);arb. units", 100, 0, 0.01);
 h_unqual_type4_distr_sv_lsp =  ROOT.TH1F("h_unqual_type4_distr_sv_lsp", "; unqual >=5trk-SV's r - closest gen LSP's r (cm);arb. units", 200, -0.08, 0.08);
 h_non_qual_nsv_distr_sv_lsp =  ROOT.TH1F ("h_non_qual_nsv_distr_sv_lsp", ";unqualified-SV's r - closest gen LSP's r (cm)", 200, -0.08, 0.08)
@@ -186,6 +188,8 @@ for event1 in events_ntuple1 :
                             dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
                             h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
                             h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
+                            h_unqual_type4_LSP_r.Fill(math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
+                            h_unqual_type4_beamspot_r.Fill(math.sqrt(mevent.bsx_at_z(vtx_ntuple1.z)**2 + mevent.bsy_at_z(vtx_ntuple1.z)))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                             h_unqual_type4_distr_sv_lsp.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2)- math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
 
@@ -259,6 +263,8 @@ for event1 in events_ntuple1 :
                             dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
                             h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
                             h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
+                            h_unqual_type4_LSP_r.Fill(math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
+                            h_unqual_type4_beamspot_r.Fill(math.sqrt(mevent.bsx_at_z(vtx_ntuple1.z)**2 + mevent.bsy_at_z(vtx_ntuple1.z)))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                             h_unqual_type4_distr_sv_lsp.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2)- math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
 
@@ -452,4 +458,15 @@ c28 = ROOT.TCanvas()
 h_non_qual_nsv_distr_sv_lsp.Draw("colz")
 c28.Print (outputdir+"h_non_qual_nsv_distr_sv_lsp.png")
 c28.Print (outputdir+"h_non_qual_nsv_distr_sv_lsp.root")
+
+c29 = ROOT.TCanvas()
+h_unqual_type4_beamspot_r.Draw("colz")
+c29.Print (outputdir+"h_unqual_type4_beamspot_r.png")
+c29.Print (outputdir+"h_unqual_type4_beamspot_r.root")
+
+c30 = ROOT.TCanvas()
+h_unqual_type4_LSP_r.Draw("colz")
+c30.Print (outputdir+"h_unqual_type4_LSP_r.png")
+c30.Print (outputdir+"h_unqual_type4_LSP_r.root")
+
 
