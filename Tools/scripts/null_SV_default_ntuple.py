@@ -65,6 +65,7 @@ h_qual_nsv_significance_dist3d_sv_lsp = ROOT.TH1F ("h_qual_nsv_significance_dist
 h_unqual_type4_dBV =  ROOT.TH1F("h_unqual_type4_dBV", ";dist2d(beamspot, unqual >=5trk-SV in a hemisphere) (cm);arb. units", 100, 0, 0.02); 
 h_unqual_type4_r =  ROOT.TH1F("h_unqual_type4_r", "; unqual >=5trk-SV's r (cm);arb. units", 100, 0, 2);
 h_unqual_type4_LSP_r =  ROOT.TH1F("h_unqual_type4_LSP_r", "; LSP's r  w.r.t bsp (cm);arb. units", 100, 0, 2);
+h_unqual_type4_LSP_r_ctr =  ROOT.TH1F("h_unqual_type4_LSP_r_ctr", "; LSP's r  w.r.t origin (cm);arb. units", 100, 0, 2);
 h_unqual_type4_beamspot_r =  ROOT.TH1F("h_unqual_type4_beamspot_r", "; beamspot's r (cm);arb. units", 100, 0, 2);
 h_unqual_type4_bs2derr =  ROOT.TH1F("h_unqual_type4_bs2derr", "; unqual >=5trk-SV's bs2derr (cm);arb. units", 100, 0, 0.01);
 h_unqual_type4_distr_sv_lsp =  ROOT.TH1F("h_unqual_type4_distr_sv_lsp", "; unqual >=5trk-SV's r - closest gen LSP's r  w.r.t bsp  (cm);arb. units", 200, -0.08, 0.08);
@@ -99,7 +100,12 @@ for event1 in events_ntuple1 :
 
     nevents_processed += 1
     if nevents_processed <= 1000 :
-         if 0.0150 < math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2 and  0.0150 < math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
+         vtx_bsp = vertices_from_ntuple1[0]    # change vertex when a beamspot is not constant
+         print "the beam spot's r is #%s" % ( np.array([mevent.bsx_at_z(vtx_bsp.z),mevent.bsy_at_z(vtx_bsp.z)])   )
+         dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_bsp.z)])     
+         dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_bsp.z)]) 
+               
+         if 0.0100 < dBLSP0_vtx_ntuple1 and math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2.09 and  0.0100 < dBLSP1_vtx_ntuple1 and math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2.09 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
         #if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # no apply fiducial cuts
             
                nevents_fiducial_cuts += 1
@@ -136,8 +142,6 @@ for event1 in events_ntuple1 :
                         else:
                           ls_of_unqual_nsv_lsp1.append(vtx_ntuple1)
                
-               dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_ntuple1.z)])     # change vertex when a beamspot is not constant 
-               dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_ntuple1.z)])     # change vertex when a beamspot is not constant 
                    
                if qual_nsv < 2:
                    nevents_nsv01_fiducial_cuts += 1
@@ -196,6 +200,7 @@ for event1 in events_ntuple1 :
                             h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
                             dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_ntuple1.z)])     # change vertex when a beamspot is not constant 
                             h_unqual_type4_LSP_r.Fill(np.linalg.norm(dBLSP_vtx_ntuple1))
+                            h_unqual_type4_LSP_r_ctr.Fill(math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
                             h_unqual_type4_beamspot_r.Fill(math.sqrt(mevent.bsx_at_z(vtx_ntuple1.z)**2 + mevent.bsy_at_z(vtx_ntuple1.z)))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                             h_unqual_type4_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP_vtx_ntuple1))
@@ -277,6 +282,7 @@ for event1 in events_ntuple1 :
                             h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
                             dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_ntuple1.z)])     # change vertex when a beamspot is not constant 
                             h_unqual_type4_LSP_r.Fill(np.linalg.norm(dBLSP_vtx_ntuple1))
+                            h_unqual_type4_LSP_r_ctr.Fill(math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
                             h_unqual_type4_beamspot_r.Fill(math.sqrt(mevent.bsx_at_z(vtx_ntuple1.z)**2 + mevent.bsy_at_z(vtx_ntuple1.z)))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                             h_unqual_type4_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP_vtx_ntuple1))
@@ -495,6 +501,11 @@ c32 = ROOT.TCanvas()
 h_unqual_type4_dist2d_to_lsp.Draw("colz")
 c32.Print (outputdir+"h_unqual_type4_dist2d_to_lsp.png")
 c32.Print (outputdir+"h_unqual_type4_dist2d_to_lsp.root")
+
+c33 = ROOT.TCanvas()
+h_unqual_type4_LSP_r_ctr.Draw("colz")
+c33.Print (outputdir+"h_unqual_type4_LSP_r_ctr.png")
+c33.Print (outputdir+"h_unqual_type4_LSP_r_ctr.root")
 
 
 
