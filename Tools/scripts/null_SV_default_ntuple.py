@@ -99,10 +99,15 @@ for event1 in events_ntuple1 :
    
 
     nevents_processed += 1
-    if nevents_processed <= 1000 and len(vertices_from_ntuple1) > 0 :
+    if nevents_processed <= 1000 :
          
-         vtx_bsp = vertices_from_ntuple1[0]    # change vertex when a beamspot is not constant
-         print "the beam spot's r is #%s" % ( np.linalg.norm(np.array([mevent.bsx_at_z(vtx_bsp.z),mevent.bsy_at_z(vtx_bsp.z)]))   )
+         beamspot = Handle ("BeamSpot")
+         beamspot_labels1 = ("BeamSpot")
+         event.getByLabel (beamspot_label1, beamspot);
+         bsx = beamspot.position().x();
+         bsy = beamspot.position().y();
+         bsz = beamspot.position().z();
+         print "the beam spot's r is #%s" % ( np.linalg.norm(np.array([bsx,bsy]))   )
          dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_bsp.z)])     
          dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_bsp.z)]) 
               
