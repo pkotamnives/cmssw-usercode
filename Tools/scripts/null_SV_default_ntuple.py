@@ -101,15 +101,15 @@ for event1 in events_ntuple1 :
     nevents_processed += 1
     if nevents_processed <= 1000 :
          
-         beamspot = Handle ("BeamSpot")
-         beamspot_labels1 = ("BeamSpot")
-         event.getByLabel (beamspot_label1, beamspot);
+         beamspot = Handle ("MFVEvent")
+         beamspot_label1 = ("offlineBeamSpot")
+         event1.getByLabel (beamspot_label1, beamspot);
          bsx = beamspot.position().x();
          bsy = beamspot.position().y();
          bsz = beamspot.position().z();
          print "the beam spot's r is #%s" % ( np.linalg.norm(np.array([bsx,bsy]))   )
-         dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_bsp.z)])     
-         dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_bsp.z)]) 
+         dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - bsx,mevent.gen_lsp_decay[1] - bsy])     
+         dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - bsx,mevent.gen_lsp_decay[4] - bsy]) 
               
          if 0.0100 < np.linalg.norm(dBLSP0_vtx_ntuple1) and math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2.09 and  0.0100 < np.linalg.norm(dBLSP1_vtx_ntuple1) and math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2.09 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
         #if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # no apply fiducial cuts
@@ -125,12 +125,12 @@ for event1 in events_ntuple1 :
 
                for vtx_ntuple1 in vertices_from_ntuple1 : # loop raw verices
 
-                   dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
+                   dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - bsx,vtx_ntuple1.y - bsy])
                    
                    if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                           qual_nsv += 1
 
-                   vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z), vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z))
+                   vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - bsy, vtx_ntuple1.x - bsx)
                   
                    if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],vtx_ntuple1_phi)) < 1.57:
                         if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
@@ -161,7 +161,7 @@ for event1 in events_ntuple1 :
                    unqual_nsv_lsp0 = 0
                    for unqual_vtx in ls_of_unqual_nsv_lsp0:
                            unqual_nsv_lsp0 += 1
-                           dBV_vtx_ntuple1 = np.array([unqual_vtx.x - mevent.bsx_at_z(unqual_vtx.z),unqual_vtx.y - mevent.bsy_at_z(unqual_vtx.z)])
+                           dBV_vtx_ntuple1 = np.array([unqual_vtx.x - bsx,unqual_vtx.y - bsy])
                            h_non_qual_nsv_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)- np.linalg.norm(dBLSP0_vtx_ntuple1))
                            if unqual_nsv_lsp0 == 1 :
                                h_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3ddist)
@@ -201,13 +201,13 @@ for event1 in events_ntuple1 :
                         if ls_of_unqual_nsv_lsp0[0].ntracks()>=5:
                             h_unqual_nsv.Fill(4)
                             vtx_ntuple1 = ls_of_unqual_nsv_lsp0[0]
-                            dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
+                            dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - bsx,vtx_ntuple1.y - bsy])
                             h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
                             h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
-                            dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_ntuple1.z)])     # change vertex when a beamspot is not constant 
+                            dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - bsx,mevent.gen_lsp_decay[1] - bsy])     # change vertex when a beamspot is not constant 
                             h_unqual_type4_LSP_r.Fill(np.linalg.norm(dBLSP_vtx_ntuple1))
                             h_unqual_type4_LSP_r_ctr.Fill(math.sqrt(mevent.gen_lsp_decay[0]**2 + mevent.gen_lsp_decay[1]**2))
-                            h_unqual_type4_beamspot_r.Fill(math.sqrt(mevent.bsx_at_z(vtx_ntuple1.z)**2 + mevent.bsy_at_z(vtx_ntuple1.z)))
+                            h_unqual_type4_beamspot_r.Fill(math.sqrt(bsx**2 + bsy**2))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                             h_unqual_type4_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP_vtx_ntuple1))
                             h_unqual_type4_dist3d_to_lsp.Fill(vtx_ntuple1.gen3ddist)
@@ -221,13 +221,13 @@ for event1 in events_ntuple1 :
 
                else:
 
-                   dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_ntuple1.z)])          # change vertex when a beamspot is not constant 
+                   dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] -bsx,mevent.gen_lsp_decay[1] - bsy])          # change vertex when a beamspot is not constant 
                    h_qual_nsv_lsp_r.Fill(np.linalg.norm(dBLSP_vtx_ntuple1))
                    h_qual_nsv_lsp_z.Fill(mevent.gen_lsp_decay[2])
                    
                    for i in range(len(ls_of_qual_nsv_lsp0)):
-                       sv_phi = math.atan2(ls_of_qual_nsv_lsp0[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp0[i].z), ls_of_qual_nsv_lsp0[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp0[i].z))
-                       dBV_vtx_ntuple1 = np.array([ls_of_qual_nsv_lsp0[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp0[i].z),ls_of_qual_nsv_lsp0[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp0[i].z)])
+                       sv_phi = math.atan2(ls_of_qual_nsv_lsp0[i].y - bsy, ls_of_qual_nsv_lsp0[i].x - bsx)
+                       dBV_vtx_ntuple1 = np.array([ls_of_qual_nsv_lsp0[i].x - bsx,ls_of_qual_nsv_lsp0[i].y - bsy])
                        h_qual_nsv_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP0_vtx_ntuple1))
                        h_qual_nsv_dphi_sv_lsp.Fill(math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0],sv_phi)))
                        h_qual_nsv_dist3d_sv_lsp.Fill(ls_of_qual_nsv_lsp0[i].gen3ddist)
@@ -244,7 +244,7 @@ for event1 in events_ntuple1 :
                    unqual_nsv_lsp1 = 0
                    for unqual_vtx in ls_of_unqual_nsv_lsp1:
                            unqual_nsv_lsp1 += 1
-                           dBV_vtx_ntuple1 = np.array([unqual_vtx.x - mevent.bsx_at_z(unqual_vtx.z),unqual_vtx.y - mevent.bsy_at_z(unqual_vtx.z)])
+                           dBV_vtx_ntuple1 = np.array([unqual_vtx.x - bsx,unqual_vtx.y - bsy])
                            h_non_qual_nsv_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)- np.linalg.norm(dBLSP1_vtx_ntuple1))
                            if unqual_nsv_lsp1 == 1 :
                                h_dist3d_to_lsp_SV0.Fill(unqual_vtx.gen3ddist)
@@ -283,13 +283,13 @@ for event1 in events_ntuple1 :
                         if ls_of_unqual_nsv_lsp1[0].ntracks()>=5:
                             h_unqual_nsv.Fill(4)
                             vtx_ntuple1 = ls_of_unqual_nsv_lsp1[0]
-                            dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - mevent.bsx_at_z(vtx_ntuple1.z),vtx_ntuple1.y - mevent.bsy_at_z(vtx_ntuple1.z)])
+                            dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - bsx,vtx_ntuple1.y - bsy])
                             h_unqual_type4_dBV.Fill(np.linalg.norm(dBV_vtx_ntuple1))
                             h_unqual_type4_r.Fill(math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2))
-                            dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_ntuple1.z)])     # change vertex when a beamspot is not constant 
+                            dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - bsx,mevent.gen_lsp_decay[4] - bsy])     # change vertex when a beamspot is not constant 
                             h_unqual_type4_LSP_r.Fill(np.linalg.norm(dBLSP_vtx_ntuple1))
                             h_unqual_type4_LSP_r_ctr.Fill(math.sqrt(mevent.gen_lsp_decay[3]**2 + mevent.gen_lsp_decay[4]**2))
-                            h_unqual_type4_beamspot_r.Fill(math.sqrt(mevent.bsx_at_z(vtx_ntuple1.z)**2 + mevent.bsy_at_z(vtx_ntuple1.z)))
+                            h_unqual_type4_beamspot_r.Fill(math.sqrt(bsx**2 + bsy**2))
                             h_unqual_type4_bs2derr.Fill(vtx_ntuple1.rescale_bs2derr)
                             h_unqual_type4_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP_vtx_ntuple1))
                             h_unqual_type4_dist3d_to_lsp.Fill(vtx_ntuple1.gen3ddist)
@@ -303,13 +303,13 @@ for event1 in events_ntuple1 :
 
                else:
 
-                   dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_ntuple1.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_ntuple1.z)])          # change vertex when a beamspot is not constant 
+                   dBLSP_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - bsx,mevent.gen_lsp_decay[4] - bsy])          # change vertex when a beamspot is not constant 
                    h_qual_nsv_lsp_r.Fill(np.linalg.norm(dBLSP_vtx_ntuple1))
                    h_qual_nsv_lsp_z.Fill(mevent.gen_lsp_decay[5])
 
                    for i in range(len(ls_of_qual_nsv_lsp1)):
-                       sv_phi = math.atan2(ls_of_qual_nsv_lsp1[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp1[i].z), ls_of_qual_nsv_lsp1[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp1[i].z))
-                       dBV_vtx_ntuple1 = np.array([ls_of_qual_nsv_lsp1[i].x - mevent.bsx_at_z(ls_of_qual_nsv_lsp1[i].z),ls_of_qual_nsv_lsp1[i].y - mevent.bsy_at_z(ls_of_qual_nsv_lsp1[i].z)])
+                       sv_phi = math.atan2(ls_of_qual_nsv_lsp1[i].y - bsy, ls_of_qual_nsv_lsp1[i].x - bsx)
+                       dBV_vtx_ntuple1 = np.array([ls_of_qual_nsv_lsp1[i].x - bsx,ls_of_qual_nsv_lsp1[i].y - bsy])
                        h_qual_nsv_distr_sv_lsp.Fill(np.linalg.norm(dBV_vtx_ntuple1)-np.linalg.norm(dBLSP1_vtx_ntuple1))
                        h_qual_nsv_dphi_sv_lsp.Fill(math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[1],sv_phi)))
                        h_qual_nsv_dist3d_sv_lsp.Fill(ls_of_qual_nsv_lsp1[i].gen3ddist)
