@@ -11,7 +11,7 @@ from JMTucker.Tools.ROOTTools import *
 cmssw_setup()
 
 # FIXME you can replace this with the usual stuff for putting plots into our publicweb areas and generating the html
-outputdir = "/eos/user/p/pekotamn/www/Null_SV_tbs_1mm_1.6TeV_default_ntuple"
+outputdir = "/eos/user/p/pekotamn/www/Null_SV_tbs_1mm_1.6TeV_name_100n_ntuple"
 outputdir += "/" # in case we forget it...
 os.system("mkdir -p "+outputdir)
 
@@ -101,11 +101,11 @@ for event1 in events_ntuple1 :
     nevents_processed += 1
     if nevents_processed <= 1000 :
          vtx_bsp = vertices_from_ntuple1[0]    # change vertex when a beamspot is not constant
-         print "the beam spot's r is #%s" % ( np.array([mevent.bsx_at_z(vtx_bsp.z),mevent.bsy_at_z(vtx_bsp.z)])   )
+         print "the beam spot's r is #%s" % ( np.linalg.norm(np.array([mevent.bsx_at_z(vtx_bsp.z),mevent.bsy_at_z(vtx_bsp.z)]))   )
          dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[1] - mevent.bsy_at_z(vtx_bsp.z)])     
          dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - mevent.bsx_at_z(vtx_bsp.z),mevent.gen_lsp_decay[4] - mevent.bsy_at_z(vtx_bsp.z)]) 
                
-         if 0.0100 < dBLSP0_vtx_ntuple1 and math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2.09 and  0.0100 < dBLSP1_vtx_ntuple1 and math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2.09 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
+         if 0.0100 < np.linalg.norm(dBLSP0_vtx_ntuple1) and math.sqrt((mevent.gen_lsp_decay[0])**2 + (mevent.gen_lsp_decay[1])**2) < 2.09 and  0.0100 < np.linalg.norm(dBLSP1_vtx_ntuple1) and math.sqrt((mevent.gen_lsp_decay[3])**2 + (mevent.gen_lsp_decay[4])**2) < 2.09 and math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # apply fiducial cuts
         #if math.fabs(ROOT.reco.deltaPhi(mevent.gen_lsp_phi[0], mevent.gen_lsp_phi[1])) > 2.7: # no apply fiducial cuts
             
                nevents_fiducial_cuts += 1
