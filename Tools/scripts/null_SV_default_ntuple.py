@@ -11,7 +11,7 @@ from JMTucker.Tools.ROOTTools import *
 cmssw_setup()
 
 # FIXME you can replace this with the usual stuff for putting plots into our publicweb areas and generating the html
-outputdir = "/eos/user/p/pekotamn/www/Null_SV_tbs_1mm_1.6TeV_name_100n_ntuple"
+outputdir = "/eos/user/p/pekotamn/www/Null_SV_tbs_1mm_1.6TeV_name_1000n_ntuple"
 outputdir += "/" # in case we forget it...
 os.system("mkdir -p "+outputdir)
 
@@ -101,9 +101,10 @@ for event1 in events_ntuple1 :
     nevents_processed += 1
     if nevents_processed <= 1000 :
          
-         beamspot = Handle ("MFVEvent")
+         beamspot1 = Handle ("reco::BeamSpot")
          beamspot_label1 = ("offlineBeamSpot")
-         event1.getByLabel (beamspot_label1, beamspot);
+         event1.getByLabel (beamspot_label1, beamspot1);
+         beamspot = beamspot1.product()
          bsx = beamspot.position().x();
          bsy = beamspot.position().y();
          bsz = beamspot.position().z();
@@ -154,7 +155,7 @@ for event1 in events_ntuple1 :
 
                h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp0))
                h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp1))
-               h_qual_nsv_event.Fill(len(ls_of_qual_nsv_lsp0)+len(ls_of_qual_nsv_lsp1))
+               h_qual_nsv_event.Fill(qual_nsv)
 
                if len(ls_of_qual_nsv_lsp0) == 0:
                    h_nsv.Fill(len(ls_of_unqual_nsv_lsp0))
