@@ -34,7 +34,7 @@ outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
 h_qual_nsv_event = ROOT.TH1F ("h_qual_nsv_event", ";# of >=5trk-SVs/event", 50, 0, 50)
-
+h_dBV =  ROOT.TH1F("h_dBV", ";dist2d(beamspot, >=5trk-SV in a hemisphere) (cm);arb. units", 100, 0, 0.02)
 
 
 nevents_processed = 0
@@ -62,14 +62,15 @@ for event1 in events_ntuple1 :
    
 
     nevents_processed += 1
-    if nevents_processed <= 1000 :
+    if True :
          
-         beamspot = Handle ("reco::BeamSpot")
+         beamspot1 = Handle ("reco::BeamSpot")
          beamspot_label1 = ("offlineBeamSpot")
-         event1.getByLabel (beamspot_label1, beamspot);
-         bsx = beamspot.position().x();
-         bsy = beamspot.position().y();
-         bsz = beamspot.position().z();
+         event1.getByLabel (beamspot_label1, beamspot1)
+         beamspot = beamspot1.product() 
+         bsx = beamspot.position().x()
+         bsy = beamspot.position().y()
+         bsz = beamspot.position().z()
          print "the beam spot's r is #%s" % ( np.linalg.norm(np.array([bsx,bsy]))   )
          
               
@@ -88,6 +89,7 @@ for event1 in events_ntuple1 :
                    
                    if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                           qual_nsv += 1
+                          h_dBV.Fill(dBV_vtx_ntuple1) 
 
                
                    
@@ -114,6 +116,11 @@ c01 = ROOT.TCanvas()
 h_qual_nsv_event.Draw("colz")
 c01.Print (outputdir+"h_qual_nsv_event.png")
 c01.Print (outputdir+"h_qual_nsv_event.root")
+
+c1 = ROOT.TCanvas()                                                      
+h_dBV.Draw("colz")
+c1.Print (outputdir+"h_dBV.png")
+c1.Print (outputdir+"h_dBV.root")
 
 
 
