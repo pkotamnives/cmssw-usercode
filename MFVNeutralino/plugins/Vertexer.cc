@@ -703,7 +703,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 		//pk: try to merge all vertex pairs 
 		all_pairs_dVV.push_back(v_dist.significance());
-		h_all_pairdistsig->fill(v_dist.significance());
+		h_all_pairdistsig->Fill(v_dist.significance());
 
 		if (v_dist.significance()<20) {
 
@@ -720,7 +720,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				merged_v = reco::Vertex(tv);
 			double merged_vchi2 = merged_v.normalizedChi2();
 			all_pairs_chi2.push_back(merged_vchi2);
-			h_all_pair_vertex_chi2->fill(merged_vchi2);
+			h_all_pair_vertex_chi2->Fill(merged_vchi2);
 		}
 		
 
