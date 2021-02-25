@@ -4,6 +4,7 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -49,9 +50,11 @@ private:
   const bool no_track_cuts;
   const double min_seed_jet_pt;
   const double min_track_pt;
+  const double min_track_pt_loose;
   const double min_track_dxy;
   const double min_track_sigmadxy;
   const double min_track_rescaled_sigmadxy;
+  const double min_track_rescaled_sigmadxy_loose;
   const double min_track_sigmadxypv;
   const int min_track_hit_r;
   const int min_track_nhits;
@@ -120,11 +123,13 @@ MFVVertexTracks::MFVVertexTracks(const edm::ParameterSet& cfg)
     min_n_seed_tracks(cfg.getParameter<int>("min_n_seed_tracks")),
     no_track_cuts(cfg.getParameter<bool>("no_track_cuts")),
     min_seed_jet_pt(cfg.getParameter<double>("min_seed_jet_pt")),
+	min_track_pt_loose(cfg.getParameter<double>("min_track_pt_loose")),
     min_track_pt(cfg.getParameter<double>("min_track_pt")),
     min_track_dxy(cfg.getParameter<double>("min_track_dxy")),
     min_track_sigmadxy(cfg.getParameter<double>("min_track_sigmadxy")),
     min_track_rescaled_sigmadxy(cfg.getParameter<double>("min_track_rescaled_sigmadxy")),
-    min_track_sigmadxypv(cfg.getParameter<double>("min_track_sigmadxypv")),
+	min_track_rescaled_sigmadxy_loose(cfg.getParameter<double>("min_track_rescaled_sigmadxy_loose")),
+	min_track_sigmadxypv(cfg.getParameter<double>("min_track_sigmadxypv")),
     min_track_hit_r(cfg.getParameter<int>("min_track_hit_r")),
     min_track_nhits(cfg.getParameter<int>("min_track_nhits")),
     min_track_npxhits(cfg.getParameter<int>("min_track_npxhits")),
