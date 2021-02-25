@@ -93,6 +93,9 @@ private:
   TH1F* h_seed_nm1_npxlayers;
   TH1F* h_seed_nm1_nstlayers;
   TH1F* h_seed_nm1_sigmadxybs;
+
+  TH1F* h_loose_seed_tracks_pt;
+  TH1F* h_loose_seed_tracks_sigmadxybs;
 };
 
 MFVVertexTracks::MFVVertexTracks(const edm::ParameterSet& cfg)
@@ -195,6 +198,9 @@ MFVVertexTracks::MFVVertexTracks(const edm::ParameterSet& cfg)
     h_seed_nm1_npxlayers = fs->make<TH1F>("h_seed_nm1_npxlayers", "", 10, 0, 10);
     h_seed_nm1_nstlayers = fs->make<TH1F>("h_seed_nm1_nstlayers", "", 30, 0, 30);
     h_seed_nm1_sigmadxybs = fs->make<TH1F>("h_seed_nm1_sigmadxybs", "", 40, -10, 10);
+
+	h_loose_seed_tracks_pt = fs->make<TH1F>("h_loose_seed_tracks_pt", "looser seed tracks from matched jets's pT (GeV)", 50, 0, 10);
+	h_loose_seed_tracks_sigmadxybs = fs->make<TH1F>("h_loose_seed_tracks_sigmadxybs", "looser seed tracks from matched jets's sigma dxy ", 40, -10, 10);
   }
 }
 
@@ -534,6 +540,12 @@ bool MFVVertexTracks::filter(edm::Event& event, const edm::EventSetup& setup) {
 			  if (match_track_jet(*itk, (*jets)[j])) {
 				  if (verbose)
 					  std::cout << "  track matched, adding to seed tracks: " << itk.key() << std::endl;
+				  double mtchtrk_pT = itk->pt();
+				  double mtchtrk_dxybs = itk->dxy(*beamspot);
+				  double mtchtrk_dxyerr = itk->dxyError();
+				  double mtchtrk_sigmadxybs = mtchtrk_dxybs / mtchtrk_dxyerr;
+				  h_loose_seed_tracks_pt->Fill(mtchtrk_pT);
+				  h_loose_seed_tracks_sigmadxybs->Fill(mtchtrk_sigmadxybs);
 				  seed_tracks->push_back(itk);
 				  seed_tracks_copy->push_back(*itk);
 				  break;
