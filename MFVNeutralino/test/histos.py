@@ -3,7 +3,8 @@ from JMTucker.Tools.BasicAnalyzer_cfg import *
 is_mc = True # for blinding
 
 from JMTucker.MFVNeutralino.NtupleCommon import ntuple_version_use as version, dataset, use_btag_triggers
-sample_files(process, 'mfv_stopdbardbar_tau001000um_M1600_2017' if is_mc else 'JetHT2017B', dataset, 1)
+#sample_files(process, 'mfv_stopdbardbar_tau001000um_M1600_2017' if is_mc else 'JetHT2017B', dataset, 1)
+input_files(process,['/afs/cern.ch/user/p/pekotamn/ntuple_mfv_neu_1mm_1.6TeV_default_raw_1000n_2017.root']) 
 tfileservice(process, 'histos.root')
 cmssw_from_argv(process)
 

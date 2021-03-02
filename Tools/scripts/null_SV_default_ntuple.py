@@ -105,9 +105,9 @@ for event1 in events_ntuple1 :
          beamspot_label1 = ("offlineBeamSpot")
          event1.getByLabel (beamspot_label1, beamspot1);
          beamspot = beamspot1.product()
-         bsx = beamspot.position().x();
-         bsy = beamspot.position().y();
-         bsz = beamspot.position().z();
+         bsx = beamspot.position().x()
+         bsy = beamspot.position().y()
+         bsz = beamspot.position().z()
          print "the beam spot's r is #%s" % ( np.linalg.norm(np.array([bsx,bsy]))   )
          dBLSP0_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[0] - bsx,mevent.gen_lsp_decay[1] - bsy])     
          dBLSP1_vtx_ntuple1 = np.array([mevent.gen_lsp_decay[3] - bsx,mevent.gen_lsp_decay[4] - bsy]) 
