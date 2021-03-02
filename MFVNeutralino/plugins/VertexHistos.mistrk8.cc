@@ -70,6 +70,9 @@ private:
 		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv and need sv to be modified for sig
 	}
 	
+	TH1F* h_nsv_raw;
+	TH1F* h_nsv_fiducial;
+
 	TH1F* h_ratio_diff_pT_sum_sv_nsv2_no_shj;
 	TH1F* h_ratio_diff_pT_sum_sv_nsv2_large_no_shj;
 	TH1F* h_ratio_diff_pT_sum_major_minor_sv_nsv2_no_shj;
@@ -171,6 +174,9 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	do_scatterplots(cfg.getParameter<bool>("do_scatterplots"))
 {
 	edm::Service<TFileService> fs;
+
+	h_nsv_raw = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
+	h_nsv_fiducial = fs->make<TH1F>("h_nsv_fiducial", "applied fiducial cuts;# of secondary vertices;arb. units", 15, 0, 15);
 
 	h_ratio_diff_pT_sum_sv_nsv2_no_shj = fs->make<TH1F>("h_ratio_diff_pT_sum_sv_nsv2_no_shj", "nsv = 2, no shared jets; #frac{sv0 shared sum pT - sv1 shared sum pT}{sv0 shared sum pT + sv1 shared sum pT}", 40, -2, 2);
 	h_ratio_diff_pT_sum_sv_nsv2_large_no_shj = fs->make<TH1F>("h_ratio_diff_pT_sum_sv_nsv2_large_no_shj", "nsv = 2, absdeltaphi01 > 0.5, no shared jets; #frac{sv0 shared sum pT - sv1 shared sum pT}{sv0 shared sum pT + sv1 shared sum pT}", 40, -2, 2);
@@ -285,9 +291,13 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	
 	edm::Handle<MFVVertexAuxCollection> auxes;
 	event.getByToken(vertex_token, auxes);
+	const int nsv = int(auxes->size());
+
+	h_nsv_raw->Fill(nsv, w);
 	if (std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])) > 2.7 && 0.0100 < mag(mevent->gen_lsp_decay[0] - bsx, mevent->gen_lsp_decay[1] - bsy) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2.09 && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2.09 && 0.0100 < mag(mevent->gen_lsp_decay[3] - bsx, mevent->gen_lsp_decay[4] - bsy)) {
 
-	const int nsv = int(auxes->size());
+		h_nsv_fiducial->Fill(nsv, w)
+	
 
 	//////////////////////////////////////////////////////////////////////
 	std::vector<std::vector<int> > sv_track_which_idx;
