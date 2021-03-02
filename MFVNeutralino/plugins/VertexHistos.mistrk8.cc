@@ -275,15 +275,17 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	edm::Handle<double> weight;
 	event.getByToken(weight_token, weight);
 	const double w = *weight;
-        
+	w = 1.0;
 	const double bsx = mevent->bsx;
 	const double bsy = mevent->bsy;
 	const double bsz = mevent->bsz;
 	const math::XYZPoint bs(bsx, bsy, bsz);
 	const math::XYZPoint pv(mevent->pvx, mevent->pvy, mevent->pvz);
 
+	
 	edm::Handle<MFVVertexAuxCollection> auxes;
 	event.getByToken(vertex_token, auxes);
+	if (std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])) > 2.7 && 0.0100 < mag(mevent->gen_lsp_decay[0] - bsx, mevent->gen_lsp_decay[1] - bsy) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2.09 && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2.09 && 0.0100 < mag(mevent->gen_lsp_decay[3] - bsx, mevent->gen_lsp_decay[4] - bsy)) {
 
 	const int nsv = int(auxes->size());
 
@@ -323,6 +325,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
                }
 
+	
 	if (nsv == 1) {
 		int njets = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
 		h_sv_njets_nsv1->Fill(njets, w);
@@ -1443,7 +1446,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 		
 	}
- //  }
+    
+     }
 	
 	
   
