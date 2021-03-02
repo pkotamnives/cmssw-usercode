@@ -281,7 +281,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	edm::Handle<double> weight;
 	event.getByToken(weight_token, weight);
 	const double w = *weight;
-	w = 1.0;
+	
 	const double bsx = mevent->bsx;
 	const double bsy = mevent->bsy;
 	const double bsz = mevent->bsz;
@@ -296,7 +296,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	h_nsv_raw->Fill(nsv, w);
 	if (std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])) > 2.7 && 0.0100 < mag(mevent->gen_lsp_decay[0] - bsx, mevent->gen_lsp_decay[1] - bsy) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2.09 && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2.09 && 0.0100 < mag(mevent->gen_lsp_decay[3] - bsx, mevent->gen_lsp_decay[4] - bsy)) {
 
-		h_nsv_fiducial->Fill(nsv, w)
+		h_nsv_fiducial->Fill(nsv, w);
 	
 
 	//////////////////////////////////////////////////////////////////////
