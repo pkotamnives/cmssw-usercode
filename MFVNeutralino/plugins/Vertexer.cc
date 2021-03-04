@@ -176,6 +176,7 @@ private:
   // extra plots
   TH1F* h_noshare_missdist4sigma_vertex_chi2;
   TH1F* h_noshare_missdist4sigma_vertex_tkvtxdistsig;
+  TH2F* h_2D_noshare_missdist4sigma_vertex_tkvtxdistsig_tkdxy;
   TH1F* h_n_noshare_missdist4sigma_moreor5trks_vertices;
   TH1F* h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices;
 
@@ -324,15 +325,16 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
 
-	h_noshare_missdist4sigma_vertex_chi2 = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_chi2", "vertices applied track miss dist sig < 4;chi2/dof", 20, 0, max_seed_vertex_chi2);
-	h_noshare_missdist4sigma_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_tkvtxdistsig", "vertices applied track miss dist sig < 4;missdist sig", 100, 0, 6);
-	h_n_noshare_missdist4sigma_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_vertices", "vertices applied track miss dist sig < 4; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
-	h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices", "vertices applied track miss dist sig < 4; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
+	h_noshare_missdist4sigma_vertex_chi2 = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_chi2", "vertices applied track miss dist sig < 1.5;chi2/dof", 20, 0, max_seed_vertex_chi2);
+	h_noshare_missdist4sigma_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_missdist4sigma_vertex_tkvtxdistsig", "vertices applied track miss dist sig < 1.5;missdist sig", 100, 0, 6);
+	h_2D_noshare_missdist4sigma_vertex_tkvtxdistsig_tkdxy = = fs->make<TH2F>("h_2D_noshare_missdist4sigma_vertex_tkvtxdistsig_tkdxy", "vertices applied track miss dist sig < 1.5;missdist sig;sigmadxybs", 100, 0, 6, 20, 0, 10);
+	h_n_noshare_missdist4sigma_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_vertices", "vertices applied track miss dist sig < 1.5; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
+	h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices = fs->make<TH1F>("h_n_noshare_missdist4sigma_moreor5trks_no_vertex_noshare_vertices", "vertices applied track miss dist sig < 1.5; # of noshare vertices(no >=5trk-vertices/event)", 50, 0, 50);
 
-	h_noshare_trim_vertex_chi2 = fs->make<TH1F>("h_noshare_trim_vertex_chi2", "vertices applied track miss dist sig < 4 && trimmed worst track ;chi2/dof", 20, 0, max_seed_vertex_chi2);
-	h_noshare_trim_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_trim_vertex_tkvtxdistsig", "vertices applied track miss dist sig < 4  && trimmed worst track ;missdist sig", 100, 0, 6);
-	h_noshare_trim_vertex_distr_shift = fs->make<TH1F>("h_noshare_trim_vertex_distr_shift", "vertices applied track miss dist sig < 4  && trimmed worst track ;vtx after'r - vtx before'r (cm)", 200, -0.08, 0.08);
-	h_n_noshare_trim_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_trim_moreor5trks_vertices", "vertices applied track miss dist sig < 4  && trimmed worst track ; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
+	h_noshare_trim_vertex_chi2 = fs->make<TH1F>("h_noshare_trim_vertex_chi2", "vertices applied track miss dist sig < 1.5 && trimmed worst track ;chi2/dof", 20, 0, max_seed_vertex_chi2);
+	h_noshare_trim_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_trim_vertex_tkvtxdistsig", "vertices applied track miss dist sig < 1.5  && trimmed worst track ;missdist sig", 100, 0, 6);
+	h_noshare_trim_vertex_distr_shift = fs->make<TH1F>("h_noshare_trim_vertex_distr_shift", "vertices applied track miss dist sig < 1.5  && trimmed worst track ;vtx after'r - vtx before'r (cm)", 200, -0.08, 0.08);
+	h_n_noshare_trim_moreor5trks_vertices = fs->make<TH1F>("h_n_noshare_trim_moreor5trks_vertices", "vertices applied track miss dist sig < 1.5  && trimmed worst track ; # of >=5trks-vertices/event(no shared tracks)", 50, 0, 50);
 	
 	h_2D_track_miss_dist_all_pairs = fs->make<TH2F>("h_2D_track_miss_dist_all_pairs", "all events' track arbitration before remove tracks;missdist sig (trk,vtx0);missdist sig (trk,vtx1)", 40, 0, 12, 40, 0, 12);
 	h_all_pairdistsig = fs->make<TH1F>("h_all_pairdistsig", "all events' shared-track vertex pairs; dVV 3d significance of all pairs", 40, 0, 100);
@@ -1203,7 +1205,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  h_noshare_vertex_tkvtxdist->Fill(tk_vtx_dist.second.value());
 	  h_noshare_vertex_tkvtxdisterr->Fill(tk_vtx_dist.second.error());
 	  h_noshare_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
-	  if (tk_vtx_dist.second.significance() < 4) {
+	  if (tk_vtx_dist.second.significance() < 1.5) {
 		  set_missdist4sigma_tks.insert(it->castTo<reco::TrackRef>());
 
 	  }
@@ -1234,6 +1236,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			missdist4sigma_track = tt_builder->build(*it.operator*());
 			std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(missdist4sigma_track, missdist4sigma_v);
 			h_noshare_missdist4sigma_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
+			double missdist4sigma_dxybs = missdist4sigma_track->dxy(*beamspot);
+			double missdist4sigma_dxyerr = missdist4sigma_track->dxyError();
+			h_2D_noshare_missdist4sigma_vertex_tkvtxdistsig_tkdxy->(tk_vtx_dist.second.significance(), missdist4sigma_dxybs/missdist4sigma_dxyerr);
 			missdist4sigma_trim_ttks_missdist_sig.push_back(tk_vtx_dist.second.significance());
 			set_trim_tks.insert(it->castTo<reco::TrackRef>());
 		}
@@ -1253,7 +1258,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		}
 		
 		
-			while (missdist4sigma_trim_ttks_missdist_sig.size() > 2 && *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) > 4) {
+			while (missdist4sigma_trim_ttks_missdist_sig.size() > 2 && *std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) > 1.5) {
 				++count_trim_worsttrack;
 
 				int max_missdist_sig_idx = std::max_element(missdist4sigma_trim_ttks_missdist_sig.begin(), missdist4sigma_trim_ttks_missdist_sig.end()) - missdist4sigma_trim_ttks_missdist_sig.begin();
