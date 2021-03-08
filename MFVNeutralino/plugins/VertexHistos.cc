@@ -300,15 +300,15 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	event.getByToken(vertex_token, auxes);
 	const int nsv = int(auxes->size());
 
-	h_nsv_raw->Fill(nsv, w);
+	h_nsv_raw->Fill(nsv);
 	for (int isv = 0; isv < nsv; ++isv) {
 		const MFVVertexAux& sv = auxes->at(isv);
-		h_nsv_raw_rescale_dBV->Fill(mag(sv.x - bsx, sv.y - bsy));
+		h_nsv_raw_rescale_dBV->Fill(mag(sv.x - bsx, sv.y - bsy),w);
 	}
 	
 	if (std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])) > 2.7 && 0.0100 < mag(mevent->gen_lsp_decay[0] - bsx, mevent->gen_lsp_decay[1] - bsy) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2.09 && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2.09 && 0.0100 < mag(mevent->gen_lsp_decay[3] - bsx, mevent->gen_lsp_decay[4] - bsy)) {
 
-		h_nsv_fiducial->Fill(nsv, w);
+		h_nsv_fiducial->Fill(nsv);
 	
 
 	//////////////////////////////////////////////////////////////////////
@@ -318,7 +318,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		const MFVVertexAux& aux = auxes->at(isv);
 		const int ntracks = aux.ntracks();
         
-		h_nsv_fiducial_rescale_dBV->Fill(mag(aux.x - bsx, aux.y - bsy));
+		h_nsv_fiducial_rescale_dBV->Fill(mag(aux.x - bsx, aux.y - bsy),w);
 		//double phin = atan2(aux.y - bsy, aux.x - bsx);
 		std::vector<int> track_which_idx;
 		std::vector<int> track_which_jet;
