@@ -34,6 +34,7 @@ outfile = ROOT.TFile(outputdir+"out.root", "RECREATE")
 
 # Define histograms here (obviously this one doesn't matter for you, but I stole it from some other code of mine)
 h_qual_nsv_event = ROOT.TH1F ("h_qual_nsv_event", ";# of >=5trk-SVs/event", 50, 0, 50)
+h_ntracks_nsv1 = ROOT.TH1F ("h_ntracks_nsv1", ";# of tracks/SV in 1-vtx events", 10, 0, 10)
 h_unqual_nsv = ROOT.TH1F ("h_unqual_nsv", ";Categories of unqualified SVs/LSP", 7, 0, 7)
 h_qual_nsv = ROOT.TH1F ("h_qual_nsv", ";# of >=5trk-SVs/LSP", 15, 0, 15)
 h_nsv = ROOT.TH1F ("h_nsv", ";# of unqualified SVs/LSP", 15, 0, 15)
@@ -119,6 +120,7 @@ for event1 in events_ntuple1 :
                n_vertex_seed_tracks = mevent.n_vertex_seed_tracks()
                qual_nsv = 0
 
+               ls_of_1vtx = []
                ls_of_qual_nsv_lsp0 = []
                ls_of_unqual_nsv_lsp0 = []
                ls_of_qual_nsv_lsp1 = []
@@ -128,8 +130,12 @@ for event1 in events_ntuple1 :
 
                    dBV_vtx_ntuple1 = np.array([vtx_ntuple1.x - bsx,vtx_ntuple1.y - bsy])
                    
+                   if math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
+                          ls_of_1vtx.append(vtx_ntuple1)
+
                    if vtx_ntuple1.ntracks()>=5 and math.sqrt(vtx_ntuple1.x**2 + vtx_ntuple1.y**2) < 2.09 and np.linalg.norm(dBV_vtx_ntuple1) > 0.0100 and vtx_ntuple1.rescale_bs2derr < 0.0025:
                           qual_nsv += 1
+    
 
                    vtx_ntuple1_phi = math.atan2(vtx_ntuple1.y - bsy, vtx_ntuple1.x - bsx)
                   
@@ -152,6 +158,10 @@ for event1 in events_ntuple1 :
                    
                if qual_nsv < 2:
                    nevents_nsv01_fiducial_cuts += 1
+               if len(ls_of_1vtx) == 1:
+                   h_ntracks_nsv1.Fill(ls_of_1vtx[0].ntracks())
+
+
 
                h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp0))
                h_qual_nsv.Fill(len(ls_of_qual_nsv_lsp1))
@@ -343,6 +353,11 @@ c01 = ROOT.TCanvas()
 h_qual_nsv_event.Draw("colz")
 c01.Print (outputdir+"h_qual_nsv_event.png")
 c01.Print (outputdir+"h_qual_nsv_event.root")
+
+c02 = ROOT.TCanvas()
+h_ntracks_nsv1.Draw("colz")
+c02.Print (outputdir+"h_ntracks_nsv1.png")
+c02.Print (outputdir+"h_ntracks_nsv1.root")
 
 c0 = ROOT.TCanvas()
 h_qual_nsv.Draw("colz")
