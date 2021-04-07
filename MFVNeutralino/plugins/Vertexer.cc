@@ -182,6 +182,8 @@ private:
   TH1F* h_noshare_trackrefine_trimmax_vertex_chi2;
   TH1F* h_noshare_trackrefine_trimmax_vertex_tkvtxdistsig;
   TH1F* h_noshare_trackrefine_trimmax_vertex_distr_shift;
+
+  TH1F* h_output_shared_jet_or_not;
   //
 
   TH2F* h_2D_close_dvv_its_significance_before_merge;
@@ -283,6 +285,8 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_noshare_trackrefine_trimmax_vertex_chi2 = fs->make<TH1F>("h_noshare_trackrefine_trimmax_vertex_chi2", ";chi2/dof", 20, 0, max_seed_vertex_chi2);
 	h_noshare_trackrefine_trimmax_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_trackrefine_trimmax_vertex_tkvtxdistsig", ";missdist sig", 100, 0, 6);
 	h_noshare_trackrefine_trimmax_vertex_distr_shift = fs->make<TH1F>("h_noshare_trackrefine_trimmax_vertex_distr_shift", ";vtx after trimmax'r - vtx before trimmax'r (cm)", 200, -0.08, 0.08);
+
+	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";shared jets? between the two most-track output vertices", 2, 0, 2);
 
 
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -777,7 +781,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   if (histos || verbose) {
     std::map<reco::TrackRef, int> track_use;
     for (size_t i = 0, ie = vertices->size(); i < ie; ++i) {
-      const reco::Vertex& v = vertices->at(i);
+      reco::Vertex& v = vertices->at(i);
       const int ntracks = v.nTracks();
       const double vchi2 = v.normalizedChi2();
       const double vndof = v.ndof();
@@ -1202,60 +1206,96 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
   }
   
-  // Peace's scratch 
-  /*
+  // start shared-jet track removal 
   edm::Handle<pat::JetCollection> jets;
-  typedef std::vector<reco::TrackRef> jet_which_track_ref;
-  std::vector<int> jet_which_jet_idx;
-  for (int jjet = 0, njjet = int(jets->size()); jjet < njjet; ++jjet) {
-	  const pat::Jet& jet = jets->at(jjet);
+  event.getByToken(jets_token, jets);
 
-	  const size_t ijet = int(jets->size()) - 1;
-	  assert(ijet <= 255);  
-	  jet_which_jet_idx.push_back(jjet);
-	  std::vector<int> jet_jjet_which_track_ref;
-	
-	  for (size_t idau = 0, ndau = jet.numberOfDaughters(); idau < ndau; ++idau) {
-		  // handle both regular aod and miniaod: in the latter
-		  // getPFConstituents() doesn't work because the daughters are
-		  // pat::PackedCandidates. Since we don't care about track
-		  // identities e.g. to compare with vertices we don't use
-		  // TrackRefGetter here, but could
+  edm::Handle<reco::TrackCollection> tracks;
+  event.getByToken(tracks_token, tracks);
+
+  std::vector<std::vector<int> > sv_track_which_idx;
+  std::vector<std::vector<int> > sv_track_which_jetidx;
+  std::vector<size_t> vertex_ntracks;
+  for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0], ++iv) {
+	  std::vector<int> track_which_idx;
+	  std::vector<int> track_which_jetidx;
+	  
+	  const track_vec tks = vertex_track_vec(*v[0]);
+	  const size_t ntks = tks.size();
+	  vertex_ntracks.push_back(ntks);
+	  for (size_t i = 0; i < ntks; ++i) {
+		  double match_threshold = 1.3;
+		  int jet_index = 255;
+
+		  for (size_t j = 0; j < jets->size(); ++j) {
+			  if (match_track_jet(*(*tks)[i], (*jets)[j])) {
+				  track_which_idx.insert(i);
+				  track_which_jetidx.insert(j);
+				  if (verbose)
+					  std::cout << "track " << (*tks)[i].key() << " matched with jet " << j << std::endl;
+			  }
+		  }
+
+	  }
+	  sv_track_which_idx.push_back(track_which_idx);
+	  sv_track_which_jetidx.push_back(track_which_jetidx);
+
+  }
+
+  if (vertices->size() >= 2) {
+
+	  int first_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
+	  reco::Vertex& v0 = vertices->at(first_ntracks_vtxidx);
+	  vertex_ntracks.erase(vertex_ntracks.begin() + first_ntracks_vtxidx);
+	  int second_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
+	  reco::Vertex& v1 = vertices->at(ssecond_ntracks_vtxidx);
+
+	  bool shared_jet = std::find_first_of(sv_track_which_jetidx[first_ntracks_vtxidx].begin(), sv_track_which_jetidx[first_ntracks_vtxidx].end(), sv_track_which_jetidx[second_ntracks_vtxidx].begin(), sv_track_which_jetidx[second_ntracks_vtxidx].end()) != sv_track_which_jetidx[first_ntracks_vtxidx].end();
+	  if (verbose)
+		  std::cout << "shared jets by the two most-track vertices? " << shared_jet << " : sv0 has # of tracks " << v0.nTracks() << " sv1 has # of tracks " << v1.nTracks()  << std::endl;
+	  
+
+  }
+
+  // end of shared-jet track removal 
+  
+  
+  bool MFVVertexTracks::match_track_jet(const reco::Track& tk, const pat::Jet& jet) {
+	  //if (reco::deltaR2(tk, jet)>0.16) return false;
+	  if (verbose) {
+		  std::cout << "jet track matching..." << std::endl;
+			  std::cout << "  target track pt " << tk.pt() << " eta " << tk.eta() << " phi " << tk.phi() << std::endl;
+	  }
+	  double match_thres = 1.3;
+	  for (size_t idau = 0, idaue = jet.numberOfDaughters(); idau < idaue; ++idau) {
 		  const reco::Candidate* dau = jet.daughter(idau);
 		  if (dau->charge() == 0)
 			  continue;
-
-		  const reco::Track * tk = 0;
+		  const reco::Track * jtk = 0;
 		  const reco::PFCandidate * pf = dynamic_cast<const reco::PFCandidate*>(dau);
 		  if (pf) {
 			  const reco::TrackRef& r = pf->trackRef();
 			  if (r.isNonnull())
-				  tk = &*r;
+				  jtk = &*r;
 		  }
 		  else {
 			  const pat::PackedCandidate* pk = dynamic_cast<const pat::PackedCandidate*>(dau);
 			  if (pk && pk->charge() && pk->hasTrackDetails())
-				  tk = &pk->pseudoTrack();
+				  jtk = &pk->pseudoTrack();
 		  }
-		  if (tk) {
-			  assert(abs(tk->charge()) == 1);
-			  jet_jjet_which_track_ref.push_back(*tk);	  // not sure how to store address of tk
+		  if (jtk) {
+			  double a = fabs(tk.pt() - jtk->pt()) + 1;
+			  double b = fabs(tk.eta() - jtk->eta()) + 1;
+			  double c = fabs(tk.phi() - jtk->phi()) + 1;
+			  if (verbose)
+				  std::cout << "  jet track pt " << jtk->pt() << " eta " << jtk->eta() << " phi " << jtk->phi() << " match abc " << a * b * c << std::endl;
+			  if (a * b * c < match_thres) {
+				  return true;
 			  }
+		  }
 	  }
-	  jet_which_track_ref.push_back(jet_jjet_which_track_ref);
-	  
+	  return false;
   }
-
-  for (size_t ivt = 0, nvt = vertices.size(); ivt < nvt; ++ivt) {
-	  const reco::Vertex& v = vertices->at(ivt);
-	  tracks[ivt] = vertex_track_set(*v[ivt]);
-	  for (auto tk : tracks[ivt])
-		  if (tk.key() ==
-
-	  
-
-  }
-  */
 
 
   //////////////////////////////////////////////////////////////////////
