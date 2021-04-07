@@ -825,7 +825,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		// If tracks's miss distance significance is larger than trackrefine_sigmacut, we first remove all those tracks and refit a new vertex 
 		double trackrefine_sigmacut_v0x = v.position().x() - bsx;
 		double trackrefine_sigmacut_v0y = v.position().y() - bsy;
-		double trackrefine_sigmacut_v0r = mag(trackrefine_trimmax_v0x, trackrefine_trimmax_v0y);
+		double trackrefine_sigmacut_v0r = mag(trackrefine_sigmacut_v0x, trackrefine_sigmacut_v0y);
 
 		reco::Vertex trackrefine_sigmacut_v;	
 		for (const TransientVertex& tv : kv_reco_dropin_nocut(trackrefine_sigmacut_ttks))
