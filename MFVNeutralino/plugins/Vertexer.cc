@@ -32,6 +32,8 @@ private:
   typedef std::set<reco::TrackRef> track_set;
   typedef std::vector<reco::TrackRef> track_vec;
 
+  bool match_track_jet(const reco::Track& tk, const pat::Jet& jet);
+
   void finish(edm::Event&, const std::vector<reco::TransientTrack>&, std::unique_ptr<reco::VertexCollection>, std::unique_ptr<VertexerPairEffs>, const std::vector<std::pair<track_set, track_set>>&);
 
   template <typename T>
@@ -1210,14 +1212,14 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   
   // start shared-jet track removal 
   edm::Handle<pat::JetCollection> jets;
-  event.getByToken(jets_token, jets);
 
   edm::Handle<reco::TrackCollection> tracks;
-  event.getByToken(tracks_token, tracks);
 
   std::vector<std::vector<int> > sv_track_which_idx;
   std::vector<std::vector<int> > sv_track_which_jetidx;
   std::vector<size_t> vertex_ntracks;
+  typedef std::vector<reco::TrackRef> track_vec;
+
   for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0], ++iv) {
 	  std::vector<int> track_which_idx;
 	  std::vector<int> track_which_jetidx;
@@ -1231,10 +1233,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 		  for (size_t j = 0; j < jets->size(); ++j) {
 			  if (match_track_jet(*(*tks)[i], (*jets)[j])) {
-				  track_which_idx.insert(i);
-				  track_which_jetidx.insert(j);
+				  track_which_idx.push_back(i);
+				  track_which_jetidx.push_back(j);
 				  if (verbose)
-					  std::cout << "track " << (*tks)[i].key() << " matched with jet " << j << std::endl;
+					  std::cout << "track " << tks[i].key() << " matched with jet " << j << std::endl;
 			  }
 		  }
 
@@ -1262,7 +1264,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
   // end of shared-jet track removal 
   
   
-  bool MFVVertexTracks::match_track_jet(const reco::Track& tk, const pat::Jet& jet) {
+  bool MFVVertexer::match_track_jet(const reco::Track& tk, const pat::Jet& jet) {
 	  //if (reco::deltaR2(tk, jet)>0.16) return false;
 	  if (verbose) {
 		  std::cout << "jet track matching..." << std::endl;
