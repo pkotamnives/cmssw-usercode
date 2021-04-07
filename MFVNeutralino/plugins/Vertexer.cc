@@ -32,7 +32,7 @@ private:
   typedef std::set<reco::TrackRef> track_set;
   typedef std::vector<reco::TrackRef> track_vec;
 
-  bool match_track_jet(reco::Track& tk, pat::Jet& jet);
+  bool match_track_jet(const reco::Track& tk, const pat::Jet& jet);
 
   void finish(edm::Event&, const std::vector<reco::TransientTrack>&, std::unique_ptr<reco::VertexCollection>, std::unique_ptr<VertexerPairEffs>, const std::vector<std::pair<track_set, track_set>>&);
 
