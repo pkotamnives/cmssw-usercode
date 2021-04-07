@@ -2,6 +2,8 @@
 #include "TMath.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -1248,7 +1250,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	  reco::Vertex& v0 = vertices->at(first_ntracks_vtxidx);
 	  vertex_ntracks.erase(vertex_ntracks.begin() + first_ntracks_vtxidx);
 	  int second_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
-	  reco::Vertex& v1 = vertices->at(ssecond_ntracks_vtxidx);
+	  reco::Vertex& v1 = vertices->at(second_ntracks_vtxidx);
 
 	  bool shared_jet = std::find_first_of(sv_track_which_jetidx[first_ntracks_vtxidx].begin(), sv_track_which_jetidx[first_ntracks_vtxidx].end(), sv_track_which_jetidx[second_ntracks_vtxidx].begin(), sv_track_which_jetidx[second_ntracks_vtxidx].end()) != sv_track_which_jetidx[first_ntracks_vtxidx].end();
 	  if (verbose)
