@@ -127,6 +127,8 @@ private:
   const double max_nm1_refit_dist3;
   const double max_nm1_refit_distz;
   const int max_nm1_refit_count;
+  const double trackrefine_sigmacut;
+  const double trackrefine_trimmax;
   const bool histos;
   const bool verbose;
   const std::string module_label;
