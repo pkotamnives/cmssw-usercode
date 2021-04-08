@@ -232,10 +232,10 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     max_nm1_refit_dist3(cfg.getParameter<double>("max_nm1_refit_dist3")),
     max_nm1_refit_distz(cfg.getParameter<double>("max_nm1_refit_distz")),
     max_nm1_refit_count(cfg.getParameter<int>("max_nm1_refit_count")),
-	trackrefine_sigmacut(cfg.getParameter<double>("trackrefine_sigmacut")),
-	trackrefine_trimmax(cfg.getParameter<double>("trackrefine_trimmax")),
 	match_jets(cfg.getParameter<bool>("match_jets")),
 	match_jet_token(match_jets ? consumes<pat::JetCollection>(cfg.getParameter<edm::InputTag>("match_jet_src")) : edm::EDGetTokenT<pat::JetCollection>()),
+	trackrefine_sigmacut(cfg.getParameter<double>("trackrefine_sigmacut")),
+	trackrefine_trimmax(cfg.getParameter<double>("trackrefine_trimmax")),
     histos(cfg.getUntrackedParameter<bool>("histos", false)),
     verbose(cfg.getUntrackedParameter<bool>("verbose", false)),
     module_label(cfg.getParameter<std::string>("@module_label"))

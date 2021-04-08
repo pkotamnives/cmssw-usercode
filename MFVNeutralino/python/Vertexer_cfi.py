@@ -67,10 +67,10 @@ mfvVertices = cms.EDProducer('MFVVertexer',
                              max_nm1_refit_dist3 = cms.double(-1),
                              max_nm1_refit_distz = cms.double(0.005),
                              max_nm1_refit_count = cms.int32(-1),
-                             trackrefine_sigmacut = cms.double(3.5),
-                             trackrefine_trimmax = cms.double(3.5),
                              match_jets = cms.bool(False),       # share-jet part 
                              match_jet_src = cms.InputTag('selectedPatJets'), # share-jet part 
+                             trackrefine_sigmacut = cms.double(3.5),
+                             trackrefine_trimmax = cms.double(3.5),
                              histos = cms.untracked.bool(True),
                              verbose = cms.untracked.bool(False),
                              )
