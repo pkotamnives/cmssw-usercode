@@ -32,6 +32,9 @@ private:
   typedef std::set<reco::TrackRef> track_set;
   typedef std::vector<reco::TrackRef> track_vec;
 
+  const bool match_jets;
+  const edm::EDGetTokenT<pat::JetCollection> match_jet_token;
+
   bool match_track_jet(const reco::Track& tk, const pat::Jet& jet);
 
   void finish(edm::Event&, const std::vector<reco::TransientTrack>&, std::unique_ptr<reco::VertexCollection>, std::unique_ptr<VertexerPairEffs>, const std::vector<std::pair<track_set, track_set>>&);
@@ -231,6 +234,8 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     max_nm1_refit_count(cfg.getParameter<int>("max_nm1_refit_count")),
 	trackrefine_sigmacut(cfg.getParameter<double>("trackrefine_sigmacut")),
 	trackrefine_trimmax(cfg.getParameter<double>("trackrefine_trimmax")),
+	match_jets(cfg.getParameter<bool>("match_jets")),
+	match_jet_token(match_jets ? consumes<pat::JetCollection>(cfg.getParameter<edm::InputTag>("match_jet_src")) : edm::EDGetTokenT<pat::JetCollection>()),
     histos(cfg.getUntrackedParameter<bool>("histos", false)),
     verbose(cfg.getUntrackedParameter<bool>("verbose", false)),
     module_label(cfg.getParameter<std::string>("@module_label"))
@@ -1211,55 +1216,56 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	}
 
 	// start shared-jet track removal 
-	edm::Handle<pat::JetCollection> jets;
 
-	edm::Handle<reco::TrackCollection> tracks;
+	if (match_jets) {
+		edm::Handle<pat::JetCollection> jets;
+		event.getByToken(match_jet_token, jets);
 
-	std::vector<std::vector<int> > sv_track_which_idx;
-	std::vector<std::vector<int> > sv_track_which_jetidx;
-	std::vector<size_t> vertex_ntracks;
-	typedef std::vector<reco::TrackRef> track_vec;
+		std::vector<std::vector<int> > sv_track_which_idx;
+		std::vector<std::vector<int> > sv_track_which_jetidx;
+		std::vector<size_t> vertex_ntracks;
+		typedef std::vector<reco::TrackRef> track_vec;
 
-	for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
-		std::vector<int> track_which_idx;
-		std::vector<int> track_which_jetidx;
+		for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
+			std::vector<int> track_which_idx;
+			std::vector<int> track_which_jetidx;
 
-		track_vec tks = vertex_track_vec(*v[0]);
-		size_t ntks = tks.size();
-		vertex_ntracks.push_back(ntks);
-		int i = 0;
-		for (const reco::TrackRef& itk : tks) {
-
-			for (size_t j = 0; j < jets->size(); ++j) {
-				if (match_track_jet(*itk, (*jets)[j])) {
-					track_which_idx.push_back(i);
-					track_which_jetidx.push_back(j);
-					if (verbose)
-						std::cout << "track " << tks[i].key() << " matched with jet " << j << std::endl;
+			track_vec tks = vertex_track_vec(*v[0]);
+			size_t ntks = tks.size();
+			vertex_ntracks.push_back(ntks);
+			int i = 0;
+			for (const reco::TrackRef& itk : tks) {
+				i++;
+				for (size_t j = 0; j < jets->size(); ++j) {
+					if (match_track_jet(*itk, (*jets)[j])) {
+						track_which_idx.push_back(i);
+						track_which_jetidx.push_back(j);
+						if (verbose)
+							std::cout << "track " << tks[i].key() << " matched with jet " << j << std::endl;
+					}
 				}
+
 			}
+			sv_track_which_idx.push_back(track_which_idx);
+			sv_track_which_jetidx.push_back(track_which_jetidx);
 
 		}
-		sv_track_which_idx.push_back(track_which_idx);
-		sv_track_which_jetidx.push_back(track_which_jetidx);
 
+		if (vertices->size() >= 2) {
+
+			int first_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
+			reco::Vertex& v0 = vertices->at(first_ntracks_vtxidx);
+			vertex_ntracks.erase(vertex_ntracks.begin() + first_ntracks_vtxidx);
+			int second_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
+			reco::Vertex & v1 = vertices->at(second_ntracks_vtxidx);
+
+			bool shared_jet = std::find_first_of(sv_track_which_jetidx[first_ntracks_vtxidx].begin(), sv_track_which_jetidx[first_ntracks_vtxidx].end(), sv_track_which_jetidx[second_ntracks_vtxidx].begin(), sv_track_which_jetidx[second_ntracks_vtxidx].end()) != sv_track_which_jetidx[first_ntracks_vtxidx].end();
+			if (verbose)
+				std::cout << "shared jets by the two most-track vertices? " << shared_jet << " : sv0 has # of tracks " << v0.nTracks() << " sv1 has # of tracks " << v1.nTracks() << std::endl;
+
+
+		}
 	}
-
-	if (vertices->size() >= 2) {
-
-		int first_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
-		reco::Vertex& v0 = vertices->at(first_ntracks_vtxidx);
-		vertex_ntracks.erase(vertex_ntracks.begin() + first_ntracks_vtxidx);
-		int second_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
-		reco::Vertex & v1 = vertices->at(second_ntracks_vtxidx);
-
-		bool shared_jet = std::find_first_of(sv_track_which_jetidx[first_ntracks_vtxidx].begin(), sv_track_which_jetidx[first_ntracks_vtxidx].end(), sv_track_which_jetidx[second_ntracks_vtxidx].begin(), sv_track_which_jetidx[second_ntracks_vtxidx].end()) != sv_track_which_jetidx[first_ntracks_vtxidx].end();
-		if (verbose)
-			std::cout << "shared jets by the two most-track vertices? " << shared_jet << " : sv0 has # of tracks " << v0.nTracks() << " sv1 has # of tracks " << v1.nTracks() << std::endl;
-
-
-	}
-
 	// end of shared-jet track removal 
 
 
