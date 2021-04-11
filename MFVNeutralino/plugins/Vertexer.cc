@@ -1281,7 +1281,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v0_track, v0);
 				h_twomost_output_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
 			}
-			h_twomost_output_vertex_chi2dof(v0.normalizedChi2());
+			h_twomost_output_vertex_chi2dof->Fill(v0.normalizedChi2());
 			h_twomost_output_vertex_mass->Fill(v0.p4().mass());
 			h_twomost_output_vertex_dBV->Fill(dBV0);
 			h_twomost_output_vertex_bs2derr->Fill(bs2derr_V0);
@@ -1299,7 +1299,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				h_twomost_output_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
 			}
 
-			h_twomost_output_vertex_chi2dof(v1.normalizedChi2());
+			h_twomost_output_vertex_chi2dof->Fill(v1.normalizedChi2());
 			h_twomost_output_vertex_mass->Fill(v1.p4().mass());
 			h_twomost_output_vertex_dBV->Fill(dBV1);
 			h_twomost_output_vertex_bs2derr->Fill(bs2derr_V1);
