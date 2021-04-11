@@ -32,9 +32,6 @@ private:
   typedef std::set<reco::TrackRef> track_set;
   typedef std::vector<reco::TrackRef> track_vec;
 
-  const bool match_jets;
-  const edm::EDGetTokenT<pat::JetCollection> match_jet_token;
-
   bool match_track_jet(const reco::Track& tk, const pat::Jet& jet);
 
   void finish(edm::Event&, const std::vector<reco::TransientTrack>&, std::unique_ptr<reco::VertexCollection>, std::unique_ptr<VertexerPairEffs>, const std::vector<std::pair<track_set, track_set>>&);
@@ -112,7 +109,7 @@ private:
     if (ttks.size() < 2)
       return std::vector<TransientVertex>();
     std::vector<TransientVertex> v(1, kv_reco->vertex(ttks));
-    if (v[0].normalisedChiSquared() > 8)
+    if (v[0].normalisedChiSquared() > 5)
       return std::vector<TransientVertex>();
     return v;
   }
@@ -123,7 +120,8 @@ private:
 	  std::vector<TransientVertex> v(1, kv_reco->vertex(ttks));
 	  return v;
   }
-
+  const bool match_jets;
+  const edm::EDGetTokenT<pat::JetCollection> match_jet_token;
   const edm::EDGetTokenT<reco::BeamSpot> beamspot_token;
   const edm::EDGetTokenT<std::vector<reco::TrackRef>> seed_tracks_token;
   const int n_tracks_per_seed_vertex;
@@ -190,7 +188,13 @@ private:
   TH1F* h_noshare_trackrefine_trimmax_vertex_tkvtxdistsig;
   TH1F* h_noshare_trackrefine_trimmax_vertex_distr_shift;
 
-  TH1F* h_output_shared_jet_or_not;
+  TH1F* h_twomost_output_shared_jet_or_not;
+  TH1F* h_twomost_output_vertex_tkvtxdistsig;
+  TH1F* h_twomost_output_vertex_chi2dof;
+  TH1F* h_twomost_output_vertex_mass;
+  TH1F* h_twomost_output_vertex_dBV;
+  TH1F* h_twomost_output_vertex_bs2derr;
+  TH2F* h_2D_twomost_output_vertex_ntracks;
   //
 
   TH2F* h_2D_close_dvv_its_significance_before_merge;
@@ -214,8 +218,11 @@ private:
 };
 
 MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
-  : kv_reco(new KalmanVertexFitter(cfg.getParameter<edm::ParameterSet>("kvr_params"), cfg.getParameter<edm::ParameterSet>("kvr_params").getParameter<bool>("doSmoothing"))),
-    beamspot_token(consumes<reco::BeamSpot>(cfg.getParameter<edm::InputTag>("beamspot_src"))),
+  : 
+	kv_reco(new KalmanVertexFitter(cfg.getParameter<edm::ParameterSet>("kvr_params"), cfg.getParameter<edm::ParameterSet>("kvr_params").getParameter<bool>("doSmoothing"))),
+	match_jets(cfg.getParameter<bool>("match_jets")),
+	match_jet_token(match_jets ? consumes<pat::JetCollection>(cfg.getParameter<edm::InputTag>("match_jet_src")) : edm::EDGetTokenT<pat::JetCollection>()),
+	beamspot_token(consumes<reco::BeamSpot>(cfg.getParameter<edm::InputTag>("beamspot_src"))),
     seed_tracks_token(consumes<std::vector<reco::TrackRef>>(cfg.getParameter<edm::InputTag>("seed_tracks_src"))),
     n_tracks_per_seed_vertex(cfg.getParameter<int>("n_tracks_per_seed_vertex")),
     max_seed_vertex_chi2(cfg.getParameter<double>("max_seed_vertex_chi2")),
@@ -232,8 +239,6 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     max_nm1_refit_dist3(cfg.getParameter<double>("max_nm1_refit_dist3")),
     max_nm1_refit_distz(cfg.getParameter<double>("max_nm1_refit_distz")),
     max_nm1_refit_count(cfg.getParameter<int>("max_nm1_refit_count")),
-	match_jets(cfg.getParameter<bool>("match_jets")),
-	match_jet_token(match_jets ? consumes<pat::JetCollection>(cfg.getParameter<edm::InputTag>("match_jet_src")) : edm::EDGetTokenT<pat::JetCollection>()),
 	trackrefine_sigmacut(cfg.getParameter<double>("trackrefine_sigmacut")),
 	trackrefine_trimmax(cfg.getParameter<double>("trackrefine_trimmax")),
     histos(cfg.getUntrackedParameter<bool>("histos", false)),
@@ -295,27 +300,32 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_noshare_trackrefine_trimmax_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_trackrefine_trimmax_vertex_tkvtxdistsig", ";missdist sig", 100, 0, 6);
 	h_noshare_trackrefine_trimmax_vertex_distr_shift = fs->make<TH1F>("h_noshare_trackrefine_trimmax_vertex_distr_shift", ";vtx after trimmax'r - vtx before trimmax'r (cm)", 200, -0.08, 0.08);
 
-	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";shared jets? between the two most-track output vertices", 2, 0, 2);
+	h_twomost_output_shared_jet_or_not = fs->make<TH1F>("h_twomost_output_shared_jet_or_not", ";shared jets? between the two most-track output vertices", 2, 0, 2);
+	h_twomost_output_vertex_chi2dof = fs->make<TH1F>("h_twomost_output_vertex_chi2dof", "; chi2/dof ", 20, 0, max_seed_vertex_chi2);
+	h_twomost_output_vertex_tkvtxdistsig = fs->make<TH1F>("h_twomost_output_vertex_tkvtxdistsig", "; miss dist significance 3d ", 50, 0, 10);
+	h_twomost_output_vertex_mass = fs->make<TH1F>("h_twomost_output_vertex_mass", "; vtx mass (GeV)", 50, 0, 2000);
+	h_twomost_output_vertex_dBV = fs->make<TH1F>("h_twomost_output_vertex_dBV", "; bvdist2d (cm)", 50, 0, 0.1);
+	h_twomost_output_vertex_bs2derr = fs->make<TH1F>("h_twomost_output_vertex_bs2derr", "; bvdist2d error (cm)", 10, 0, 0.05);
 
 
-	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
-	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
-	h_2D_close_dvv_its_significance_failed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_failed_merge_pairs", "Only failed merging pairs by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
-	h_2D_close_dvv_its_significance_after_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_after_merge", "After merging by significance<4: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm) ", 50, 0, 0.1, 100, 0, 30);
-	h_merged_vertex_chi2 = fs->make<TH1F>("h_merged_vertex_chi2", "After merging by sigma<4: merged vertices; chi2/dof ", 20, 0, max_seed_vertex_chi2);
-	h_non_merged_vertex_chi2 = fs->make<TH1F>("h_non_merged_vertex_chi2", "After merging by sigma<4: non-merged vertices; chi2/dof ", 20, 0, max_seed_vertex_chi2);
-	h_merged_vertex_ntracks = fs->make<TH1F>("h_merged_vertex_ntracks", "After merging by sigma<4: merged vertices; # of tracks/vtx ", 30, 0, 30);
-	h_non_merged_vertex_ntracks = fs->make<TH1F>("h_non_merged_vertex_ntracks", "After merging by sigma<4: non-merged vertices; # of tracks/vtx ", 30, 0, 30);
-	h_merged_vertex_tkvtxdist = fs->make<TH1F>("h_merged_vertex_tkvtxdist", "After merging by sigma<4: merged vertices; miss dist 3d (cm)", 50, 0, 0.1);
-	h_non_merged_vertex_tkvtxdist = fs->make<TH1F>("h_non_merged_vertex_tkvtxdist", "After merging by sigma<4: non-merged vertices; miss dist 3d (cm)", 50, 0, 0.1);
-	h_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_merged_vertex_tkvtxdistsig", "After merging by sigma<4: merged vertices; miss dist significance 3d ", 50, 0, 10);
-	h_non_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_non_merged_vertex_tkvtxdistsig", "After merging by sigma<4: non-merged vertices; miss dist significance 3d ", 50, 0, 10);
-	h_merged_vertex_mass = fs->make<TH1F>("h_merged_vertex_mass", "After merging by sigma<4: merged vertices; vtx mass (GeV)", 50, 0, 2000);
-	h_non_merged_vertex_mass = fs->make<TH1F>("h_non_merged_vertex_mass", "After merging by sigma<4: non-merged vertices; vtx mass (GeV)", 50, 0, 2000);
-	h_merged_vertex_dBV = fs->make<TH1F>("h_merged_vertex_dBV", "After merging by sigma<4: merged vertices; bvdist2d (cm)", 50, 0, 0.1);
-	h_non_merged_vertex_dBV = fs->make<TH1F>("h_non_merged_vertex_dBV", "After merging by sigma<4: non-merged vertices; bvdist2d (cm)", 50, 0, 0.1);
-	h_merged_vertex_bs2derr = fs->make<TH1F>("h_merged_vertex_bs2derr", "After merging by sigma<4: merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
-	h_non_merged_vertex_bs2derr = fs->make<TH1F>("h_non_merged_vertex_bs2derr", "After merging by sigma<4: non-merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
+	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
+	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
+	h_2D_close_dvv_its_significance_failed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_failed_merge_pairs", "Only failed merging pairs: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
+	h_2D_close_dvv_its_significance_after_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_after_merge", "After merging: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm) ", 50, 0, 0.1, 100, 0, 30);
+	h_merged_vertex_chi2 = fs->make<TH1F>("h_merged_vertex_chi2", "After merging: merged vertices; chi2/dof ", 20, 0, max_seed_vertex_chi2);
+	h_non_merged_vertex_chi2 = fs->make<TH1F>("h_non_merged_vertex_chi2", "After merging: non-merged vertices; chi2/dof ", 20, 0, max_seed_vertex_chi2);
+	h_merged_vertex_ntracks = fs->make<TH1F>("h_merged_vertex_ntracks", "After merging: merged vertices; # of tracks/vtx ", 30, 0, 30);
+	h_non_merged_vertex_ntracks = fs->make<TH1F>("h_non_merged_vertex_ntracks", "After merging: non-merged vertices; # of tracks/vtx ", 30, 0, 30);
+	h_merged_vertex_tkvtxdist = fs->make<TH1F>("h_merged_vertex_tkvtxdist", "After merging: merged vertices; miss dist 3d (cm)", 50, 0, 0.1);
+	h_non_merged_vertex_tkvtxdist = fs->make<TH1F>("h_non_merged_vertex_tkvtxdist", "After merging: non-merged vertices; miss dist 3d (cm)", 50, 0, 0.1);
+	h_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_merged_vertex_tkvtxdistsig", "After merging: merged vertices; miss dist significance 3d ", 50, 0, 10);
+	h_non_merged_vertex_tkvtxdistsig = fs->make<TH1F>("h_non_merged_vertex_tkvtxdistsig", "After merging: non-merged vertices; miss dist significance 3d ", 50, 0, 10);
+	h_merged_vertex_mass = fs->make<TH1F>("h_merged_vertex_mass", "After merging: merged vertices; vtx mass (GeV)", 50, 0, 2000);
+	h_non_merged_vertex_mass = fs->make<TH1F>("h_non_merged_vertex_mass", "After merging: non-merged vertices; vtx mass (GeV)", 50, 0, 2000);
+	h_merged_vertex_dBV = fs->make<TH1F>("h_merged_vertex_dBV", "After merging: merged vertices; bvdist2d (cm)", 50, 0, 0.1);
+	h_non_merged_vertex_dBV = fs->make<TH1F>("h_non_merged_vertex_dBV", "After merging: non-merged vertices; bvdist2d (cm)", 50, 0, 0.1);
+	h_merged_vertex_bs2derr = fs->make<TH1F>("h_merged_vertex_bs2derr", "After merging: merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
+	h_non_merged_vertex_bs2derr = fs->make<TH1F>("h_non_merged_vertex_bs2derr", "After merging: non-merged vertices; bvdist2d error (cm)", 10, 0, 0.05);
 
   }
 }
@@ -939,7 +949,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				}
 
 				// we replace the noshare vertex by the vertex after the track refinement
-				v = trackrefine_trimmax_v;
+				//v = trackrefine_trimmax_v;
 			}
 		}
 
@@ -1259,7 +1269,45 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			int second_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
 			reco::Vertex & v1 = vertices->at(second_ntracks_vtxidx);
 
+			const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
+			Measurement1D dBV0_Meas1D = vertex_dist_2d.distance(v0, fake_bs_vtx); 
+			double dBV0 = dBV0_Meas1D.value();
+			double bs2derr_V0 = dBV0_Meas1D.error();
+
+			for (auto it = v0.tracks_begin(), ite = v0.tracks_end(); it != ite; ++it) {
+				
+				reco::TransientTrack v0_track;
+				v0_track = tt_builder->build(*it.operator*());
+				std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v0_track, v0);
+				h_twomost_output_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
+			}
+			h_twomost_output_vertex_chi2dof(v0.normalizedChi2());
+			h_twomost_output_vertex_mass->Fill(v0.p4().mass());
+			h_twomost_output_vertex_dBV->Fill(dBV0);
+			h_twomost_output_vertex_bs2derr->Fill(bs2derr_V0);
+
+			
+			Measurement1D dBV1_Meas1D = vertex_dist_2d.distance(v1, fake_bs_vtx);
+			double dBV1 = dBV1_Meas1D.value();
+			double bs2derr_V1 = dBV1_Meas1D.error();
+
+			for (auto it = v1.tracks_begin(), ite = v1.tracks_end(); it != ite; ++it) {
+
+				reco::TransientTrack v1_track;
+				v1_track = tt_builder->build(*it.operator*());
+				std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v1_track, v1);
+				h_twomost_output_vertex_tkvtxdistsig->Fill(tk_vtx_dist.second.significance());
+			}
+
+			h_twomost_output_vertex_chi2dof(v1.normalizedChi2());
+			h_twomost_output_vertex_mass->Fill(v1.p4().mass());
+			h_twomost_output_vertex_dBV->Fill(dBV1);
+			h_twomost_output_vertex_bs2derr->Fill(bs2derr_V1);
+
+			h_2D_twomost_output_vertex_ntracks->Fill(v0.nTracks(), v1.nTracks());
+
 			bool shared_jet = std::find_first_of(sv_track_which_jetidx[first_ntracks_vtxidx].begin(), sv_track_which_jetidx[first_ntracks_vtxidx].end(), sv_track_which_jetidx[second_ntracks_vtxidx].begin(), sv_track_which_jetidx[second_ntracks_vtxidx].end()) != sv_track_which_jetidx[first_ntracks_vtxidx].end();
+			h_twomost_output_shared_jet_or_not->Fill(shared_jet);
 			if (verbose)
 				std::cout << "shared jets by the two most-track vertices? " << shared_jet << " : sv0 has # of tracks " << v0.nTracks() << " sv1 has # of tracks " << v1.nTracks() << std::endl;
 
