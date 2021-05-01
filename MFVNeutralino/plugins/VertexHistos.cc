@@ -70,11 +70,10 @@ private:
 		return Measurement1D(val, sqrt(ROOT::Math::Similarity(jac, sv.covariance())) / 1 / val); // modified err from 2->1 of sv and need sv to be modified for sig
 	}
 	
-	TH1F* h_nsv_raw;
-	TH1F* h_nsv_fiducial;
+	TH1F* h_nsv;
+	
 
-	TH1F* h_nsv_raw_rescale_dBV;
-	TH1F* h_nsv_fiducial_rescale_dBV;
+	TH1F* h_nsv_rescale_dBV;
 
 	
 	TH1F* h_sv_njets_nsv1;
@@ -82,6 +81,7 @@ private:
 	
 
 	TH1F* h_sv_njets_large_nsv2_shj;
+	TH1F* h_output_shared_jet_or_not;
 	TH1F* h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2;
 	TH1F* h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2;
 	
@@ -95,6 +95,7 @@ private:
 	
 	
 	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2;
+	
 	
 
 	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2;
@@ -128,17 +129,18 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 {
 	edm::Service<TFileService> fs;
 
-	h_nsv_raw = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
-	h_nsv_fiducial = fs->make<TH1F>("h_nsv_fiducial", "applied fiducial cuts;# of secondary vertices;arb. units", 15, 0, 15);
+	h_nsv = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
+	
 
-	h_nsv_raw_rescale_dBV = fs->make<TH1F>("h_nsv_raw_rescale_dBV", ";dist2d(beamspot, SV) (cm);arb. units", 500, 0, 2.5);
-	h_nsv_fiducial_rescale_dBV = fs->make<TH1F>("h_nsv_fiducial_rescale_dBV", "applied fiducial cuts;dist2d(beamspot, SV) (cm);arb. units", 500, 0, 2.5);
-
+	h_nsv_rescale_dBV = fs->make<TH1F>("h_nsv_rescale_dBV", ";dist2d(beamspot, SV) (cm);arb. units", 500, 0, 2.5);
+	
 
 	h_sv_njets_nsv1 = fs->make<TH1F>("h_sv_njets_large_nsv1", "nsv = 1; # of jets/SV;arb. units", 10, 0, 10);
 	h_sv_njets_large_nsv2_no_shj = fs->make<TH1F>("h_sv_njets_large_nsv2_no_shj", "nsv = 2, absdPhi01 > 0.5, no shared jets; # of jets/SV;arb. units", 10, 0, 10);
 	h_sv_njets_large_nsv2_shj = fs->make<TH1F>("h_sv_njets_large_nsv2_shj", "nsv = 2, absdPhi01 > 0.5, shared jets; # of jets/SV;arb. units", 10, 0, 10);
 	
+	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";shared jets? between the two most-track output vertices", 2, 0, 2);
+
 	h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH1F>("h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # of jets/SV;arb. units", 10, 0, 10);
 	h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH1F>("h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2", "poor nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # of jets/SV;arb. units", 10, 0, 10);
 	
@@ -195,15 +197,12 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	event.getByToken(vertex_token, auxes);
 	const int nsv = int(auxes->size());
 
-	h_nsv_raw->Fill(nsv);
+	h_nsv->Fill(nsv,w);
 	for (int isv = 0; isv < nsv; ++isv) {
 		const MFVVertexAux& sv = auxes->at(isv);
-		h_nsv_raw_rescale_dBV->Fill(mag(sv.x - bsx, sv.y - bsy),w);
+		h_nsv_rescale_dBV->Fill(mag(sv.x - bsx, sv.y - bsy),w);
 	}
 	
-	if (std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])) > 2.7 && 0.0100 < mag(mevent->gen_lsp_decay[0] - bsx, mevent->gen_lsp_decay[1] - bsy) && mag(mevent->gen_lsp_decay[0], mevent->gen_lsp_decay[1]) < 2.09 && mag(mevent->gen_lsp_decay[3], mevent->gen_lsp_decay[4]) < 2.09 && 0.0100 < mag(mevent->gen_lsp_decay[3] - bsx, mevent->gen_lsp_decay[4] - bsy)) {
-
-		h_nsv_fiducial->Fill(nsv);
 	
 
 	//////////////////////////////////////////////////////////////////////
@@ -213,7 +212,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		const MFVVertexAux& aux = auxes->at(isv);
 		const int ntracks = aux.ntracks();
         
-		h_nsv_fiducial_rescale_dBV->Fill(mag(aux.x - bsx, aux.y - bsy),w);
+		
 		//double phin = atan2(aux.y - bsy, aux.x - bsx);
 		std::vector<int> track_which_idx;
 		std::vector<int> track_which_jet;
@@ -292,6 +291,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		}
 
 		bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
+		h_output_shared_jet_or_not->Fill(shared_jet);
 		if (shared_jet) {
 
 			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
@@ -645,6 +645,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 					   if ((sv0_sum_pt_track_which_idx.size() >= 3) && (sv1_sum_pt_track_which_idx.size() >= 3)) {
 						   
 							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
+							   
 							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv0, w);
 							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv1, w);
 
@@ -713,7 +714,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		}
 
 		
-	}
+	
     
      }
 	

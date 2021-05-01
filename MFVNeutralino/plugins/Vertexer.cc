@@ -1565,18 +1565,18 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v1_ttks))
 					nosharedjets_v1 = reco::Vertex(tv);
 
-				double v0x = v0->position().x() - bsx;
-				double v0y = v0->position().y() - bsy;
-				double v1x = v1->position().x() - bsx;
-				double v1y = v1->position().y() - bsy;
+				double v0x = v0.position().x() - bsx;
+				double v0y = v0.position().y() - bsy;
+				double v1x = v1.position().x() - bsx;
+				double v1y = v1.position().y() - bsy;
 				h_twomost_output_shared_jet_before_dVV->Fill(mag(v0x - v1x, v0y - v1y));
 
 				
 
-				double nosharedjets_v0x = nosharedjets_v0->position().x() - bsx;
-				double nosharedjets_v0y = nosharedjets_v0->position().y() - bsy;
-				double nosharedjets_v1x = nosharedjets_v1->position().x() - bsx;
-				double nosharedjets_v1y = nosharedjets_v1->position().y() - bsy;
+				double nosharedjets_v0x = nosharedjets_v0.position().x() - bsx;
+				double nosharedjets_v0y = nosharedjets_v0.position().y() - bsy;
+				double nosharedjets_v1x = nosharedjets_v1.position().x() - bsx;
+				double nosharedjets_v1y = nosharedjets_v1.position().y() - bsy;
 
 				
 				h_twomost_output_shared_jet_after_dVV->Fill(mag(nosharedjets_v0x - nosharedjets_v1x, nosharedjets_v0y - nosharedjets_v1y));
