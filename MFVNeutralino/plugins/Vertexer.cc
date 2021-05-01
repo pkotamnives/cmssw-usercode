@@ -196,6 +196,20 @@ private:
   TH1F* h_twomost_output_vertex_dBV;
   TH1F* h_twomost_output_vertex_bs2derr;
   TH2F* h_2D_twomost_output_vertex_ntracks;
+
+  TH1F* h_twomost_output_shared_jet_before_dVV;
+  TH1F* h_twomost_output_shared_jet_after_dVV;
+
+  TH1F* h_select_first_shared_jet_vertex_before_dBV;
+  TH1F* h_remove_first_shared_jet_vertex_before_dBV;
+  TH1F* h_remove_first_shared_jet_vertex_after_dBV;
+  TH1F* h_select_first_shared_jet_vertex_before_bs2derr;
+  TH1F* h_remove_first_shared_jet_vertex_before_bs2derr;
+  TH1F* h_remove_first_shared_jet_vertex_after_bs2derr;
+  TH1F* h_remove_first_shared_jet_vertex_before_mass;
+  TH1F* h_remove_first_shared_jet_vertex_after_mass;
+  TH1F* h_remove_first_shared_jet_vertex_before_chi2dof;
+  TH1F* h_remove_first_shared_jet_vertex_after_chi2dof;
   //
 
   TH2F* h_2D_close_dvv_its_significance_before_merge;
@@ -306,8 +320,22 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_twomost_output_vertex_tkvtxdistsig = fs->make<TH1F>("h_twomost_output_vertex_tkvtxdistsig", "; miss dist significance 3d ", 50, 0, 10);
 	h_twomost_output_vertex_mass = fs->make<TH1F>("h_twomost_output_vertex_mass", "; vtx mass (GeV)", 50, 0, 2000);
 	h_twomost_output_vertex_dBV = fs->make<TH1F>("h_twomost_output_vertex_dBV", "; dBV (cm)", 100, 0, 1.0);
-	h_twomost_output_vertex_bs2derr = fs->make<TH1F>("h_twomost_output_vertex_bs2derr", "; bs2err (cm)", 10, 0, 0.05);
+	h_twomost_output_vertex_bs2derr = fs->make<TH1F>("h_twomost_output_vertex_bs2derr", "; bs2err (cm)", 20, 0, 0.05);
 	h_2D_twomost_output_vertex_ntracks = fs->make<TH2F>("h_2D_twomost_output_vertex_ntracks", "; most-track vtx's ntracks; second most-track vtx's ntracks", 30, 0, 30, 30, 0, 30);
+
+	h_twomost_output_shared_jet_before_dVV = fs->make<TH1F>("h_twomost_output_shared_jet_before_dVV", "shared-jet events (before removal); dVV (cm)", 100, 0, 2.0);
+	h_twomost_output_shared_jet_after_dVV = fs->make<TH1F>("h_twomost_output_shared_jet_after_dVV", "shared-jet events (after removal); dVV (cm)", 100, 0, 2.0);
+
+	h_select_first_shared_jet_vertex_before_dBV = fs->make<TH1F>("h_select_first_shared_jet_vertex_before_dBV", "shared-jet events (before removal); selected vtx's dBV (cm)", 100, 0, 1.0);
+	h_remove_first_shared_jet_vertex_before_dBV = fs->make<TH1F>("h_remove_first_shared_jet_vertex_before_dBV", "shared-jet events (before removal); non-selected vtx's dBV (cm)", 100, 0, 1.0);
+	h_remove_first_shared_jet_vertex_after_dBV = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_dBV", "shared-jet events (after removal); non-selected selected vtx's dBV (cm)", 100, 0, 1.0);
+	h_select_first_shared_jet_vertex_before_bs2derr = fs->make<TH1F>("h_select_first_shared_jet_vertex_before_bs2derr", "shared-jet events (before removal); selected vtx's bs2err (cm)", 20, 0, 0.05);
+	h_remove_first_shared_jet_vertex_before_bs2derr = fs->make<TH1F>("h_remove_first_shared_jet_vertex_before_bs2derr", "shared-jet events (before removal); non-selected vtx's bs2err (cm)", 20, 0, 0.05);
+	h_remove_first_shared_jet_vertex_after_bs2derr = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_bs2derr", "shared-jet events (after removal); non-selected vtx's bs2err (cm)", 20, 0, 0.05);
+	h_remove_first_shared_jet_vertex_before_mass = fs->make<TH1F>("h_remove_first_shared_jet_vertex_before_mass", "; non-selected vtx's mass (GeV)", 50, 0, 2000);
+	h_remove_first_shared_jet_vertex_after_mass = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_mass", "; non-selected vtx's mass (GeV)", 50, 0, 2000);
+	h_remove_first_shared_jet_vertex_before_chi2dof = fs->make<TH1F>("h_remove_first_shared_jet_vertex_before_chi2dof", "; non-selected vtx's chi2/dof ", 20, 0, max_seed_vertex_chi2);
+	h_remove_first_shared_jet_vertex_after_chi2dof = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_chi2dof", "; non-selected vtx's chi2/dof ", 20, 0, max_seed_vertex_chi2);
 
 	h_2D_close_dvv_its_significance_before_merge = fs->make<TH2F>("h_2D_close_dvv_its_significance_before_merge", "Before merging: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
 	h_2D_close_dvv_its_significance_passed_merge_pairs = fs->make<TH2F>("h_2D_close_dvv_its_significance_passed_merge_pairs", "Only passed merging pairs: dPhi(SV0,SV1)<0.5; svdist3d (cm); svdist3d significance(cm)", 50, 0, 0.1, 100, 0, 30);
@@ -1453,6 +1481,64 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						sv0_sum_pt_track_which_idx = sv0_diff;
 						
 					}
+
+					if (i == 0) {
+						std::vector<reco::TransientTrack> nosharedjets_v0_ttks;
+						for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) {
+							reco::TransientTrack v0_track;
+							int idx = sv0_sum_pt_track_which_idx[i];
+							v0_track = tt_builder->build(tks_v0[idx]);
+							nosharedjets_v0_ttks.push_back(v0_track);
+						}
+
+						reco::Vertex nosharedjets_v0;
+						for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v0_ttks))
+							nosharedjets_v0 = reco::Vertex(tv);
+
+						std::vector<reco::TransientTrack> nosharedjets_v1_ttks;
+						for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
+							reco::TransientTrack v1_track;
+							int idx = sv1_sum_pt_track_which_idx[i];
+							v1_track = tt_builder->build(tks_v1[idx]);
+							nosharedjets_v1_ttks.push_back(v1_track);
+						}
+
+						reco::Vertex nosharedjets_v1;
+						for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v1_ttks))
+							nosharedjets_v1 = reco::Vertex(tv);
+
+						Measurement1D noshj_dBV0_Meas1D = vertex_dist_2d.distance(nosharedjets_v0, fake_bs_vtx);
+						double noshj_dBV0 = noshj_dBV0_Meas1D.value();
+						double noshj_bs2derr0 = noshj_dBV0_Meas1D.error();
+						Measurement1D noshj_dBV1_Meas1D = vertex_dist_2d.distance(nosharedjets_v1, fake_bs_vtx);
+						double noshj_dBV1 = noshj_dBV1_Meas1D.value();
+						double noshj_bs2derr1 = noshj_dBV1_Meas1D.error();
+
+						if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
+							h_remove_first_shared_jet_vertex_after_dBV->Fill(noshj_dBV1);
+							h_select_first_shared_jet_vertex_before_dBV->Fill(dBV0);
+							h_remove_first_shared_jet_vertex_before_dBV->Fill(dBV1);
+							h_remove_first_shared_jet_vertex_after_bs2derr->Fill(noshj_bs2derr1);
+							h_select_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V0);
+							h_remove_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V1);
+							h_remove_first_shared_jet_vertex_after_mass->Fill(nosharedjets_v1.p4().mass());
+							h_remove_first_shared_jet_vertex_before_mass->Fill(v1.p4().mass());
+							h_remove_first_shared_jet_vertex_after_chi2dof->Fill(nosharedjets_v1.normalizedChi2());
+							h_remove_first_shared_jet_vertex_before_chi2dof->Fill(v1.normalizedChi2());
+						}
+						else {
+							h_remove_first_shared_jet_vertex_after_dBV->Fill(noshj_dBV0);
+							h_select_first_shared_jet_vertex_before_dBV->Fill(dBV1);
+							h_remove_first_shared_jet_vertex_before_dBV->Fill(dBV0);
+							h_remove_first_shared_jet_vertex_after_bs2derr->Fill(noshj_bs2derr0);
+							h_select_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V1);
+							h_remove_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V0);
+							h_remove_first_shared_jet_vertex_after_mass->Fill(nosharedjets_v0.p4().mass());
+							h_remove_first_shared_jet_vertex_before_mass->Fill(v0.p4().mass());
+							h_remove_first_shared_jet_vertex_after_chi2dof->Fill(nosharedjets_v0.normalizedChi2());
+							h_remove_first_shared_jet_vertex_before_chi2dof->Fill(v0.normalizedChi2());
+						}
+					}
 				}
 
 				std::vector<reco::TransientTrack> nosharedjets_v0_ttks;
@@ -1479,6 +1565,24 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v1_ttks))
 					nosharedjets_v1 = reco::Vertex(tv);
 
+				double v0x = v0->position().x() - bsx;
+				double v0y = v0->position().y() - bsy;
+				double v1x = v1->position().x() - bsx;
+				double v1y = v1->position().y() - bsy;
+				h_twomost_output_shared_jet_before_dVV->Fill(mag(v0x - v1x, v0y - v1y));
+
+				
+
+				double nosharedjets_v0x = nosharedjets_v0->position().x() - bsx;
+				double nosharedjets_v0y = nosharedjets_v0->position().y() - bsy;
+				double nosharedjets_v1x = nosharedjets_v1->position().x() - bsx;
+				double nosharedjets_v1y = nosharedjets_v1->position().y() - bsy;
+
+				
+				h_twomost_output_shared_jet_after_dVV->Fill(mag(nosharedjets_v0x - nosharedjets_v1x, nosharedjets_v0y - nosharedjets_v1y));
+
+				v0 = nosharedjets_v0;
+				v1 = nosharedjets_v1;
 			}
 		}
 	}
