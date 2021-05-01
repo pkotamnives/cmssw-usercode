@@ -1422,7 +1422,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				//remove shared tracks for each shared jet  
 				for (int i = 0; i < nsharedjets; i++) {
 
-					int jet_index = nsharedjet_jet_index[i];
+					
 					double sum_pt_i_sv0 = 0;
 					std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
 					for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
@@ -1458,7 +1458,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::vector<reco::TransientTrack> nosharedjets_v0_ttks;
 				for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) {
 					reco::TransientTrack v0_track;
-					int idx	= sv0_i_sharedjet_which_idx[i];
+					int idx	= sv0_sum_pt_track_which_idx[i];
 					v0_track = tt_builder->build(tks_v0[idx]);
 					nosharedjets_v0_ttks.push_back(v0_track);
 				}
@@ -1470,7 +1470,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::vector<reco::TransientTrack> nosharedjets_v1_ttks;
 				for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
 					reco::TransientTrack v1_track;
-					int idx = sv1_i_sharedjet_which_idx[i];
+					int idx = sv1_sum_pt_track_which_idx[i];
 					v1_track = tt_builder->build(tks_v1[idx]);
 					nosharedjets_v1_ttks.push_back(v1_track);
 				}
