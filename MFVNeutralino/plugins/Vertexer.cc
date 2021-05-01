@@ -1313,7 +1313,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::cout << "shared jets by the two most-track vertices? " << shared_jet << " : sv0 has # of tracks " << v0.nTracks() << " sv1 has # of tracks " << v1.nTracks() << std::endl;
 
 			if (shared_jet) {
-				int nsharedjet = 0;
+				int nsharedjets = 0;
+				std::vector<int> nsharedjet_jet_index;
 				std::vector<std::vector<int>> sv_track_which_jet_copy;
 				sv_track_which_jet_copy = sv_track_which_jet;
 				
@@ -1368,7 +1369,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						sv0_track_which_idx_copy.erase(std::remove(sv0_track_which_idx_copy.begin(), sv0_track_which_idx_copy.end(), track_index), sv0_track_which_idx_copy.end());
 						
 					}
-					sv0_sharedjet_which_no_trk_idx.push_back(sv0_track_which_idx_copy);
+					
 
 					if (sv0_track_which_temp_idx.size() + sv0_track_which_idx_copy.size() != sv0_track_which_idx.size()) {
 						std::cout << "sv0 needs to be fixed" << std::endl;
@@ -1398,10 +1399,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					for (size_t k = 0; k < sv1_track_which_temp_idx.size(); k++) {
 						int track_index = sv1_track_which_temp_idx[k];
 						sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end());
-						sv1_track_which_idx_no_trk.erase(std::remove(sv1_track_which_idx_no_trk.begin(), sv1_track_which_idx_no_trk.end(), track_index), sv1_track_which_idx_no_trk.end());
-
+						
 					}
-					sv1_sharedjet_which_no_trk_idx.push_back(sv1_track_which_idx_copy);
+					
 
 					if (sv1_track_which_temp_idx.size() + sv1_track_which_idx_copy.size() != sv1_track_which_idx.size()) {
 						std::cout << "sv1 needs to be fixed" << std::endl;
@@ -1415,7 +1415,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				}
 
 				std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
+				track_vec tks_v0 = vertex_track_vec(v0);
 				std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
+				track_vec tks_v1 = vertex_track_vec(v1);
 
 				//remove shared tracks for each shared jet  
 				for (int i = 0; i < nsharedjets; i++) {
@@ -1425,15 +1427,17 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
 					for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
 						int idx = sv0_i_sharedjet_which_idx[j];
-						sum_pt_i_sv0 = sum_pt_i_sv0 + tks[idx]->pt();
+						sum_pt_i_sv0 = sum_pt_i_sv0 + tks_v0[idx]->pt();
 					}
 					double sum_pt_i_sv1 = 0;
 					std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
 					for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
 						int idx = sv1_i_sharedjet_which_idx[j];
-						sum_pt_i_sv1 = sum_pt_i_sv1 + tks[idx]->pt();
+						sum_pt_i_sv1 = sum_pt_i_sv1 + tks_v1[idx]->pt();
 					}
 
+					std::vector<int> sv1_diff;
+					std::vector<int> sv0_diff;
 
 					if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
 						
@@ -1455,7 +1459,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) {
 					reco::TransientTrack v0_track;
 					int idx	= sv0_i_sharedjet_which_idx[i];
-					v0_track = tt_builder->build(tks[idx]);
+					v0_track = tt_builder->build(tks_v0[idx]);
 					nosharedjets_v0_ttks.push_back(v0_track);
 				}
 				
@@ -1467,7 +1471,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
 					reco::TransientTrack v1_track;
 					int idx = sv1_i_sharedjet_which_idx[i];
-					v1_track = tt_builder->build(tks[idx]);
+					v1_track = tt_builder->build(tks_v1[idx]);
 					nosharedjets_v1_ttks.push_back(v1_track);
 				}
 
