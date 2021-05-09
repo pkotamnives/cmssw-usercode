@@ -71,51 +71,10 @@ private:
 	}
 	
 	TH1F* h_nsv;
-	
-
-	TH1F* h_nsv_rescale_dBV;
-
-	
-	TH1F* h_sv_njets_nsv1;
-	TH1F* h_sv_njets_large_nsv2_no_shj;
-	
-
-	TH1F* h_sv_njets_large_nsv2_shj;
 	TH1F* h_output_shared_jet_or_not;
-	TH1F* h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2;
-	TH1F* h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2;
-	
-	//efficiency plots for all shared jets 
-	TH2F* h_2D_sv_tracks_large_nsv2;
-	TH2F* h_2D_sv_tracks_shared_jets_large_nsv2;
-	TH2F* h_2D_sv_tracks_no_shared_tracks_large_nsv2;
-	TH2F* h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2;
-
-	//efficiency plots for all nsharedjets=1 
-	
-	
-	TH2F* h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2;
-	
 	
 
-	TH2F* h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2;
-
-	TH1F* h_diff_pT_sum_dPhi_shj_sv_large_nsv2;
 	
-	TH1F* h_diff_pT_sum_sv0_sv1_sv_nsv2;
-
-	
-	TH1F * h_lspdist2d_nsv2_shared_jets;
-	TH1F * h_lspdist3d_nsv2_shared_jets;
-	TH1F * h_absdeltaphi01_genlsp_nsv2_shared_jets;
-	TH1F * h_lspdist2d_nsv2_no_shared_jets;
-	TH1F * h_lspdist3d_nsv2_no_shared_jets;
-	TH1F * h_absdeltaphi01_genlsp_nsv2_no_shared_jets;
-
-	TH1F * h_nsharedjets_nsv2_shared_jets;
-	TH1F * h_nsharedjets_large_nsv2_shared_jets;
-	TH1F * h_svdist2d_large_absdeltaphi01_nsv2_shared_jets;
-	TH1F * h_svdist3d_large_absdeltaphi01_nsv2_shared_jets;
 };
 
 const char* MFVVertexHistos::sv_index_names[MFVVertexHistos::sv_num_indices] = { "all" };
@@ -130,47 +89,8 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	edm::Service<TFileService> fs;
 
 	h_nsv = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
-	
+	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";SV tracks share jet?"",2,0,2)
 
-	h_nsv_rescale_dBV = fs->make<TH1F>("h_nsv_rescale_dBV", ";dist2d(beamspot, SV) (cm);arb. units", 500, 0, 2.5);
-	
-
-	h_sv_njets_nsv1 = fs->make<TH1F>("h_sv_njets_large_nsv1", "nsv = 1; # of jets/SV;arb. units", 10, 0, 10);
-	h_sv_njets_large_nsv2_no_shj = fs->make<TH1F>("h_sv_njets_large_nsv2_no_shj", "nsv = 2, absdPhi01 > 0.5, no shared jets; # of jets/SV;arb. units", 10, 0, 10);
-	h_sv_njets_large_nsv2_shj = fs->make<TH1F>("h_sv_njets_large_nsv2_shj", "nsv = 2, absdPhi01 > 0.5, shared jets; # of jets/SV;arb. units", 10, 0, 10);
-	
-	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";shared jets? between the two most-track output vertices", 2, 0, 2);
-
-	h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH1F>("h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # of jets/SV;arb. units", 10, 0, 10);
-	h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH1F>("h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2", "poor nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # of jets/SV;arb. units", 10, 0, 10);
-	
-	h_2D_sv_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5; # vtx's more tracks; # vtx's less tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_shared_jets_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_shared_jets_large_nsv2", "nsv = 2, absdPhi01 > 0.5, shared jets; # vtx's more tracks; # vtx's less tracks", 50, 0, 50, 50, 0, 50);
-    h_2D_sv_tracks_no_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no shared tracks; # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no minor tracks;  # major vtx's tracks; # minor vtx's tracks", 50, 0, 50, 50, 0, 50);
-	h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2", "nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
-	
-	h_diff_pT_sum_dPhi_shj_sv_large_nsv2 = fs->make<TH1F>("h_diff_pT_sum_dPhi_shj_sv_large_nsv2", "nsv = 2, absdPhi01 > 0.5 ;delta(phi of a shared jet, phi of vtx w/ more_{sum p_{T}} );arb. units", 31, 0, 3.16);
-	
-	h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2 = fs->make<TH2F>("h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2", "poor nsv = 2, absdPhi01 > 0.5, no less_{sum p_{T}} shared tracks; # sv0 vtx's tracks; # sv1 vtx's tracks", 50, 0, 50, 50, 0, 50);
-	
-
-	//start to apply the >= n ratio cut
-
-	h_diff_pT_sum_sv0_sv1_sv_nsv2 = fs->make<TH1F>("h_diff_pT_sum_sv0_sv1_sv_nsv2", "nsv = 2, absdeltaphi01 > 0.5; sv0 shared sum p_{T} - sv1 shared sum p_{T}", 200, -1000, 1000);
-	
-	h_lspdist2d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
-	h_lspdist3d_nsv2_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
-	h_absdeltaphi01_genlsp_nsv2_shared_jets = fs->make<TH1F>("h_absdeltaphi01_genlsp_nsv2_shared_jets", "nsv = 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
-	h_lspdist2d_nsv2_no_shared_jets = fs->make<TH1F>("h_lspdist2d_nsv2_no_shared_jets", "nsv = 2;dist2d(gen vtx #0, #1) (cm)", 200, 0, 2);
-	h_lspdist3d_nsv2_no_shared_jets = fs->make<TH1F>("h_lspdist3d_nsv2_no_shared_jets", " nsv = 2;dist3d(gen vtx #0, #1) (cm)", 200, 0, 2);
-	h_absdeltaphi01_genlsp_nsv2_no_shared_jets = fs->make<TH1F>("h_absdeltaphi01_genlsp_nsv2_no_shared_jets", "nsv = 2;abs(delta(gen lsp phi of sv #0, gen lsp phi of sv #1));arb. units", 316, 0, 3.16);
-
-    h_nsharedjets_nsv2_shared_jets = fs->make<TH1F>("h_nsharedjets_nsv2_shared_jets", "nsv = 2;# of shared jets;arb. units", 10, 0, 10);		
-        	
-	h_nsharedjets_large_nsv2_shared_jets = fs->make<TH1F>("h_nsharedjets_large_nsv2_shared_jets", "nsv = 2, absdeltaphi01 > 0.5;# of shared jets;arb. units", 10, 0, 10);
-	h_svdist2d_large_absdeltaphi01_nsv2_shared_jets = fs->make<TH1F>("h_svdist2d_large_absdeltaphi01_nsv2_shared_jets", "nsv = 2, absdeltaphi01 > 0.5 ;dist2d(sv #0, #1) (cm);arb. units", 500, 0, 1);
-	h_svdist3d_large_absdeltaphi01_nsv2_shared_jets = fs->make<TH1F>("h_svdist3d_large_absdeltaphi01_nsv2_shared_jets", "nsv = 2, absdeltaphi01 > 0.5 ;dist3d(sv #0, #1) (cm);arb. units", 500, 0, 1);
 	}
 
 void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) {
@@ -198,10 +118,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 	const int nsv = int(auxes->size());
 
 	h_nsv->Fill(nsv,w);
-	for (int isv = 0; isv < nsv; ++isv) {
-		const MFVVertexAux& sv = auxes->at(isv);
-		h_nsv_rescale_dBV->Fill(mag(sv.x - bsx, sv.y - bsy),w);
-	}
+	
 	
 	
 
@@ -243,10 +160,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
                }
 
 	
-	if (nsv == 1) {
-		int njets = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
-		h_sv_njets_nsv1->Fill(njets, w);
-	}
+	
 
 	if (nsv >= 2) {
 		const MFVVertexAux& sv0 = auxes->at(0);
@@ -258,459 +172,128 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		double eta0 = atan2(sv0.y - bsy, sv0.z - bsz);
 		double eta1 = atan2(sv1.y - bsy, sv1.z - bsz);
 
-		if ((nsv==2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
-			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
-			int idx0 = 0;
-			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
-			std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
-			int idx1 = 0;
-			std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
-			/*
-			if ((sv0_track_which_idx.size() >= 5) && (sv1_track_which_idx.size() >= 5)) {
-				if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
-					h_2D_sv_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size());
-				}
-				else {
-					h_2D_sv_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size());
-
-				}
-			}
-			*/
-			if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
-				h_2D_sv_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
-			}
-			else {
-				h_2D_sv_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
-
-			}
-
+		
+		std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
+		int idx0 = 0;
+		std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
+		std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
+		int idx1 = 0;
+		std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
 			
-			
-			
-			
-		}
+		
 
 		bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
 		h_output_shared_jet_or_not->Fill(shared_jet);
-		if (shared_jet) {
 
-			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
-			int idx0 = 0;
-			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
-			std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
-			int idx1 = 0;
-			std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
+		int nsharedjets = 0;
+		std::vector<double> nsharedjet_phis;
+		std::vector<std::vector<int>> sv_track_which_jet_copy = sv_track_which_jet;
 
-			if ((nsv == 2) && (fabs(reco::deltaPhi(phi0, phi1)) > 0.5)) {
-				
-				if ((sv0_track_which_idx.size() >= 3) && (sv1_track_which_idx.size() >= 3)) {
-					if (sv0_track_which_idx.size() >= sv1_track_which_idx.size()) {
-						h_2D_sv_tracks_shared_jets_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx.size(),w);
-					}
-					else {
-						h_2D_sv_tracks_shared_jets_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx.size(),w);
+		std::vector<std::vector<int> >sv0_sharedjet_which_idx;                                                                                                                              
+		std::vector<std::vector<int> >sv1_sharedjet_which_idx;
 
-					}
-				}
+		std::vector<int> sv0_track_which_jet = sv_track_which_jet[0];                                                                                                    
+		std::vector<int> sv0_track_which_idx = sv_track_which_idx[0];                                                                                                    
+		std::vector<int> sv0_track_which_temp_idx;                                                                                                                                                                                                                                                                                                                              
+		std::vector<int> sv1_track_which_jet = sv_track_which_jet[1];                                                                                                   
+		std::vector<int> sv1_track_which_idx = sv_track_which_idx[1];                                                                                                   
+		std::vector<int> sv1_track_which_temp_idx;
 
-				int njets_sv0 = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
-				int njets_sv1 = std::set<double>(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()).size();
-				h_sv_njets_large_nsv2_shj->Fill(njets_sv0, w);
-				h_sv_njets_large_nsv2_shj->Fill(njets_sv1, w);
+		while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
 
-				
-
-			}
-
-			int nsharedjets = 1;
-			std::vector<int> nsharedjet_jet_index;
-			std::vector<std::vector<int> > sv_track_which_jet_copy;
-			sv_track_which_jet_copy = sv_track_which_jet;
-			std::vector<int> nsharedjet_tracks_sv0;
-			std::vector<int> nsharedjet_tracks_sv1;
-			std::vector<std::vector<int> >sv0_sharedjet_which_idx;
-			std::vector<std::vector<int> >sv1_sharedjet_which_idx;
-			std::vector<std::vector<int> >sv0_sharedjet_which_no_trk_idx;
-			std::vector<std::vector<int> >sv1_sharedjet_which_no_trk_idx;
+			nsharedjets++;
+			std::vector<int> sv0_track_which_idx_copy = sv0_track_which_idx;
+			std::vector<int> sv1_track_which_idx_copy = sv1_track_which_idx;
 			std::vector<int>::iterator it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
-			int idx = std::distance(sv_track_which_jet_copy[0].begin(), it);
+			int idx = std::distance(sv_track_which_jet_copy[first_ntracks_vtxidx].begin(), it);
 			int jet_index = sv_track_which_jet_copy[0].at(idx);
-			nsharedjet_jet_index.push_back(jet_index);
+			std::vector<int>::iterator itr = std::find(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index);
+
+			if (itr != sv_track_which_jet_copy[0].cend()) {
+				int j = std::distance(sv_track_which_jet_copy[0].begin(), itr);
+				nsharedjet_phis.push_back(mevent->jet_track_phi[j]);
+			}
 			sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
 			sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());
-			nsharedjet_tracks_sv0.push_back(std::count(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index));
-
-			std::vector<int> sv0_track_which_jet = sv_track_which_jet[0];
-			std::vector<int> sv0_track_which_jet_idx = sv_track_which_idx[0];
-
-			std::vector<int> sv0_track_which_idx_copy = sv0_track_which_idx;
-			std::vector<int> sv0_track_which_idx_no_trk = sv0_track_which_idx;
-			std::vector<int> sv0_track_which_temp_idx;
-			std::multimap<int, size_t> sv0_m_nshj1;
-
-
-
-			for (size_t k = 0; k < sv0_track_which_jet.size(); k++) if (sv0_track_which_jet[k] == jet_index) { sv0_m_nshj1.insert({ sv0_track_which_jet[k], k }); }
-
-			for (auto it = sv0_m_nshj1.begin(); it != sv0_m_nshj1.end(); )
-			{
-				auto p = sv0_m_nshj1.equal_range(it->first);
-
-				while (p.first != p.second)
-				{
-					sv0_track_which_temp_idx.push_back(sv0_track_which_jet_idx[p.first++->second]);
-				}
-				it = p.second;
-
+		
+			// start counting shared tracks of sv0 for each shared jet                                                                                                                          
+			nsharedjet_tracks_sv0.push_back(std::count(sv0_track_which_jet.begin(), sv0_track_which_jet.end(), jet_index));                                                 
+			std::multimap<int, size_t> sv0_m;                                                                                                                                                                       
+			for (size_t k = 0; k < sv0_track_which_jet.size(); k++) if (sv0_track_which_jet[k] == jet_index) { sv0_m.insert({ sv0_track_which_jet[k], k }); }                                                                                                                                                                                                                                                                                                                                                                                                           
+			for (auto it = sv0_m.begin(); it != sv0_m.end(); )                                                                                                                                  
+			{                                                                                                                                                                                           
+				auto p = sv0_m.equal_range(it->first);                                                                                                                                                                                                                                                                                                                                  
+				while (p.first != p.second)                                                                                                                                                         
+				{                                                                                                                                                                                           
+					sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);                                                                                                 
+				}                                                                                                                                                                                   
+				it = p.second;                                                                                                                                                                                                                                                                                                                                                  
+			}                                                                                                                                                                                                                                                                                                                                                                       
+			sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx);                                                                                                                        
+			for (size_t k = 0; k < sv0_track_which_temp_idx.size(); k++) {                                                                                                                              
+				int track_index = sv0_track_which_temp_idx[k];                                                                                                                                      
+				sv0_track_which_idx_copy.erase(std::remove(sv0_track_which_idx_copy.begin(), sv0_track_which_idx_copy.end(), track_index), sv0_track_which_idx_copy.end());                                                                                                                                                                                                                                                                                                                                                                                         
+			}                                                                                                                                                                                                                                                                                                                                                                       
+			                                                                                                                                                                                                                                                                                              
+			sv0_track_which_temp_idx = {};                                                                                                                                                                                                                                                                                                                                          
+			// start counting shared tracks of sv1 for each shared jet                                                                                                                          
+			nsharedjet_tracks_sv1.push_back(std::count(sv1_track_which_jet.begin(), sv1_track_which_jet.end(), jet_index));                                                                     
+			std::multimap<int, size_t> sv1_m;                                                                                                                                                   
+			for (size_t k = 0; k < sv1_track_which_jet.size(); k++) if (sv1_track_which_jet[k] == jet_index) { sv1_m.insert({ sv1_track_which_jet[k], k }); }                                                                                                                                                                                                                                                                                                                                                                                                           
+			for (auto it = sv1_m.begin(); it != sv1_m.end(); )                                                                                                                                  
+			{                                                                                                                                                                                           
+				auto p = sv1_m.equal_range(it->first);                                                                                                                                                                                                                                                                                                                                  
+				while (p.first != p.second)                                                                                                                                                         
+				{                                                                                                                                                                                           
+					sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);                                                                                                 
+				}                                                                                                                                                                                   
+				it = p.second;                                                                                                                                                                                                                                                                                                                                                  
 			}
 
-			sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx);
-			for (size_t k = 0; k < sv0_track_which_temp_idx.size(); k++) {
-				int track_index = sv0_track_which_temp_idx[k];
-				sv0_track_which_idx_copy.erase(std::remove(sv0_track_which_idx_copy.begin(), sv0_track_which_idx_copy.end(), track_index), sv0_track_which_idx_copy.end());
-				sv0_track_which_idx_no_trk.erase(std::remove(sv0_track_which_idx_no_trk.begin(), sv0_track_which_idx_no_trk.end(), track_index), sv0_track_which_idx_no_trk.end());
+			sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);                                                                                                                        
+			for (size_t k = 0; k < sv1_track_which_temp_idx.size(); k++) { int track_index = sv1_track_which_temp_idx[k];                                                                                                                                      
+			sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end()); }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+			sv1_track_which_temp_idx = {}; 
+		
+		}
 
+
+		if (shared_jet) {
+
+			std::cout << "shared-jet event id: " << "run :" << run << "lumi: " << lumi << "event: " << evt << std::endl;
+			std::cout << "the number of shared-jets is " << nsharedjets << std::endl;
+			std::cout << "sv0's phi = " << phi0 << " and " << "sv1's phi = " << phi1 << std::endl;
+			std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
+			std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
+			for (int i = 0; i < nsharedjets; ++i) {
+				std::out << "shared jet's phi: " << nsharedjet_phis[i] << std::endl;
+				double sum_pt_i_sv0 = 0;                                                                                                                                                            
+				std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];                                                                                                            
+				for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) { 
+					int idx = sv0_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
+				sum_pt_i_sv0 = sum_pt_i_sv0 + tks_v0[idx]->pt(); }                                                                                                                                                                                   
+				double sum_pt_i_sv1 = 0;                                                                                                                                                            
+				std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];                                                                                                            
+				for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) { 
+					int idx = sv1_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
+				sum_pt_i_sv1 = sum_pt_i_sv1 + tks_v1[idx]->pt(); }
 			}
-			sv0_sharedjet_which_no_trk_idx.push_back(sv0_track_which_idx_copy);
-            sv0_track_which_temp_idx = {};
-
-			nsharedjet_tracks_sv1.push_back(std::count(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end(), jet_index));
-
-			std::vector<int> sv1_track_which_jet = sv_track_which_jet[1];
-			std::vector<int> sv1_track_which_jet_idx = sv_track_which_idx[1];
-
-			std::vector<int> sv1_track_which_idx_copy = sv1_track_which_idx;
-			std::vector<int> sv1_track_which_idx_no_trk = sv1_track_which_idx;
-			std::vector<int> sv1_track_which_temp_idx;
-			std::multimap<int, size_t> sv1_m_nshj1;
-
-			for (size_t k = 0; k < sv1_track_which_jet.size(); k++) if (sv1_track_which_jet[k] == jet_index) { sv1_m_nshj1.insert({ sv1_track_which_jet[k], k }); }
-
-			for (auto it = sv1_m_nshj1.begin(); it != sv1_m_nshj1.end(); )
-			{
-				auto p = sv1_m_nshj1.equal_range(it->first);
-
-				while (p.first != p.second)
-				{
-					sv1_track_which_temp_idx.push_back(sv1_track_which_jet_idx[p.first++->second]);
-				}
-				it = p.second;
-
+			if (sum_pt_i_sv0 >= sum_pt_sv1) {
+				std::cout << "sv0 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[i] << std::endl;
 			}
-			sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);  
-			for (size_t k = 0; k < sv1_track_which_temp_idx.size(); k++) {
-				int track_index = sv1_track_which_temp_idx[k];
-				sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end());
-				sv1_track_which_idx_no_trk.erase(std::remove(sv1_track_which_idx_no_trk.begin(), sv1_track_which_idx_no_trk.end(), track_index), sv1_track_which_idx_no_trk.end());
-
+			else {
+				std::cout << "sv1 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[i] << std::endl;
 			}
-			sv1_sharedjet_which_no_trk_idx.push_back(sv1_track_which_idx_copy);
-			sv1_track_which_temp_idx = {};
-			
-			while (std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end()) != sv_track_which_jet_copy[0].end()) {
-				nsharedjets++;
-				sv0_track_which_idx_copy = sv0_track_which_idx;
-				sv1_track_which_idx_copy = sv1_track_which_idx;
-				it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
-				idx = std::distance(sv_track_which_jet_copy[0].begin(), it);
-				jet_index = sv_track_which_jet_copy[0].at(idx);
-				nsharedjet_jet_index.push_back(jet_index);
-				sv_track_which_jet_copy[0].erase(std::remove(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index), sv_track_which_jet_copy[0].end());
-				sv_track_which_jet_copy[1].erase(std::remove(sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end(), jet_index), sv_track_which_jet_copy[1].end());
-				nsharedjet_tracks_sv0.push_back(std::count(sv0_track_which_jet.begin(), sv0_track_which_jet.end(), jet_index));
-
-				std::multimap<int, size_t> sv0_m;
-				for (size_t k = 0; k < sv0_track_which_jet.size(); k++) if (sv0_track_which_jet[k] == jet_index) { sv0_m.insert({ sv0_track_which_jet[k], k }); }
-
-				for (auto it = sv0_m.begin(); it != sv0_m.end(); )
-				{
-					auto p = sv0_m.equal_range(it->first);
-
-					while (p.first != p.second)
-					{
-						sv0_track_which_temp_idx.push_back(sv0_track_which_jet_idx[p.first++->second]);
-					}
-					it = p.second;
-
-				}
-				
-				sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx); 
-				for (size_t k = 0; k < sv0_track_which_temp_idx.size(); k++) {
-					int track_index = sv0_track_which_temp_idx[k];
-					sv0_track_which_idx_copy.erase(std::remove(sv0_track_which_idx_copy.begin(), sv0_track_which_idx_copy.end(), track_index), sv0_track_which_idx_copy.end());
-					sv0_track_which_idx_no_trk.erase(std::remove(sv0_track_which_idx_no_trk.begin(), sv0_track_which_idx_no_trk.end(), track_index), sv0_track_which_idx_no_trk.end());
-
-				}
-				sv0_sharedjet_which_no_trk_idx.push_back(sv0_track_which_idx_copy);
-			    
-				if (sv0_track_which_temp_idx.size() + sv0_track_which_idx_copy.size() != sv0_track_which_idx.size()) {
-					std::cout << "sv0 needs to be fixed" << std::endl;
-					std::cout << "sv0 tracks = " << sv0_track_which_idx.size() << ", shared ones = " << sv0_track_which_temp_idx.size() << ", not shared ones = " << sv0_track_which_idx_copy.size() << std::endl;
-
-				}
-				sv0_track_which_temp_idx = {};
-
-				nsharedjet_tracks_sv1.push_back(std::count(sv1_track_which_jet.begin(), sv1_track_which_jet.end(), jet_index));
-				std::multimap<int, size_t> sv1_m;
-				for (size_t k = 0; k < sv1_track_which_jet.size(); k++) if (sv1_track_which_jet[k] == jet_index) { sv1_m.insert({ sv1_track_which_jet[k], k }); }
-
-				for (auto it = sv1_m.begin(); it != sv1_m.end(); )
-				{
-					auto p = sv1_m.equal_range(it->first);
-
-					while (p.first != p.second)
-					{
-						sv1_track_which_temp_idx.push_back(sv1_track_which_jet_idx[p.first++->second]);
-					}
-					it = p.second;
-
-				}
-				
-				sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);  
-				for (size_t k = 0; k < sv1_track_which_temp_idx.size(); k++) {
-					int track_index = sv1_track_which_temp_idx[k];
-					sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end());
-					sv1_track_which_idx_no_trk.erase(std::remove(sv1_track_which_idx_no_trk.begin(), sv1_track_which_idx_no_trk.end(), track_index), sv1_track_which_idx_no_trk.end());
-
-				}
-				sv1_sharedjet_which_no_trk_idx.push_back(sv1_track_which_idx_copy);
-
-				if (sv1_track_which_temp_idx.size() + sv1_track_which_idx_copy.size() != sv1_track_which_idx.size()) {
-					std::cout << "sv1 needs to be fixed" << std::endl;
-					std::cout << "sv1 tracks = " << sv1_track_which_idx.size() << ", shared ones = " << sv1_track_which_temp_idx.size() << ", not shared ones = " << sv1_track_which_idx_copy.size() << std::endl;
-
-				}
-
-				sv1_track_which_temp_idx = {};
-				
-			
-		        }	
-
-			
-			
-			if (nsv == 2) {	   //start nsv=2
-				h_nsharedjets_nsv2_shared_jets->Fill(nsharedjets,w);
-				std::vector<double> absdeltaphi_sv0_shared_jets;
-				std::vector<double> absdeltaphi_sv1_shared_jets;
-				std::vector<double> max_dphi_sv0_sv1;
-                                
-                                
-				h_lspdist2d_nsv2_shared_jets->Fill(mevent->lspdist2d(), w);
-				h_lspdist3d_nsv2_shared_jets->Fill(mevent->lspdist3d(), w);
-				h_absdeltaphi01_genlsp_nsv2_shared_jets->Fill(std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
-
-				if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5) {	//start no split vertex 
-
-					std::vector<int> sv0_track_which_idx_no_shared_track = sv0_track_which_idx_no_trk;
-					std::vector<int> sv1_track_which_idx_no_shared_track = sv1_track_which_idx_no_trk;
-					std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
-					int idx0 = 0;
-					std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
-					std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
-					int idx1 = 0;
-					std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
-
-					if ((sv0_track_which_idx.size() - sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
-
-
-						if ((sv0_track_which_idx_no_shared_track.size() >= 3) && (sv1_track_which_idx_no_shared_track.size() >= 3)) {
-							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv0_track_which_idx_no_shared_track.size(), sv1_track_which_idx_no_shared_track.size(),w);
-
-						}
-
-					}
-					else {
-
-						if ((sv1_track_which_idx_no_shared_track.size() >= 3) && (sv0_track_which_idx_no_shared_track.size() >= 3)) {
-							h_2D_sv_tracks_no_shared_tracks_large_nsv2->Fill(sv1_track_which_idx_no_shared_track.size(), sv0_track_which_idx_no_shared_track.size(),w);
-						}
-
-					}
-					
-					if ((sv0_track_which_idx.size()- sv0_track_which_idx_no_shared_track.size()) >= (sv1_track_which_idx.size() - sv1_track_which_idx_no_shared_track.size())) {		 // sv0 is major vtx
-						
-						
-						if ((sv0_track_which_idx.size() >= 3) && (sv1_track_which_idx_no_shared_track.size() >= 3)) {
-								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv0_track_which_idx.size(), sv1_track_which_idx_no_shared_track.size(),w);
-							
-						}
-
-					}
-					else {
-						
-						if ((sv1_track_which_idx.size() >= 3) && (sv0_track_which_idx_no_shared_track.size() >= 3)) {	  
-								h_2D_sv_tracks_no_minor_shared_tracks_large_nsv2->Fill(sv1_track_which_idx.size(), sv0_track_which_idx_no_shared_track.size(),w);
-						}
-
-					}
-
-
-					
-					
-
-					
-
-					h_nsharedjets_large_nsv2_shared_jets->Fill(nsharedjets, w);
-					h_svdist2d_large_absdeltaphi01_nsv2_shared_jets->Fill(svdist2d, w);
-					h_svdist3d_large_absdeltaphi01_nsv2_shared_jets->Fill(svdist3d, w);
-
-					std::vector<int> sv0_track_which_non_shared_jet = sv_track_which_jet_copy[0];
-					std::vector<int> sv1_track_which_non_shared_jet = sv_track_which_jet_copy[1];
-
-					double sum_sv0_non_shared_jet_pt = 0;
-					double sum_sv1_non_shared_jet_pt = 0;
-					for (size_t k = 0; k < sv0_track_which_non_shared_jet.size(); k++) {
-						sum_sv0_non_shared_jet_pt = sum_sv0_non_shared_jet_pt + mevent->jet_pt[int(sv0_track_which_non_shared_jet[k])];
-					}
-					for (size_t k = 0; k < sv1_track_which_non_shared_jet.size(); k++) {
-						sum_sv1_non_shared_jet_pt = sum_sv1_non_shared_jet_pt + mevent->jet_pt[int(sv1_track_which_non_shared_jet[k])];
-					}
-					
-					std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
-					std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
-				
-					int njets_sum_pT_sv0 = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
-					int njets_sum_pT_sv1 = std::set<double>(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()).size();
-				
-
-                                        for (int i = 0; i < nsharedjets; i++) {				//start nsharedjet loop
-
-
-                                                
-						int jet_index = nsharedjet_jet_index[i];
-
-						double dphi_large_sv0_sharedjet = double(fabs(reco::deltaPhi(phi0, mevent->jet_phi[jet_index])));
-						double dphi_large_sv1_sharedjet = double(fabs(reco::deltaPhi(phi1, mevent->jet_phi[jet_index])));
-
-
-						// all w/ sum pt 
-
-						std::vector<int> sv1_diff; 
-						std::vector<int> sv0_diff;
-
-						double sum_pt_i_sv0 = 0;
-						std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
-						for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
-							int idx = sv0_i_sharedjet_which_idx[j];
-							sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx);
-						}
-						double sum_pt_i_sv1 = 0;
-						std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
-						for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
-							int idx = sv1_i_sharedjet_which_idx[j];
-							sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx);
-						}
-
-						double sum_pt_i_no_sv0 = 0;
-						std::vector<int> sv0_i_sharedjet_which_no_idx = sv0_sharedjet_which_no_trk_idx[i];
-						for (unsigned int j = 0; j < sv0_i_sharedjet_which_no_idx.size(); j++) {
-							int idx = sv0_i_sharedjet_which_no_idx[j];
-							sum_pt_i_no_sv0 = sum_pt_i_no_sv0 + sv0.track_pt(idx);
-						}
-						double sum_pt_i_no_sv1 = 0;
-						std::vector<int> sv1_i_sharedjet_which_no_idx = sv1_sharedjet_which_no_trk_idx[i];
-						for (unsigned int j = 0; j < sv1_i_sharedjet_which_no_idx.size(); j++) {
-							int idx = sv1_i_sharedjet_which_no_idx[j];
-							sum_pt_i_no_sv1 = sum_pt_i_no_sv1 + sv1.track_pt(idx);
-						}
-
-						
-						h_diff_pT_sum_sv0_sv1_sv_nsv2->Fill(sum_pt_i_sv0- sum_pt_i_sv1,w);
-						
-
-						if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
-							h_diff_pT_sum_dPhi_shj_sv_large_nsv2->Fill(dphi_large_sv0_sharedjet, w);
-							std::set_difference(sv1_sum_pt_track_which_idx.begin(), sv1_sum_pt_track_which_idx.end(), sv1_i_sharedjet_which_idx.begin(), sv1_i_sharedjet_which_idx.end(),
-								std::inserter(sv1_diff, sv1_diff.begin())); 
-							
-							sv1_sum_pt_track_which_idx = sv1_diff;
-							njets_sum_pT_sv1 = njets_sum_pT_sv1 - 1;
-						}
-						else {
-							h_diff_pT_sum_dPhi_shj_sv_large_nsv2->Fill(dphi_large_sv1_sharedjet, w);
-							std::set_difference(sv0_sum_pt_track_which_idx.begin(), sv0_sum_pt_track_which_idx.end(), sv0_i_sharedjet_which_idx.begin(), sv0_i_sharedjet_which_idx.end(),
-								std::inserter(sv0_diff, sv0_diff.begin()));
-							
-							sv0_sum_pt_track_which_idx = sv0_diff;
-							njets_sum_pT_sv0 = njets_sum_pT_sv0 - 1;
-
-						}
-						
-
-					   }	//end nsharedjets loop
-
-
-
-					   
-					   if ((sv0_sum_pt_track_which_idx.size() >= 3) && (sv1_sum_pt_track_which_idx.size() >= 3)) {
-						   
-							   h_2D_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
-							   
-							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv0, w);
-							   h_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv1, w);
-
-					   }
-					   else {
-							   h_2D_poor_sv_tracks_no_less_sum_pt_shared_tracks_large_nsv2->Fill(sv0_sum_pt_track_which_idx.size(), sv1_sum_pt_track_which_idx.size(),w);
-							   h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv0, w);
-							   h_poor_sv_njets_no_less_sum_pt_shared_tracks_large_nsv2->Fill(njets_sum_pT_sv1, w);
-					   }
-
-					   
-
-					}   //end no split vertex 
-
-				}	//end nsv=2
-
-
-
-
-
-
-		   }
-		else {	   // no shared jets
-
-
-		if (nsv == 2) {
-			h_lspdist2d_nsv2_no_shared_jets->Fill(mevent->lspdist2d(), w);
-			h_lspdist3d_nsv2_no_shared_jets->Fill(mevent->lspdist3d(), w);
-			h_absdeltaphi01_genlsp_nsv2_no_shared_jets->Fill(std::abs(reco::deltaPhi(mevent->gen_lsp_phi[0], mevent->gen_lsp_phi[1])), w);
-			h_nsharedjets_nsv2_shared_jets->Fill((int)0, w);
-			std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
-			int idx0 = 0;
-			std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
-			std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
-			int idx1 = 0;
-			std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
-
-			double sum_pt_sv0 = 0.0;
-			double sum_pt_sv1 = 0.0;
-			for (unsigned int j = 0; j < sv0_track_which_idx.size(); j++) {
-				int idx = sv0_track_which_idx[j];
-				sum_pt_sv0 = sum_pt_sv0 + sv0.track_pt(idx);
-			}
-			for (unsigned int j = 0; j < sv1_track_which_idx.size(); j++) {
-				int idx = sv1_track_which_idx[j];
-				sum_pt_sv1 = sum_pt_sv1 + sv1.track_pt(idx);
-			}
-
-			
-			
-			if (fabs(reco::deltaPhi(phi0, phi1)) > 0.5){
-				h_nsharedjets_large_nsv2_shared_jets->Fill((int)0, w);
-
-				int njets_sv0 = std::set<double>(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end()).size();
-				int njets_sv1 = std::set<double>(sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()).size();
-				h_sv_njets_large_nsv2_no_shj->Fill(njets_sv0, w);
-				h_sv_njets_large_nsv2_no_shj->Fill(njets_sv1, w);
-
-				
-
-			}	
-
-		   }
-
 		  
+		}
+		else {
+
+			std::cout << "shared-jet event id: " << "run :" << run << "lumi: " << lumi << "event: " << evt << std::endl;
+			std::cout << "the number of shared-jets is " << nsharedjets << std::endl;
+			std::cout << "sv0's phi = " << phi0 << " and " << "sv1's phi = " << phi1 << std::endl;
+			std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
+			std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
+
 		}
 
 		
