@@ -279,13 +279,15 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) { 
 					int idx = sv1_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
 					sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx); }
+
+				if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
+					std::cout << "sv0 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[i] << std::endl;
+				}
+				else {
+					std::cout << "sv1 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[i] << std::endl;
+				}
 			}
-			if (sum_pt_i_sv0 >= sum_pt_sv1) {
-				std::cout << "sv0 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[0] << std::endl;
-			}
-			else {
-				std::cout << "sv1 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[0] << std::endl;
-			}
+			
 		  
 		}
 		else {
