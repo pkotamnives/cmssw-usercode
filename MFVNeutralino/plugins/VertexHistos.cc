@@ -189,6 +189,8 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		std::vector<double> nsharedjet_phis;
 		std::vector<std::vector<int>> sv_track_which_jet_copy = sv_track_which_jet;
 
+		std::vector<int> nsharedjet_tracks_sv0;                                                                                                                                             
+		std::vector<int> nsharedjet_tracks_sv1;
 		std::vector<std::vector<int> >sv0_sharedjet_which_idx;                                                                                                                              
 		std::vector<std::vector<int> >sv1_sharedjet_which_idx;
 
@@ -266,17 +268,17 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
 			std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
 			for (int i = 0; i < nsharedjets; ++i) {
-				std::out << "shared jet's phi: " << nsharedjet_phis[i] << std::endl;
+				std::cout << "shared jet's phi: " << nsharedjet_phis[i] << std::endl;
 				double sum_pt_i_sv0 = 0;                                                                                                                                                            
 				std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];                                                                                                            
 				for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) { 
 					int idx = sv0_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
-				sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx); }                                                                                                                                                                                   
+					sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx); }                                                                                                                                                                                   
 				double sum_pt_i_sv1 = 0;                                                                                                                                                            
 				std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];                                                                                                            
 				for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) { 
 					int idx = sv1_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
-				sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx); }
+					sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx); }
 			}
 			if (sum_pt_i_sv0 >= sum_pt_sv1) {
 				std::cout << "sv0 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[0] << std::endl;
