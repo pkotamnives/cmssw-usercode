@@ -89,7 +89,7 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 	edm::Service<TFileService> fs;
 
 	h_nsv = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
-	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";SV tracks share jet?"",2,0,2)
+	h_output_shared_jet_or_not = fs->make<TH1F>("h_output_shared_jet_or_not", ";SV tracks share jet?", 2, 0, 2);
 
 	}
 
@@ -172,14 +172,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		double eta0 = atan2(sv0.y - bsy, sv0.z - bsz);
 		double eta1 = atan2(sv1.y - bsy, sv1.z - bsz);
 
-		
+		/*
 		std::vector<int> sv0_track_which_idx(int(sv0.ntracks()));
 		int idx0 = 0;
 		std::generate(sv0_track_which_idx.begin(), sv0_track_which_idx.end(), [&] { return idx0++; });
 		std::vector<int> sv1_track_which_idx(int(sv1.ntracks()));
 		int idx1 = 0;
 		std::generate(sv1_track_which_idx.begin(), sv1_track_which_idx.end(), [&] { return idx1++; });
-			
+		*/	
 		
 
 		bool shared_jet = std::find_first_of(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), sv_track_which_jet[1].begin(), sv_track_which_jet[1].end()) != sv_track_which_jet[0].end();
@@ -205,7 +205,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			std::vector<int> sv0_track_which_idx_copy = sv0_track_which_idx;
 			std::vector<int> sv1_track_which_idx_copy = sv1_track_which_idx;
 			std::vector<int>::iterator it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
-			int idx = std::distance(sv_track_which_jet_copy[first_ntracks_vtxidx].begin(), it);
+			int idx = std::distance(sv_track_which_jet_copy[0].begin(), it);
 			int jet_index = sv_track_which_jet_copy[0].at(idx);
 			std::vector<int>::iterator itr = std::find(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), jet_index);
 
@@ -271,18 +271,18 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];                                                                                                            
 				for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) { 
 					int idx = sv0_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
-				sum_pt_i_sv0 = sum_pt_i_sv0 + tks_v0[idx]->pt(); }                                                                                                                                                                                   
+				sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx); }                                                                                                                                                                                   
 				double sum_pt_i_sv1 = 0;                                                                                                                                                            
 				std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];                                                                                                            
 				for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) { 
 					int idx = sv1_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
-				sum_pt_i_sv1 = sum_pt_i_sv1 + tks_v1[idx]->pt(); }
+				sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx); }
 			}
 			if (sum_pt_i_sv0 >= sum_pt_sv1) {
-				std::cout << "sv0 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[i] << std::endl;
+				std::cout << "sv0 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[0] << std::endl;
 			}
 			else {
-				std::cout << "sv1 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[i] << std::endl;
+				std::cout << "sv1 is selected (not initial pair) with the number of shared tracks of " << nsharedjet_tracks_sv0[0] << std::endl;
 			}
 		  
 		}
