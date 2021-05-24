@@ -291,7 +291,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double sum_pt_i_sv0 = 0;                                                                                                                                                            
 				std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];       //consider [1,3,5,6]
 				std::cout << "# of sv0's shared-tracks = " << sv0_i_sharedjet_which_idx.size() << std::endl;
-				for (int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) { 		//used to be nsharedjet_tracks_sv0[i]
+				for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) { 		//used to be nsharedjet_tracks_sv0[i]
 					int idx = sv0_i_sharedjet_which_idx[j] - 1; 
 					std::cout << "with jet index: " << nsharedjet_idxs[i] << "idx is appended to a sv0 temp list: " << idx << std::endl;
 					sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx); 
@@ -303,7 +303,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				double sum_pt_i_sv1 = 0;                                                                                                                                                            
 				std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];     
 				std::cout << "# of sv1's shared-tracks = " << sv1_i_sharedjet_which_idx.size() << std::endl;
-				for (int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {	   //used to be nsharedjet_tracks_sv1[i]
+				for (unsigned int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {	   //used to be nsharedjet_tracks_sv1[i]
 					int idx = sv1_i_sharedjet_which_idx[j] - 1;  
 					std::cout << "with jet index: " << nsharedjet_idxs[i] << "idx is appended to a sv1 temp list: " << idx << std::endl;
 					sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx); 
