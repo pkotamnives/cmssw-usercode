@@ -234,7 +234,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 		
 			// start counting shared tracks of sv0 for each shared jet                                                                                                                          
 			nsharedjet_tracks_sv0.push_back(std::count(sv0_track_which_jet.begin(), sv0_track_which_jet.end(), jet_index));        
-			std::cout << "# of sv0's shared-tracks = " << nsharedjet_tracks_sv0.end() << std::endl;
+			std::cout << "# of sv0's shared-tracks = " << nsharedjet_tracks_sv0.back() << std::endl;
 			std::multimap<int, size_t> sv0_m;                                                                                                                                                                       
 			for (size_t k = 0; k < sv0_track_which_jet.size(); k++) if (sv0_track_which_jet[k] == jet_index) { sv0_m.insert({ sv0_track_which_jet[k], k }); }                                                                                                                                                                                                                                                                                                                                                                                                           
 			for (auto it = sv0_m.begin(); it != sv0_m.end(); )                                                                                                                                  
@@ -243,7 +243,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				while (p.first != p.second)                                                                                                                                                         
 				{                                                                                                                                                                                           
 					sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]); 
-					std::cout << "with jet index: " << jet_index << "idx is appended to a sv0 temp list: " << sv0_track_which_temp_idx.end() << std::endl;
+					std::cout << "with jet index: " << jet_index << "idx is appended to a sv0 temp list: " << sv0_track_which_temp_idx.back() << std::endl;
 					//[..] -> [..,1]
 				}                                                                                                                                                                                   
 				it = p.second;                                                                                                                                                                                                                                                                                                                                                  
@@ -257,7 +257,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 			sv0_track_which_temp_idx = {};                                                                                                                                                                                                                                                                                                                                          
 			// start counting shared tracks of sv1 for each shared jet                                                                                                                          
 			nsharedjet_tracks_sv1.push_back(std::count(sv1_track_which_jet.begin(), sv1_track_which_jet.end(), jet_index));   
-			std::cout << "# of sv1's shared-tracks = " << nsharedjet_tracks_sv1.end() << std::endl;
+			std::cout << "# of sv1's shared-tracks = " << nsharedjet_tracks_sv1.back() << std::endl;
 			std::multimap<int, size_t> sv1_m;                                                                                                                                                   
 			for (size_t k = 0; k < sv1_track_which_jet.size(); k++) if (sv1_track_which_jet[k] == jet_index) { sv1_m.insert({ sv1_track_which_jet[k], k }); }                                                                                                                                                                                                                                                                                                                                                                                                           
 			for (auto it = sv1_m.begin(); it != sv1_m.end(); )                                                                                                                                  
@@ -266,7 +266,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				while (p.first != p.second)                                                                                                                                                         
 				{                                                                                                                                                                                           
 					sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);  
-					std::cout << "with jet index: " << jet_index << "idx is appended to a sv1 temp list: " << sv1_track_which_temp_idx.end() << std::endl;
+					std::cout << "with jet index: " << jet_index << "idx is appended to a sv1 temp list: " << sv1_track_which_temp_idx.back() << std::endl;
 				}                                                                                                                                                                                   
 				it = p.second;                                                                                                                                                                                                                                                                                                                                                  
 			}
