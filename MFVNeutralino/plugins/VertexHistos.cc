@@ -207,13 +207,14 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 
 			nsharedjets++;
 			std::vector<int> sv0_track_which_idx_copy = sv0_track_which_idx;
+			std::cout << " sv0's size: " << sv0_track_which_idx_copy.size() << std::endl;
 			std::vector<int> sv1_track_which_idx_copy = sv1_track_which_idx;
+			std::cout << " sv1's size: " << sv1_track_which_idx_copy.size() << std::endl;
 			std::vector<int>::iterator it = std::find_first_of(sv_track_which_jet_copy[0].begin(), sv_track_which_jet_copy[0].end(), sv_track_which_jet_copy[1].begin(), sv_track_which_jet_copy[1].end());
 			int idx = std::distance(sv_track_which_jet_copy[0].begin(), it);
 			int jet_index = sv_track_which_jet_copy[0].at(idx);
-			std::vector<int>::iterator itr = std::find(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index);
-
 			/*
+			std::vector<int>::iterator itr = std::find(sv_track_which_jet[0].begin(), sv_track_which_jet[0].end(), jet_index);
 			if (itr != sv_track_which_jet[0].cend()) {
 				int j = std::distance(sv_track_which_jet[0].begin(), itr);
 				nsharedjet_phis.push_back(mevent->jet_track_phi[j]);
@@ -285,14 +286,20 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 				for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) { 
 					int idx = sv0_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
 					sum_pt_i_sv0 = sum_pt_i_sv0 + sv0.track_pt(idx); 
-					std::cout << "  " << j + 1 << " shared track's phi: " << sv0.track_phi(idx) << " shared track's pt: " << sv0.track_pt(idx) << " shared track's sig_dxy" << sv0.track_dxy(idx)/sv0.track_dxy_err(idx) << std::endl;
+					AlgebraicVector3 mom_tk(sv0.track_px[idx], sv0.track_py[idx], sv0.track_pz[idx]);
+					AlgebraicVector3 ref_tk(sv0.track_vx[idx], sv0.track_vy[idx], sv0.track_vz[idx]);
+					Measurement1D tkvtx_dist = miss_dist(sv0, ref_tk, mom_tk);
+					std::cout << "  " << j + 1 << " shared track's phi: " << sv0.track_phi[idx] << " shared track's pt: " << sv0.track_pt(idx) << " shared track's sig_dxy" << tkvtx_dist.significance() << std::endl;
 				}                                                                                                                                                                                   
 				double sum_pt_i_sv1 = 0;                                                                                                                                                            
 				std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];                                                                                                            
 				for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) { 
 					int idx = sv1_i_sharedjet_which_idx[j] - 1;                                                                                                                                           
 					sum_pt_i_sv1 = sum_pt_i_sv1 + sv1.track_pt(idx); 
-					std::cout << "  " << j + 1 << " shared track's phi: " << sv1.track_phi(idx) << " shared track's pt: " << sv1.track_pt(idx) << " shared track's sig_dxy" << sv1.track_dxy(idx) / sv1.track_dxy_err(idx) << std::endl;
+					AlgebraicVector3 mom_tk(sv1.track_px[idx], sv1.track_py[idx], sv1.track_pz[idx]);
+					AlgebraicVector3 ref_tk(sv1.track_vx[idx], sv1.track_vy[idx], sv1.track_vz[idx]);
+					Measurement1D tkvtx_dist = miss_dist(sv1, ref_tk, mom_tk);
+					std::cout << "  " << j + 1 << " shared track's phi: " << sv1.track_phi[idx] << " shared track's pt: " << sv1.track_pt(idx) << " shared track's sig_dxy" << tkvtx_dist.significance() << std::endl;
 
 				}
 
