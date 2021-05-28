@@ -1,7 +1,9 @@
 #include "TH2.h"
 #include "TMath.h"
+#include <math.h>  
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
+#include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
@@ -33,7 +35,7 @@ private:
   typedef std::set<reco::TrackRef> track_set;
   typedef std::vector<reco::TrackRef> track_vec;
 
-  bool match_track_jet(const reco::Track& tk, const pat::Jet& jet);
+  bool match_track_jet(const reco::Track& tk, const pat::Jet& jet, const pat::JetCollection& jets, const int& idx);
 
   void finish(edm::Event&, const std::vector<reco::TransientTrack>&, std::unique_ptr<reco::VertexCollection>, std::unique_ptr<VertexerPairEffs>, const std::vector<std::pair<track_set, track_set>>&);
 
@@ -194,7 +196,16 @@ private:
   TH1F* h_twomost_output_vertex_chi2dof;
   TH1F* h_twomost_output_vertex_mass;
   TH1F* h_twomost_output_vertex_dBV;
-  TH1F* h_twomost_output_vertex_bs2derr;
+  TH1F* h_twomost_output_vertex_bs2derr; 
+
+  TH1F* h_twomost_output_tracks_sum_pT;
+  TH1F* h_twomost_output_tracks_med_tkvtxdistsig;
+  TH1F* h_twomost_output_tracks_jet_dR;
+
+  TH2F* h_2D_twomost_output_tracks_sum_pT_med_tkvtxdistsig;
+  TH2F* h_2D_twomost_output_tracks_sum_pT_jet_dR;
+
+
   TH2F* h_2D_twomost_output_vertex_ntracks;
 
   TH1F* h_twomost_output_shared_jet_before_dVV;
@@ -317,18 +328,25 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 
 	h_twomost_output_shared_jet_or_not = fs->make<TH1F>("h_twomost_output_shared_jet_or_not", ";shared jets? between the two most-track output vertices", 2, 0, 2);
 	h_twomost_output_vertex_chi2dof = fs->make<TH1F>("h_twomost_output_vertex_chi2dof", "; chi2/dof ", 20, 0, max_seed_vertex_chi2);
-	h_twomost_output_vertex_tkvtxdistsig = fs->make<TH1F>("h_twomost_output_vertex_tkvtxdistsig", "; miss dist significance 3d ", 50, 0, 10);
-	h_twomost_output_vertex_mass = fs->make<TH1F>("h_twomost_output_vertex_mass", "; vtx mass (GeV)", 50, 0, 2000);
+	h_twomost_output_vertex_tkvtxdistsig = fs->make<TH1F>("h_twomost_output_vertex_tkvtxdistsig", "; miss dist significance 3d ", 50, 0, 6);
+	h_twomost_output_vertex_mass = fs->make<TH1F>("h_twomost_output_vertex_mass", "; vtx mass (GeV)", 50, 0, 1000);
 	h_twomost_output_vertex_dBV = fs->make<TH1F>("h_twomost_output_vertex_dBV", "; dBV (cm)", 100, 0, 1.0);
 	h_twomost_output_vertex_bs2derr = fs->make<TH1F>("h_twomost_output_vertex_bs2derr", "; bs2err (cm)", 20, 0, 0.05);
 	h_2D_twomost_output_vertex_ntracks = fs->make<TH2F>("h_2D_twomost_output_vertex_ntracks", "; most-track vtx's ntracks; second most-track vtx's ntracks", 30, 0, 30, 30, 0, 30);
+
+	h_twomost_output_tracks_sum_pT = fs->make<TH1F>("h_twomost_output_tracks_sum_pT", "; sum pT(GeV)", 50, 0, 1000);
+	h_twomost_output_tracks_med_tkvtxdistsig = fs->make<TH1F>("h_twomost_output_tracks_med_tkvtxdistsig", "medium miss dist significance 3d; ", 50, 0, 5);
+	h_twomost_output_tracks_jet_dR = fs->make<TH1F>("h_twomost_output_tracks_jet_dR", "; avg. dR(tracks,shared-jet)", 50, 0, 1);
+
+	h_2D_twomost_output_tracks_sum_pT_med_tkvtxdistsig = fs->make<TH2F>("h_twomost_output_tracks_sum_pT_med_tkvtxdistsig", "; sum pT(GeV); medium miss dist significance 3d", 50, 0, 1000, 50, 0, 5);
+	h_2D_twomost_output_tracks_sum_pT_jet_dR = fs->make<TH2F>("h_twomost_output_tracks_sum_pT_jet_dR", "; sum pT(GeV); avg. dR(tracks,shared-jet)", 50, 0, 1000, 50, 0, 1);
 
 	h_twomost_output_shared_jet_before_dVV = fs->make<TH1F>("h_twomost_output_shared_jet_before_dVV", "shared-jet events (before removal); dVV (cm)", 100, 0, 2.0);
 	h_twomost_output_shared_jet_after_dVV = fs->make<TH1F>("h_twomost_output_shared_jet_after_dVV", "shared-jet events (after removal); dVV (cm)", 100, 0, 2.0);
 
 	h_select_first_shared_jet_vertex_before_dBV = fs->make<TH1F>("h_select_first_shared_jet_vertex_before_dBV", "shared-jet events (before removal); selected vtx's dBV (cm)", 100, 0, 1.0);
 	h_remove_first_shared_jet_vertex_before_dBV = fs->make<TH1F>("h_remove_first_shared_jet_vertex_before_dBV", "shared-jet events (before removal); non-selected vtx's dBV (cm)", 100, 0, 1.0);
-	h_remove_first_shared_jet_vertex_after_dBV = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_dBV", "shared-jet events (after removal); non-selected selected vtx's dBV (cm)", 100, 0, 1.0);
+	h_remove_first_shared_jet_vertex_after_dBV = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_dBV", "shared-jet events (after removal); non-selected vtx's dBV (cm)", 100, 0, 1.0);
 	h_select_first_shared_jet_vertex_before_bs2derr = fs->make<TH1F>("h_select_first_shared_jet_vertex_before_bs2derr", "shared-jet events (before removal); selected vtx's bs2err (cm)", 20, 0, 0.05);
 	h_remove_first_shared_jet_vertex_before_bs2derr = fs->make<TH1F>("h_remove_first_shared_jet_vertex_before_bs2derr", "shared-jet events (before removal); non-selected vtx's bs2err (cm)", 20, 0, 0.05);
 	h_remove_first_shared_jet_vertex_after_bs2derr = fs->make<TH1F>("h_remove_first_shared_jet_vertex_after_bs2derr", "shared-jet events (after removal); non-selected vtx's bs2err (cm)", 20, 0, 0.05);
@@ -412,7 +430,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 	const double bsx = beamspot->position().x();
 	const double bsy = beamspot->position().y();
 	const double bsz = beamspot->position().z();
-
+        
+       
 	edm::ESHandle<TransientTrackBuilder> tt_builder;
 	setup.get<TransientTrackRecord>().get("TransientTrackBuilder", tt_builder);
 
@@ -1264,11 +1283,12 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 		std::vector<std::vector<int> > sv_track_which_jet;
 		std::vector<size_t> vertex_ntracks;
 		typedef std::vector<reco::TrackRef> track_vec;
-
+                
+        int v_count = 0;
 		for (v[0] = vertices->begin(); v[0] != vertices->end(); ++v[0]) {
 			std::vector<int> track_which_idx;
 			std::vector<int> track_which_jet;
-
+            v_count++;
 			track_vec tks = vertex_track_vec(*v[0]);
 			size_t ntks = tks.size();
 			vertex_ntracks.push_back(ntks);
@@ -1276,33 +1296,35 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			for (const reco::TrackRef& itk : tks) {
 				i++;
 				for (size_t j = 0; j < jets->size(); ++j) {
-					if (match_track_jet(*itk, (*jets)[j])) {
-						track_which_idx.push_back(i);
-						track_which_jet.push_back(j);
-						if (verbose)
+				       int jet_index = static_cast<int>(j);	
+                       if (match_track_jet(*itk, (*jets)[j], *jets,jet_index)) {
+							track_which_idx.push_back(i);
+                            std::cout << "track idx: " << i << " of jet: " << j << " of vtx's ntracks: " << ntks << " vtx #: " << v_count << std::endl;  
+							track_which_jet.push_back(j);
+					   if (verbose)
 							std::cout << "track " << tks[i].key() << " matched with jet " << j << std::endl;
-					}
-				}
+					   }
 
-			}
+				}
+            }
+
+			
 			sv_track_which_idx.push_back(track_which_idx);
 			sv_track_which_jet.push_back(track_which_jet);
 
 		}
 
 		if (vertices->size() >= 2) {
-
-			int first_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
+			int first_ntracks_vtxidx = std::distance(vertex_ntracks.begin(),std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()));
 			reco::Vertex& v0 = vertices->at(first_ntracks_vtxidx);
-			vertex_ntracks.erase(vertex_ntracks.begin() + first_ntracks_vtxidx);
-			int second_ntracks_vtxidx = std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()) - vertex_ntracks.begin();
+			vertex_ntracks[first_ntracks_vtxidx] = 0;
+            int second_ntracks_vtxidx = std::distance(vertex_ntracks.begin(),std::max_element(vertex_ntracks.begin(), vertex_ntracks.end()));
 			reco::Vertex & v1 = vertices->at(second_ntracks_vtxidx);
-
 			const reco::Vertex fake_bs_vtx(beamspot->position(), beamspot->covariance3D());
 			Measurement1D dBV0_Meas1D = vertex_dist_2d.distance(v0, fake_bs_vtx); 
 			double dBV0 = dBV0_Meas1D.value();
 			double bs2derr_V0 = dBV0_Meas1D.error();
-
+                         
 			for (auto it = v0.tracks_begin(), ite = v0.tracks_end(); it != ite; ++it) {
 				
 				reco::TransientTrack v0_track;
@@ -1341,17 +1363,20 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::cout << "shared jets by the two most-track vertices? " << shared_jet << " : sv0 has # of tracks " << v0.nTracks() << " sv1 has # of tracks " << v1.nTracks() << std::endl;
 
 			if (shared_jet) {
+                                
+                std::cout << "shared-jet event id: " << " run: " << event.id().run() << " lumi: " << event.luminosityBlock() << " event: " << event.id().event() << std::endl;
+			        
 				int nsharedjets = 0;
 				std::vector<int> nsharedjet_jet_index;
-				std::vector<std::vector<int>> sv_track_which_jet_copy;
-				sv_track_which_jet_copy = sv_track_which_jet;
+				std::vector<std::vector<int>> sv_track_which_jet_copy = sv_track_which_jet;
 				
 				std::vector<int> nsharedjet_tracks_sv0;
 				std::vector<int> nsharedjet_tracks_sv1;
 				std::vector<std::vector<int> >sv0_sharedjet_which_idx;
 				std::vector<std::vector<int> >sv1_sharedjet_which_idx;
 				
-				
+			                                          
+	
 				std::vector<int> sv0_track_which_jet = sv_track_which_jet[first_ntracks_vtxidx];
 				std::vector<int> sv0_track_which_idx = sv_track_which_idx[first_ntracks_vtxidx];
 				std::vector<int> sv0_track_which_temp_idx;
@@ -1360,7 +1385,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::vector<int> sv1_track_which_idx = sv_track_which_idx[second_ntracks_vtxidx];
 				std::vector<int> sv1_track_which_temp_idx;
 				
-
+                std::cout << "vtx0 ntracks: " << sv0_track_which_idx.size() << std::endl;                        
+				std::cout << "vtx1 ntracks: " << sv1_track_which_idx.size() << std::endl; 
 				
 
 				while (std::find_first_of(sv_track_which_jet_copy[first_ntracks_vtxidx].begin(), sv_track_which_jet_copy[first_ntracks_vtxidx].end(), sv_track_which_jet_copy[second_ntracks_vtxidx].begin(), sv_track_which_jet_copy[second_ntracks_vtxidx].end()) != sv_track_which_jet_copy[first_ntracks_vtxidx].end()) {
@@ -1385,26 +1411,30 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 						while (p.first != p.second)
 						{
-							sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);
-						}
+							
+                                sv0_track_which_temp_idx.push_back(sv0_track_which_idx[p.first++->second]);
+						        //std::cout << "with jet index: " << jet_index << "idx is appended to a sv0 temp list: " << sv0_track_which_temp_idx.back() << std::endl;
+                        }
 						it = p.second;
 
 					}
-
+                                        
 					sv0_sharedjet_which_idx.push_back(sv0_track_which_temp_idx);
 					for (size_t k = 0; k < sv0_track_which_temp_idx.size(); k++) {
 						int track_index = sv0_track_which_temp_idx[k];
+                        // std::cout << "shared track's idx: " << track_index << std::endl;
 						sv0_track_which_idx_copy.erase(std::remove(sv0_track_which_idx_copy.begin(), sv0_track_which_idx_copy.end(), track_index), sv0_track_which_idx_copy.end());
 						
 					}
+                    
 					
-
 					if (sv0_track_which_temp_idx.size() + sv0_track_which_idx_copy.size() != sv0_track_which_idx.size()) {
 						std::cout << "sv0 needs to be fixed" << std::endl;
 						std::cout << "sv0 tracks = " << sv0_track_which_idx.size() << ", shared ones = " << sv0_track_which_temp_idx.size() << ", not shared ones = " << sv0_track_which_idx_copy.size() << std::endl;
 
 					}
 					sv0_track_which_temp_idx = {};
+					//end
 
 					// start counting shared tracks of sv1 for each shared jet
 					nsharedjet_tracks_sv1.push_back(std::count(sv1_track_which_jet.begin(), sv1_track_which_jet.end(), jet_index));
@@ -1418,182 +1448,269 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						while (p.first != p.second)
 						{
 							sv1_track_which_temp_idx.push_back(sv1_track_which_idx[p.first++->second]);
-						}
+						        //std::cout << "with jet index: " << jet_index << "idx is appended to a sv1 temp list: " << sv1_track_which_temp_idx.back() << std::endl;
+                                                }
 						it = p.second;
 
 					}
-
+                                        
 					sv1_sharedjet_which_idx.push_back(sv1_track_which_temp_idx);
 					for (size_t k = 0; k < sv1_track_which_temp_idx.size(); k++) {
 						int track_index = sv1_track_which_temp_idx[k];
 						sv1_track_which_idx_copy.erase(std::remove(sv1_track_which_idx_copy.begin(), sv1_track_which_idx_copy.end(), track_index), sv1_track_which_idx_copy.end());
 						
 					}
-					
-
-					if (sv1_track_which_temp_idx.size() + sv1_track_which_idx_copy.size() != sv1_track_which_idx.size()) {
+					    
+                     if (sv1_track_which_temp_idx.size() + sv1_track_which_idx_copy.size() != sv1_track_which_idx.size()) {
 						std::cout << "sv1 needs to be fixed" << std::endl;
 						std::cout << "sv1 tracks = " << sv1_track_which_idx.size() << ", shared ones = " << sv1_track_which_temp_idx.size() << ", not shared ones = " << sv1_track_which_idx_copy.size() << std::endl;
 
-					}
+                     }
 
 					sv1_track_which_temp_idx = {};
+                    //end
 
 
 				}
 
 				std::vector<int> sv0_sum_pt_track_which_idx = sv0_track_which_idx;
+                std::vector<int> sv0_no_shared_track_which_idx; 
 				track_vec tks_v0 = vertex_track_vec(v0);
 				std::vector<int> sv1_sum_pt_track_which_idx = sv1_track_which_idx;
+                std::vector<int> sv1_no_shared_track_which_idx;
 				track_vec tks_v1 = vertex_track_vec(v1);
+                //std::cout << __LINE__ << std::endl; 
+				//remove shared tracks for each shared jet 
+				
 
-				//remove shared tracks for each shared jet  
+                std::cout << "the number of shared-jets is " << nsharedjets << std::endl;                                               
+				//std::cout << "sv0's phi = " << phi0 << " and " << "sv1's phi = " << phi1 << std::endl;                                  
+                                
 				for (int i = 0; i < nsharedjets; i++) {
 
-					
+				    int jet_index = nsharedjet_jet_index[i]; 	
 					double sum_pt_i_sv0 = 0;
 					std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
-					for (int j = 0; j < nsharedjet_tracks_sv0[i]; j++) {
-						int idx = sv0_i_sharedjet_which_idx[j];
-						sum_pt_i_sv0 = sum_pt_i_sv0 + tks_v0[idx]->pt();
-					}
-					double sum_pt_i_sv1 = 0;
-					std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
-					for (int j = 0; j < nsharedjet_tracks_sv1[i]; j++) {
-						int idx = sv1_i_sharedjet_which_idx[j];
-						sum_pt_i_sv1 = sum_pt_i_sv1 + tks_v1[idx]->pt();
-					}
-
-					std::vector<int> sv1_diff;
-					std::vector<int> sv0_diff;
-
-					if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
+					std::vector<double> sv0_i_sharedjet_tk_vtx_dist; 
+					
+					double sum_dR_i_sv0 = 0;
+					std::cout << " shared-jet index: " << jet_index << std::endl;
+					for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
+						int idx = sv0_i_sharedjet_which_idx[j]-1;
+                        sum_pt_i_sv0 = sum_pt_i_sv0 + tks_v0[idx]->pt();
+                        reco::TransientTrack v0_track;
+                        v0_track = tt_builder->build(tks_v0[idx]);
+                        std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v0_track, v0);
+						sv0_i_sharedjet_tk_vtx_dist.push_back(tk_vtx_dist.second.significance());
+						double dR = reco::deltaR(jets[jet_index].eta(), jets[jet_index].phi(), tks_v0[idx]->eta(), tks_v0[idx]->phi());
+						sum_dR_i_sv0 = sum_dR_i_sv0 + dR;
+					    std::cout << "  " << j + 1 << " shared track's phi: " << tks_v0[idx]->phi() << " shared track's eta: " << tks_v0[idx]->eta() << " shared track's pt: " << tks_v0[idx]->pt() << " shared track's sig_dxy: " << tk_vtx_dist.second.significance() << std::endl;
 						
-						std::set_difference(sv1_sum_pt_track_which_idx.begin(), sv1_sum_pt_track_which_idx.end(), sv1_i_sharedjet_which_idx.begin(), sv1_i_sharedjet_which_idx.end(),
-							std::inserter(sv1_diff, sv1_diff.begin()));
-                        sv1_sum_pt_track_which_idx = sv1_diff;
-						
+					}
+					h_twomost_output_tracks_sum_pT->Fill(sum_pt_i_sv0);
+					std::sort(sv0_i_sharedjet_tk_vtx_dist);
+					if (fmod(sv0_i_sharedjet_tk_vtx_dist.size(),2)==1.0) {
+						h_twomost_output_tracks_med_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size()/2]);
+						h_2D_twomost_output_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2);
 					}
 					else {
-						
-						std::set_difference(sv0_sum_pt_track_which_idx.begin(), sv0_sum_pt_track_which_idx.end(), sv0_i_sharedjet_which_idx.begin(), sv0_i_sharedjet_which_idx.end(),
-							std::inserter(sv0_diff, sv0_diff.begin()));
-						sv0_sum_pt_track_which_idx = sv0_diff;
-						
+						h_twomost_output_tracks_med_tkvtxdistsig->Fill((sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size()/2]+sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size()/2)-1])/2);
+						h_2D_twomost_output_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, (sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2] + sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2);
 					}
+					h_twomost_output_tracks_jet_dR->Fill(sum_dR_i_sv0/ sv0_i_sharedjet_which_idx.size());
+					h_2D_twomost_output_tracks_sum_pT_jet_dR->Fill(sum_pt_i_sv0,sum_dR_i_sv0);
+					
+					
+                                        
+					double sum_pt_i_sv1 = 0;
+					std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
+					std::vector<double> sv1_i_sharedjet_tk_vtx_dist;
+					
+					double sum_dR_i_sv1 = 0;
+					for (unsigned int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {
+						int idx = sv1_i_sharedjet_which_idx[j]-1;
+                        sum_pt_i_sv1 = sum_pt_i_sv1 + tks_v1[idx]->pt();
+                        reco::TransientTrack v1_track;
+                        v1_track = tt_builder->build(tks_v1[idx]); 
+                        std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v1_track, v1);
+						sv1_i_sharedjet_tk_vtx_dist.push_back(tk_vtx_dist.second.significance());
+						double dR = reco::deltaR(jets[jet_index].eta(), jets[jet_index].phi(), tks_v1[idx]->eta(), tks_v1[idx]->phi());
+						sum_dR_i_sv1 = sum_dR_i_sv1 + dR;
+                        std::cout << "  " << j + 1 << " shared track's phi: " << tks_v1[idx]->phi() << " shared track's eta: " << tks_v1[idx]->eta() << " shared track's pt: " << tks_v1[idx]->pt() << " shared track's sig_dxy: " << tk_vtx_dist.second.significance() << std::endl;
+					}
+					h_twomost_output_tracks_sum_pT->Fill(sum_pt_i_sv1);
+					std::sort(sv1_i_sharedjet_tk_vtx_dist);
+					if (fmod(sv1_i_sharedjet_tk_vtx_dist.size(), 2) == 1.0) {
+						h_twomost_output_tracks_med_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
+						h_2D_twomost_output_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2);
+					}
+					else {
+						h_twomost_output_tracks_med_tkvtxdistsig->Fill((sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2);
+						h_2D_twomost_output_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, (sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2);
 
+					}
+					h_twomost_output_tracks_jet_dR->Fill(sum_dR_i_sv1 / sv1_i_sharedjet_which_idx.size());
+					h_2D_twomost_output_tracks_sum_pT_jet_dR->Fill(sum_pt_i_sv1, sum_dR_i_sv1);
+
+					std::vector<int> sv1_diff;
+				    std::vector<int> sv0_diff;
+
+					
+                    if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
+					        std::cout << " sv0 is selected " << std::endl; 	
+						    std::set_difference(sv1_sum_pt_track_which_idx.begin(), sv1_sum_pt_track_which_idx.end(), sv1_i_sharedjet_which_idx.begin(), sv1_i_sharedjet_which_idx.end(),
+					        std::inserter(sv1_diff, sv1_diff.begin()));
+                            sv1_sum_pt_track_which_idx = sv1_diff;
+                    }
+					else {
+                            std::cout << " sv1 is selected " << std::endl;
+                            std::set_difference(sv0_sum_pt_track_which_idx.begin(), sv0_sum_pt_track_which_idx.end(), sv0_i_sharedjet_which_idx.begin(), sv0_i_sharedjet_which_idx.end(),
+					        std::inserter(sv0_diff, sv0_diff.begin()));
+						    sv0_sum_pt_track_which_idx =  sv0_diff;
+                    }
+                    /*
 					if (i == 0) {
 						std::vector<reco::TransientTrack> nosharedjets_v0_ttks;
 						for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) {
 							reco::TransientTrack v0_track;
-							int idx = sv0_sum_pt_track_which_idx[i];
-							v0_track = tt_builder->build(tks_v0[idx]);
-							nosharedjets_v0_ttks.push_back(v0_track);
+							int idx = sv0_sum_pt_track_which_idx[i]-1;
+						        if (&(tks_v0[idx])){ 
+                                     v0_track = tt_builder->build(tks_v0[idx]);
+                                     nosharedjets_v0_ttks.push_back(v0_track);
+                                }
 						}
-
+                                                
 						reco::Vertex nosharedjets_v0;
 						for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v0_ttks))
 							nosharedjets_v0 = reco::Vertex(tv);
 
 						std::vector<reco::TransientTrack> nosharedjets_v1_ttks;
-						for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
+						
+                        for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
 							reco::TransientTrack v1_track;
-							int idx = sv1_sum_pt_track_which_idx[i];
-							v1_track = tt_builder->build(tks_v1[idx]);
-							nosharedjets_v1_ttks.push_back(v1_track);
+							int idx = sv1_sum_pt_track_which_idx[i]-1;
+                                if (&(tks_v1[idx])){
+							          v1_track = tt_builder->build(tks_v1[idx]);
+                                      nosharedjets_v1_ttks.push_back(v1_track);
+                                }
+                                                        
 						}
-
+                                               
 						reco::Vertex nosharedjets_v1;
 						for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v1_ttks))
 							nosharedjets_v1 = reco::Vertex(tv);
 
-						Measurement1D noshj_dBV0_Meas1D = vertex_dist_2d.distance(nosharedjets_v0, fake_bs_vtx);
-						double noshj_dBV0 = noshj_dBV0_Meas1D.value();
-						double noshj_bs2derr0 = noshj_dBV0_Meas1D.error();
-						Measurement1D noshj_dBV1_Meas1D = vertex_dist_2d.distance(nosharedjets_v1, fake_bs_vtx);
-						double noshj_dBV1 = noshj_dBV1_Meas1D.value();
-						double noshj_bs2derr1 = noshj_dBV1_Meas1D.error();
-
-						if (nosharedjets_v0.nTracks()>=3 && nosharedjets_v1.nTracks() >= 3) {
-							if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
-								h_remove_first_shared_jet_vertex_after_dBV->Fill(noshj_dBV1);
-								h_select_first_shared_jet_vertex_before_dBV->Fill(dBV0);
-								h_remove_first_shared_jet_vertex_before_dBV->Fill(dBV1);
-								h_remove_first_shared_jet_vertex_after_bs2derr->Fill(noshj_bs2derr1);
-								h_select_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V0);
-								h_remove_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V1);
-								h_remove_first_shared_jet_vertex_after_mass->Fill(nosharedjets_v1.p4().mass());
-								h_remove_first_shared_jet_vertex_before_mass->Fill(v1.p4().mass());
-								h_remove_first_shared_jet_vertex_after_chi2dof->Fill(nosharedjets_v1.normalizedChi2());
-								h_remove_first_shared_jet_vertex_before_chi2dof->Fill(v1.normalizedChi2());
-							}
-							else {
-								h_remove_first_shared_jet_vertex_after_dBV->Fill(noshj_dBV0);
-								h_select_first_shared_jet_vertex_before_dBV->Fill(dBV1);
-								h_remove_first_shared_jet_vertex_before_dBV->Fill(dBV0);
-								h_remove_first_shared_jet_vertex_after_bs2derr->Fill(noshj_bs2derr0);
-								h_select_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V1);
-								h_remove_first_shared_jet_vertex_before_dBV->Fill(bs2derr_V0);
-								h_remove_first_shared_jet_vertex_after_mass->Fill(nosharedjets_v0.p4().mass());
-								h_remove_first_shared_jet_vertex_before_mass->Fill(v0.p4().mass());
-								h_remove_first_shared_jet_vertex_after_chi2dof->Fill(nosharedjets_v0.normalizedChi2());
-								h_remove_first_shared_jet_vertex_before_chi2dof->Fill(v0.normalizedChi2());
-							}
+                            Measurement1D noshj_dBV0_Meas1D = vertex_dist_2d.distance(nosharedjets_v0, fake_bs_vtx);
+							double noshj_dBV0 = noshj_dBV0_Meas1D.value();
+							double noshj_bs2derr0 = noshj_dBV0_Meas1D.error();
+							Measurement1D noshj_dBV1_Meas1D = vertex_dist_2d.distance(nosharedjets_v1, fake_bs_vtx);
+							double noshj_dBV1 = noshj_dBV1_Meas1D.value();
+							double noshj_bs2derr1 = noshj_dBV1_Meas1D.error();
+                                                
+                       if (nosharedjets_v0.nTracks() >= 3 && nosharedjets_v1.nTracks() >= 3) {
+						
+                       if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
+							h_remove_first_shared_jet_vertex_after_dBV->Fill(noshj_dBV1);
+							h_select_first_shared_jet_vertex_before_dBV->Fill(dBV0);
+							h_remove_first_shared_jet_vertex_before_dBV->Fill(dBV1);
+							h_remove_first_shared_jet_vertex_after_bs2derr->Fill(noshj_bs2derr1);
+                                                        h_select_first_shared_jet_vertex_before_bs2derr->Fill(bs2derr_V0);
+							h_remove_first_shared_jet_vertex_before_bs2derr->Fill(bs2derr_V1);
+							h_remove_first_shared_jet_vertex_after_mass->Fill(nosharedjets_v1.p4().mass());
+							h_remove_first_shared_jet_vertex_before_mass->Fill(v1.p4().mass());
+							h_remove_first_shared_jet_vertex_after_chi2dof->Fill(nosharedjets_v1.normalizedChi2());
+							h_remove_first_shared_jet_vertex_before_chi2dof->Fill(v1.normalizedChi2());
 						}
+						else {
+							h_remove_first_shared_jet_vertex_after_dBV->Fill(noshj_dBV0);
+							h_select_first_shared_jet_vertex_before_dBV->Fill(dBV1);
+							h_remove_first_shared_jet_vertex_before_dBV->Fill(dBV0);
+							h_remove_first_shared_jet_vertex_after_bs2derr->Fill(noshj_bs2derr0);
+							h_select_first_shared_jet_vertex_before_bs2derr->Fill(bs2derr_V1);
+							h_remove_first_shared_jet_vertex_before_bs2derr->Fill(bs2derr_V0);
+							h_remove_first_shared_jet_vertex_after_mass->Fill(nosharedjets_v0.p4().mass());
+							h_remove_first_shared_jet_vertex_before_mass->Fill(v0.p4().mass());
+							h_remove_first_shared_jet_vertex_after_chi2dof->Fill(nosharedjets_v0.normalizedChi2());
+							h_remove_first_shared_jet_vertex_before_chi2dof->Fill(v0.normalizedChi2());
+						}
+                       }
+                       
+                                                
 					}
+					*/
 				}
+                               
+                std::cout << "after removal:    " << std::endl;
+				std::vector<reco::TransientTrack> nosharedjets_v0_ttks;
+				for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) {
+					reco::TransientTrack v0_track;
+					int idx	= sv0_sum_pt_track_which_idx[i]-1;
+					v0_track = tt_builder->build(tks_v0[idx]);
+					nosharedjets_v0_ttks.push_back(v0_track);
+				}
+                               
+                reco::Vertex nosharedjets_v0;
 
-				
-					std::vector<reco::TransientTrack> nosharedjets_v0_ttks;
-					for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) {
-						reco::TransientTrack v0_track;
-						int idx = sv0_sum_pt_track_which_idx[i];
-						v0_track = tt_builder->build(tks_v0[idx]);
-						nosharedjets_v0_ttks.push_back(v0_track);
-					}
-
-					reco::Vertex nosharedjets_v0;
-					for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v0_ttks))
-						nosharedjets_v0 = reco::Vertex(tv);
-
-					std::vector<reco::TransientTrack> nosharedjets_v1_ttks;
-					for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
-						reco::TransientTrack v1_track;
-						int idx = sv1_sum_pt_track_which_idx[i];
-						v1_track = tt_builder->build(tks_v1[idx]);
-						nosharedjets_v1_ttks.push_back(v1_track);
-					}
-
-					reco::Vertex nosharedjets_v1;
-					for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v1_ttks))
-						nosharedjets_v1 = reco::Vertex(tv);
+                for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v0_ttks))                                                          
+					nosharedjets_v0 = reco::Vertex(tv);
+                                
+                 if (nosharedjets_v0.nTracks() >0) {
+                     for (unsigned int i = 0, ie = sv0_sum_pt_track_which_idx.size(); i < ie; ++i) { 
+                         reco::TransientTrack v0_track;   
+                         int idx = sv0_sum_pt_track_which_idx[i]-1;                                                                               
+						 v0_track = tt_builder->build(tks_v0[idx]);                                                                              
+						 std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v0_track, nosharedjets_v0);                                     
+						 std::cout << "  " << i + 1 << " shared track's phi: " << tks_v0[idx]->phi() << " shared track's pt: " << tks_v0[idx]->pt() << " shared track's sig_dxy: " << tk_vtx_dist.second.significance() << std::endl;                              
+					 }            
+                 }				
 
 
-				if (nosharedjets_v0.nTracks() >= 3 && nosharedjets_v1.nTracks() >= 3) {
+                               
+                               
+				std::vector<reco::TransientTrack> nosharedjets_v1_ttks;
+				for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {
+					reco::TransientTrack v1_track;
+					int idx = sv1_sum_pt_track_which_idx[i]-1;
+					v1_track = tt_builder->build(tks_v1[idx]);
+					nosharedjets_v1_ttks.push_back(v1_track);
+				}
+                
+                reco::Vertex nosharedjets_v1;
+				for (const TransientVertex& tv : kv_reco_dropin(nosharedjets_v1_ttks))
+					nosharedjets_v1 = reco::Vertex(tv);
 
+                if (nosharedjets_v1.nTracks() >0) {                                                                                     
+					for (unsigned int i = 0, ie = sv1_sum_pt_track_which_idx.size(); i < ie; ++i) {                                                 
+						reco::TransientTrack v1_track;                                                                                          
+						int idx = sv1_sum_pt_track_which_idx[i]-1;                                                                               
+						v1_track = tt_builder->build(tks_v1[idx]);                                                                              
+						std::pair<bool, Measurement1D> tk_vtx_dist = track_dist(v1_track, nosharedjets_v1);                                     
+						std::cout << "  " << i + 1 << " shared track's phi: " << tks_v1[idx]->phi() << " shared track's pt: " << tks_v1[idx]->pt() << " shared track's sig_dxy: " << tk_vtx_dist.second.significance() << std::endl;                              
+					}                                                                                                                       }
+
+                if (nosharedjets_v0.nTracks() >= 3 && nosharedjets_v1.nTracks() >= 3) {
 					double v0x = v0.position().x() - bsx;
 					double v0y = v0.position().y() - bsy;
 					double v1x = v1.position().x() - bsx;
 					double v1y = v1.position().y() - bsy;
-					h_twomost_output_shared_jet_before_dVV->Fill(mag(v0x - v1x, v0y - v1y));
-
-
+                    h_twomost_output_shared_jet_before_dVV->Fill(mag(v0x - v1x, v0y - v1y));
 
 					double nosharedjets_v0x = nosharedjets_v0.position().x() - bsx;
 					double nosharedjets_v0y = nosharedjets_v0.position().y() - bsy;
 					double nosharedjets_v1x = nosharedjets_v1.position().x() - bsx;
 					double nosharedjets_v1y = nosharedjets_v1.position().y() - bsy;
 
-
+			        
 					h_twomost_output_shared_jet_after_dVV->Fill(mag(nosharedjets_v0x - nosharedjets_v1x, nosharedjets_v0y - nosharedjets_v1y));
-				}
+                }
+                
 				v0 = nosharedjets_v0;
 				v1 = nosharedjets_v1;
 			}
 		}
 	}
 	// end of shared-jet track removal 
-
+        //std::cout << __LINE__ << std::endl;
 
 	
 
@@ -1604,41 +1721,50 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
   finish(event, seed_tracks, std::move(vertices), std::move(vpeffs), vpeffs_tracks);
 }
-
-bool MFVVertexer::match_track_jet(const reco::Track& tk, const pat::Jet& jet) {
+bool MFVVertexer::match_track_jet(const reco::Track& tk, const pat::Jet& matchjet, const pat::JetCollection& jets, const int& idx) {
 	//if (reco::deltaR2(tk, jet)>0.16) return false;
-	if (verbose) {
+	
+        if (verbose) {
 		std::cout << "jet track matching..." << std::endl;
 		std::cout << "  target track pt " << tk.pt() << " eta " << tk.eta() << " phi " << tk.phi() << std::endl;
 	}
-	double match_thres = 1.3;
-	for (size_t idau = 0, idaue = jet.numberOfDaughters(); idau < idaue; ++idau) {
-		const reco::Candidate* dau = jet.daughter(idau);
-		if (dau->charge() == 0)
-			continue;
-		const reco::Track * jtk = 0;
-		const reco::PFCandidate * pf = dynamic_cast<const reco::PFCandidate*>(dau);
-		if (pf) {
-			const reco::TrackRef& r = pf->trackRef();
-			if (r.isNonnull())
-				jtk = &*r;
-		}
-		else {
-			const pat::PackedCandidate* pk = dynamic_cast<const pat::PackedCandidate*>(dau);
-			if (pk && pk->charge() && pk->hasTrackDetails())
-				jtk = &pk->pseudoTrack();
-		}
-		if (jtk) {
-			double a = fabs(tk.pt() - jtk->pt()) + 1;
-			double b = fabs(tk.eta() - jtk->eta()) + 1;
-			double c = fabs(tk.phi() - jtk->phi()) + 1;
-			if (verbose)
-				std::cout << "  jet track pt " << jtk->pt() << " eta " << jtk->eta() << " phi " << jtk->phi() << " match abc " << a * b * c << std::endl;
-			if (a * b * c < match_thres) {
-				return true;
+	
+	
+		double match_thres = 1.3;                                                                                                                                                           int jet_index = 255;                                                                                                                                                                for (size_t j = 0; j < jets.size(); ++j) {
+                   for (size_t idau = 0, idaue = jets[j].numberOfDaughters(); idau < idaue; ++idau) {               	        	
+                        const reco::Candidate* dau = jets[j].daughter(idau);
+			if (dau->charge() == 0)
+				continue;
+			const reco::Track * jtk = 0;
+			const reco::PFCandidate * pf = dynamic_cast<const reco::PFCandidate*>(dau);
+			if (pf) {
+				const reco::TrackRef& r = pf->trackRef();
+				if (r.isNonnull())
+					jtk = &*r;
 			}
-		}
-	}
+			else {
+				const pat::PackedCandidate* pk = dynamic_cast<const pat::PackedCandidate*>(dau);
+				if (pk && pk->charge() && pk->hasTrackDetails())
+					jtk = &pk->pseudoTrack();
+			}
+			if (jtk) {
+			     double a = fabs(tk.pt() - fabs(jtk->charge() * jtk->pt())) + 1;
+			     double b = fabs(tk.eta() - jtk->eta()) + 1;
+			     double c = fabs(tk.phi() - jtk->phi()) + 1;
+			     if (verbose)
+				std::cout << "  jet track pt " << jtk->pt() << " eta " << jtk->eta() << " phi " << jtk->phi() << " match abc " << a * b * c << std::endl;
+			     if (a * b * c < match_thres) {
+				match_thres = a * b * c;
+			        jet_index = j; 
+			     }
+                        }
+                    }
+                 }
+                 if (jet_index == idx){
+                   return true;
+                 }
+	
+
 	return false;
 }
 
