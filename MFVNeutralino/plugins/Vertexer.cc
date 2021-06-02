@@ -1547,20 +1547,24 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					double medium_tk_vtx_dist_pT_sv0;
 					std::sort(sv0_i_sharedjet_tk_vtx_dist.begin(),sv0_i_sharedjet_tk_vtx_dist.end());
 					auto it0 = find(sv0_i_sharedjet_which_idx_copy.begin(), sv0_i_sharedjet_which_idx_copy.end(), sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2]);
-					int pT0_idx = it0 - sv0_i_sharedjet_tk_pT.begin();
-					auto it0_even = find(sv0_i_sharedjet_which_idx_copy.begin(), sv0_i_sharedjet_which_idx_copy.end(), sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2)-1]);
-					int pT0_idx_even = it0_even - sv0_i_sharedjet_tk_pT.begin();
+					int pT_idx0 = it0 - sv0_i_sharedjet_tk_pT.begin();
+					auto it0_even;
+					int pT_idx0_even;
+
 					if (fmod(sv0_i_sharedjet_tk_vtx_dist.size(),2)==1.0) {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size()/2]);
 						medium_tk_vtx_dist_sv0 = sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2];
 						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, medium_tk_vtx_dist_sv0);
-						medium_tk_vtx_dist_pT_sv0 = sv0_i_sharedjet_tk_pT[pT0_idx];
+						medium_tk_vtx_dist_pT_sv0 = sv0_i_sharedjet_tk_pT[pT_idx0];
 					}
 					else {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill((sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size()/2]+sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size()/2)-1])/2);
 						medium_tk_vtx_dist_sv0 = (sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2] + sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
 						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, medium_tk_vtx_dist_sv0);
-						medium_tk_vtx_dist_pT_sv0 = (sv0_i_sharedjet_tk_pT[pT0_idx] + sv0_i_sharedjet_tk_pT[pT0_idx_even])/2;
+						it0_even = find(sv0_i_sharedjet_which_idx_copy.begin(), sv0_i_sharedjet_which_idx_copy.end(), sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
+						pT_idx0_even = it0_even - sv0_i_sharedjet_tk_pT.begin();
+						medium_tk_vtx_dist_pT_sv0 = (sv0_i_sharedjet_tk_pT[pT_idx0] + sv0_i_sharedjet_tk_pT[pT_idx0_even])/2;
+
 					}
 					
 					h_twomost_shared_tracks_jet_dR->Fill(sum_dR_i_sv0/ sv0_i_sharedjet_which_idx.size());
@@ -1603,17 +1607,19 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					std::sort(sv1_i_sharedjet_tk_vtx_dist.begin(),sv1_i_sharedjet_tk_vtx_dist.end());
 					auto it1 = find(sv1_i_sharedjet_which_idx_copy.begin(), sv1_i_sharedjet_which_idx_copy.end(), sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
 					int pT_idx1 = it1 - sv1_i_sharedjet_tk_pT.begin();
-					auto it1_even = find(sv1_i_sharedjet_which_idx_copy.begin(), sv1_i_sharedjet_which_idx_copy.end(), sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
-					int pT1_idx_even = it1_even - sv1_i_sharedjet_tk_pT.begin();
+					auto it1_even;
+					int pT_idx1_even;
 					if (fmod(sv1_i_sharedjet_tk_vtx_dist.size(), 2) == 1.0) {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
 						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
-						medium_tk_vtx_dist_pT_sv1 = sv1_i_sharedjet_tk_pT[pT1_idx];
+						medium_tk_vtx_dist_pT_sv1 = sv1_i_sharedjet_tk_pT[pT_idx1];
 					}
 					else {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill((sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2);
 						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, (sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2);
-						medium_tk_vtx_dist_pT_sv1 = (sv1_i_sharedjet_tk_pT[pT1_idx] + sv1_i_sharedjet_tk_pT[pT1_idx_even]) / 2;
+						it1_even = find(sv1_i_sharedjet_which_idx_copy.begin(), sv1_i_sharedjet_which_idx_copy.end(), sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
+						pT_idx1_even = it1_even - sv1_i_sharedjet_tk_pT.begin();
+						medium_tk_vtx_dist_pT_sv1 = (sv1_i_sharedjet_tk_pT[pT_idx1] + sv1_i_sharedjet_tk_pT[pT_idx1_even]) / 2;
 
 					}
 					h_twomost_shared_tracks_jet_dR->Fill(sum_dR_i_sv1 / sv1_i_sharedjet_which_idx.size());
