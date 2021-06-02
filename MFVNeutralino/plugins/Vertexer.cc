@@ -1548,7 +1548,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					sv0_i_sharedjet_tk_vtx_dist_copy = sv0_i_sharedjet_tk_vtx_dist;
 					std::sort(sv0_i_sharedjet_tk_vtx_dist.begin(),sv0_i_sharedjet_tk_vtx_dist.end());
 					std::vector<int>::iterator it0 = find(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), sv0_i_sharedjet_tk_vtx_dist_copy.end(), sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2]);
-					int pT_idx0 = it0 - sv0_i_sharedjet_tk_vtx_dist_copy.begin();
+					int pT_idx0 = std::distance(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), it0);
 					std::vector<int>::iterator it0_even;
 					int pT_idx0_even;
 
@@ -1564,7 +1564,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						median_tk_vtx_dist_sv0 = (sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2] + sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
 						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, median_tk_vtx_dist_sv0);
 						it0_even = find(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), sv0_i_sharedjet_tk_vtx_dist_copy.end(), sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
-						pT_idx0_even = it0_even - sv0_i_sharedjet_tk_vtx_dist_copy.begin();
+						pT_idx0_even = std::distance(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), it0_even);
 						median_tk_vtx_dist_pT_sv0 = (sv0_i_sharedjet_tk_pT[pT_idx0] + sv0_i_sharedjet_tk_pT[pT_idx0_even])/2;
 						std::cout << "Even: median tk_vtx_dist = " << median_tk_vtx_dist_sv0 << " its pT = " << median_tk_vtx_dist_pT_sv0 << std::endl;
 
@@ -1610,7 +1610,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					sv1_i_sharedjet_tk_vtx_dist_copy = sv1_i_sharedjet_tk_vtx_dist;
 					std::sort(sv1_i_sharedjet_tk_vtx_dist.begin(),sv1_i_sharedjet_tk_vtx_dist.end());
 					std::vector<int>::iterator it1 = find(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), sv1_i_sharedjet_tk_vtx_dist_copy.end(), sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
-					int pT_idx1 = it1 - sv1_i_sharedjet_tk_vtx_dist_copy.begin();
+					int pT_idx1 = std::distance(sv1_i_sharedjet_tk_vtx_dist_copy.begin(),it1);
 					std::vector<int>::iterator it1_even;
 					int pT_idx1_even;
 					if (fmod(sv1_i_sharedjet_tk_vtx_dist.size(), 2) == 1.0) {
@@ -1625,7 +1625,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						median_tk_vtx_dist_sv1 = (sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
 						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, median_tk_vtx_dist_sv1); 
 						it1_even = find(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), sv1_i_sharedjet_tk_vtx_dist_copy.end(), sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
-						pT_idx1_even = it1_even - sv1_i_sharedjet_tk_vtx_dist_copy.begin();
+						pT_idx1_even = std::distance(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), it1_even);
 						median_tk_vtx_dist_pT_sv1 = (sv1_i_sharedjet_tk_pT[pT_idx1] + sv1_i_sharedjet_tk_pT[pT_idx1_even]) / 2;
 						std::cout << "Even: median tk_vtx_dist = " << median_tk_vtx_dist_sv1 << " its pT = " << median_tk_vtx_dist_pT_sv1 << std::endl;
 
