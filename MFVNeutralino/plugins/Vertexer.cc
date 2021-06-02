@@ -1513,7 +1513,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				    size_t jet_index = nsharedjet_jet_index[i]; 	
 					double sum_pt_i_sv0 = 0;
 					std::vector<int> sv0_i_sharedjet_which_idx = sv0_sharedjet_which_idx[i];
-					std::vector<int> sv0_i_sharedjet_which_idx_copy = sv0_sharedjet_which_idx[i];
+					std::vector<double> sv0_i_sharedjet_tk_vtx_dist_copy;
 					std::vector<double> sv0_i_sharedjet_tk_vtx_dist; 
 					std::vector<double> sv0_i_sharedjet_tk_pT;
 					std::vector<double> sv0_i_sharedjet_tk_eta;
@@ -1543,27 +1543,30 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					}
 					h_twomost_shared_tracks_sum_pT->Fill(sum_pt_i_sv0);
 					h_twomost_shared_tracks_vertex_bs2derr->Fill(bs2derr_V0);
-					double medium_tk_vtx_dist_sv0;
-					double medium_tk_vtx_dist_pT_sv0;
+					double median_tk_vtx_dist_sv0;
+					double median_tk_vtx_dist_pT_sv0;
+					sv0_i_sharedjet_tk_vtx_dist_copy = sv0_i_sharedjet_tk_vtx_dist;
 					std::sort(sv0_i_sharedjet_tk_vtx_dist.begin(),sv0_i_sharedjet_tk_vtx_dist.end());
-					std::vector<int>::iterator it0 = find(sv0_i_sharedjet_which_idx_copy.begin(), sv0_i_sharedjet_which_idx_copy.end(), sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2]);
-					int pT_idx0 = it0 - sv0_i_sharedjet_which_idx_copy.begin();
+					std::vector<int>::iterator it0 = find(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), sv0_i_sharedjet_tk_vtx_dist_copy.end(), sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2]);
+					int pT_idx0 = it0 - sv0_i_sharedjet_tk_vtx_dist_copy.begin();
 					std::vector<int>::iterator it0_even;
 					int pT_idx0_even;
 
 					if (fmod(sv0_i_sharedjet_tk_vtx_dist.size(),2)==1.0) {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size()/2]);
-						medium_tk_vtx_dist_sv0 = sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2];
-						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, medium_tk_vtx_dist_sv0);
-						medium_tk_vtx_dist_pT_sv0 = sv0_i_sharedjet_tk_pT[pT_idx0];
+						median_tk_vtx_dist_sv0 = sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2];
+						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, median_tk_vtx_dist_sv0);
+						median_tk_vtx_dist_pT_sv0 = sv0_i_sharedjet_tk_pT[pT_idx0];
+						std::cout << "Odd: median tk_vtx_dist = " << median_tk_vtx_dist_sv0 << " its pT = " << median_tk_vtx_dist_pT_sv0 << std::endl;
 					}
 					else {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill((sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size()/2]+sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size()/2)-1])/2);
-						medium_tk_vtx_dist_sv0 = (sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2] + sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
-						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, medium_tk_vtx_dist_sv0);
-						it0_even = find(sv0_i_sharedjet_which_idx_copy.begin(), sv0_i_sharedjet_which_idx_copy.end(), sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
-						pT_idx0_even = it0_even - sv0_i_sharedjet_which_idx_copy.begin();
-						medium_tk_vtx_dist_pT_sv0 = (sv0_i_sharedjet_tk_pT[pT_idx0] + sv0_i_sharedjet_tk_pT[pT_idx0_even])/2;
+						median_tk_vtx_dist_sv0 = (sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2] + sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
+						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv0, median_tk_vtx_dist_sv0);
+						it0_even = find(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), sv0_i_sharedjet_tk_vtx_dist_copy.end(), sv0_i_sharedjet_tk_vtx_dist[(sv0_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
+						pT_idx0_even = it0_even - sv0_i_sharedjet_tk_vtx_dist_copy.begin();
+						median_tk_vtx_dist_pT_sv0 = (sv0_i_sharedjet_tk_pT[pT_idx0] + sv0_i_sharedjet_tk_pT[pT_idx0_even])/2;
+						std::cout << "Even: median tk_vtx_dist = " << median_tk_vtx_dist_sv0 << " its pT = " << median_tk_vtx_dist_pT_sv0 << std::endl;
 
 					}
 					
@@ -1574,7 +1577,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
                                         
 					double sum_pt_i_sv1 = 0;
 					std::vector<int> sv1_i_sharedjet_which_idx = sv1_sharedjet_which_idx[i];
-					std::vector<int> sv1_i_sharedjet_which_idx_copy = sv1_sharedjet_which_idx[i];
+					std::vector<double> sv1_i_sharedjet_tk_vtx_dist_copy;
 					std::vector<double> sv1_i_sharedjet_tk_pT;
 					std::vector<double> sv1_i_sharedjet_tk_vtx_dist;
 					std::vector<double> sv1_i_sharedjet_tk_eta;
@@ -1602,26 +1605,29 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					}
 					h_twomost_shared_tracks_sum_pT->Fill(sum_pt_i_sv1);
 					h_twomost_shared_tracks_vertex_bs2derr->Fill(bs2derr_V1);
-					double medium_tk_vtx_dist_sv1;
-					double medium_tk_vtx_dist_pT_sv1;
+					double median_tk_vtx_dist_sv1;
+					double median_tk_vtx_dist_pT_sv1;
+					sv1_i_sharedjet_tk_vtx_dist_copy = sv1_i_sharedjet_tk_vtx_dist;
 					std::sort(sv1_i_sharedjet_tk_vtx_dist.begin(),sv1_i_sharedjet_tk_vtx_dist.end());
-					std::vector<int>::iterator it1 = find(sv1_i_sharedjet_which_idx_copy.begin(), sv1_i_sharedjet_which_idx_copy.end(), sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
-					int pT_idx1 = it1 - sv1_i_sharedjet_which_idx_copy.begin();
+					std::vector<int>::iterator it1 = find(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), sv1_i_sharedjet_tk_vtx_dist_copy.end(), sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
+					int pT_idx1 = it1 - sv1_i_sharedjet_tk_vtx_dist_copy.begin();
 					std::vector<int>::iterator it1_even;
 					int pT_idx1_even;
 					if (fmod(sv1_i_sharedjet_tk_vtx_dist.size(), 2) == 1.0) {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
-						medium_tk_vtx_dist_sv1 = sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2];
-						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, medium_tk_vtx_dist_sv1); 
-						medium_tk_vtx_dist_pT_sv1 = sv1_i_sharedjet_tk_pT[pT_idx1];
+						median_tk_vtx_dist_sv1 = sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2];
+						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, median_tk_vtx_dist_sv1); 
+						median_tk_vtx_dist_pT_sv1 = sv1_i_sharedjet_tk_pT[pT_idx1];
+						std::cout << "Odd: median tk_vtx_dist = " << median_tk_vtx_dist_sv1 << " its pT = " << median_tk_vtx_dist_pT_sv1 << std::endl;
 					}
 					else {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill((sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2);
-						medium_tk_vtx_dist_sv1 = (sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
-						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, medium_tk_vtx_dist_sv1); 
-						it1_even = find(sv1_i_sharedjet_which_idx_copy.begin(), sv1_i_sharedjet_which_idx_copy.end(), sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
-						pT_idx1_even = it1_even - sv1_i_sharedjet_which_idx_copy.begin();
-						medium_tk_vtx_dist_pT_sv1 = (sv1_i_sharedjet_tk_pT[pT_idx1] + sv1_i_sharedjet_tk_pT[pT_idx1_even]) / 2;
+						median_tk_vtx_dist_sv1 = (sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2] + sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]) / 2;
+						h_2D_twomost_shared_tracks_sum_pT_med_tkvtxdistsig->Fill(sum_pt_i_sv1, median_tk_vtx_dist_sv1); 
+						it1_even = find(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), sv1_i_sharedjet_tk_vtx_dist_copy.end(), sv1_i_sharedjet_tk_vtx_dist[(sv1_i_sharedjet_tk_vtx_dist.size() / 2) - 1]);
+						pT_idx1_even = it1_even - sv1_i_sharedjet_tk_vtx_dist_copy.begin();
+						median_tk_vtx_dist_pT_sv1 = (sv1_i_sharedjet_tk_pT[pT_idx1] + sv1_i_sharedjet_tk_pT[pT_idx1_even]) / 2;
+						std::cout << "Even: median tk_vtx_dist = " << median_tk_vtx_dist_sv1 << " its pT = " << median_tk_vtx_dist_pT_sv1 << std::endl;
 
 					}
 					h_twomost_shared_tracks_jet_dR->Fill(sum_dR_i_sv1 / sv1_i_sharedjet_which_idx.size());
@@ -1655,7 +1661,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 					if (sv0_i_sharedjet_which_idx.size() == 1 && sv1_i_sharedjet_which_idx.size() >= 4) {
 						h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[0], sv0_i_sharedjet_tk_vtx_dist[0]);
-						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(medium_tk_vtx_dist_pT_sv1, medium_tk_vtx_dist_sv1);
+						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(median_tk_vtx_dist_pT_sv1, median_tk_vtx_dist_sv1);
+						std::cout << "4&&1: median tk_vtx_dist = " << median_tk_vtx_dist_sv1 << " its pT = " << median_tk_vtx_dist_pT_sv1 << std::endl;
 						double sum_tk_vtx_dist_i_sv1 = 0;
 						for (unsigned int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {
 							h_2D_twomost_correct_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[j], sv1_i_sharedjet_tk_vtx_dist[j]);
@@ -1664,7 +1671,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					}
 					if (sv1_i_sharedjet_which_idx.size() == 1 && sv0_i_sharedjet_which_idx.size() >= 4) {
 						h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[0], sv1_i_sharedjet_tk_vtx_dist[0]);
-						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(medium_tk_vtx_dist_pT_sv0, medium_tk_vtx_dist_sv0);
+						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(median_tk_vtx_dist_pT_sv0, median_tk_vtx_dist_sv0);
+						std::cout << "4&&1: median tk_vtx_dist = " << median_tk_vtx_dist_sv0 << " its pT = " << median_tk_vtx_dist_pT_sv0 << std::endl;
 						double sum_tk_vtx_dist_i_sv0 = 0;
 						for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
 							h_2D_twomost_correct_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[j], sv0_i_sharedjet_tk_vtx_dist[j]);
