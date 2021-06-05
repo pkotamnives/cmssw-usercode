@@ -214,6 +214,13 @@ private:
   TH2F* h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig;
   TH2F* h_2D_twomost_one_one_shared_tracks_pT_tkvtxdistsig;
 
+  TH1F* h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig;
+  TH1F* h_twomost_correct_mis_reco_shared_tracks_pair_dR;
+  TH1F* h_twomost_correct_mis_reco_shared_tracks_pair_dR_rms;
+  TH2F* h_2D_twomost_correct_shared_tracks_sum_pT_median_tkvtxdistsig;
+  TH2F* h_2D_twomost_correct_shared_tracks_sum_pT_mis_reco_sum_pT;
+  TH2F* h_2D_twomost_correct_shared_tracks_sum_pT_dR_sig;
+
 
   TH2F* h_2D_twomost_output_vertex_ntracks;
 
@@ -359,6 +366,14 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_2D_twomost_one_one_shared_tracks_pT_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_one_one_shared_tracks_pT_tkvtxdistsig", "shared-ntracks's vtx == 1 && shared-ntracks's vtx == 1; one-shared trk's pT (GeV); one-shared trk's miss dist significance 3d", 50, 0, 100, 50, 0, 5);
 	h_2D_twomost_correct_shared_tracks_pT_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_correct_shared_tracks_pT_tkvtxdistsig", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4; >=4 trks' pT (GeV); >=4 trks' miss dist significance 3d", 50, 0, 100, 50, 0, 5);
 	h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4; its pT (GeV); >=4 trks' median miss dist significance 3d", 50, 0, 100, 50, 0, 5);
+
+	h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig = fs->make<TH1F>("h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4; avg. dR significance of a shared-track pair", 50, 0, 10);
+	h_twomost_correct_mis_reco_shared_tracks_pair_dR = fs->make<TH1F>("h_twomost_correct_mis_reco_shared_tracks_pair_dR", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4; avg. dR of a shared-track pair", 50, 0, 5);
+	h_twomost_correct_mis_reco_shared_tracks_pair_dR_rms = fs->make<TH1F>("h_twomost_correct_mis_reco_shared_tracks_pair_dR_rms", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4; avg. dR rms of a shared-track pair", 50, 0, 0.5);
+
+	h_2D_twomost_correct_shared_tracks_sum_pT_median_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_correct_shared_tracks_sum_pT_median_tkvtxdistsig", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4;  >=4 trks' sum pT (GeV); >=4 trks' median miss dist significance 3d", 50, 0, 200, 50, 0, 5);
+	h_2D_twomost_correct_shared_tracks_sum_pT_mis_reco_sum_pT = fs->make<TH2F>("h_2D_twomost_correct_shared_tracks_sum_pT_mis_reco_sum_pT", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4;  >=4 trks' sum pT (GeV); 1 trk's pT (GeV)", 50, 0, 200, 50, 0, 200);
+	h_2D_twomost_correct_shared_tracks_sum_pT_dR_sig = fs->make<TH2F>("h_2D_twomost_correct_shared_tracks_sum_pT_dR_sig", "shared-ntracks's vtx == 1 && shared-ntracks's vtx >= 4;  >=4 trks' sum pT (GeV); dR significance of a shared-track pair", 50, 0, 200, 50, 0, 10);
 
 
 	h_twomost_output_shared_jet_before_dVV = fs->make<TH1F>("h_twomost_output_shared_jet_before_dVV", "shared-jet events (before removal); dVV (cm)", 100, 0, 2.0);
@@ -1547,9 +1562,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					double median_tk_vtx_dist_pT_sv0;
 					sv0_i_sharedjet_tk_vtx_dist_copy = sv0_i_sharedjet_tk_vtx_dist;
 					std::sort(sv0_i_sharedjet_tk_vtx_dist.begin(),sv0_i_sharedjet_tk_vtx_dist.end());
-					std::vector<int>::iterator it0 = find(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), sv0_i_sharedjet_tk_vtx_dist_copy.end(), sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2]);
+					std::vector<double>::iterator it0 = find(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), sv0_i_sharedjet_tk_vtx_dist_copy.end(), sv0_i_sharedjet_tk_vtx_dist[sv0_i_sharedjet_tk_vtx_dist.size() / 2]);
 					int pT_idx0 = std::distance(sv0_i_sharedjet_tk_vtx_dist_copy.begin(), it0);
-					std::vector<int>::iterator it0_even;
+					std::vector<double>::iterator it0_even;
 					int pT_idx0_even;
 
 					if (fmod(sv0_i_sharedjet_tk_vtx_dist.size(),2)==1.0) {
@@ -1609,9 +1624,9 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					double median_tk_vtx_dist_pT_sv1;
 					sv1_i_sharedjet_tk_vtx_dist_copy = sv1_i_sharedjet_tk_vtx_dist;
 					std::sort(sv1_i_sharedjet_tk_vtx_dist.begin(),sv1_i_sharedjet_tk_vtx_dist.end());
-					std::vector<int>::iterator it1 = find(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), sv1_i_sharedjet_tk_vtx_dist_copy.end(), sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
+					std::vector<double>::iterator it1 = find(sv1_i_sharedjet_tk_vtx_dist_copy.begin(), sv1_i_sharedjet_tk_vtx_dist_copy.end(), sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
 					int pT_idx1 = std::distance(sv1_i_sharedjet_tk_vtx_dist_copy.begin(),it1);
-					std::vector<int>::iterator it1_even;
+					std::vector<double>::iterator it1_even;
 					int pT_idx1_even;
 					if (fmod(sv1_i_sharedjet_tk_vtx_dist.size(), 2) == 1.0) {
 						h_twomost_shared_tracks_med_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_vtx_dist[sv1_i_sharedjet_tk_vtx_dist.size() / 2]);
@@ -1643,17 +1658,18 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 					double sum_sqrt_dR_spread_i_sv0 = 0;
 					for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
-						sum_sqrt_dR_spread_i_sv0 = sum_sqrt_dR_spread_i_sv0 + reco::deltaR(mean_eta_sv0, mean_phi_sv0, sv0_i_sharedjet_tk_eta[j], sv0_i_sharedjet_tk_phi[j]);
-					}
+						sum_sqrt_dR_spread_i_sv0 = sum_sqrt_dR_spread_i_sv0 + pow(reco::deltaR(mean_eta_sv0, mean_phi_sv0, sv0_i_sharedjet_tk_eta[j], sv0_i_sharedjet_tk_phi[j]),2);                }
 
 					double sum_sqrt_dR_spread_i_sv1 = 0;
 					for (unsigned int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {
-						sum_sqrt_dR_spread_i_sv1 = sum_sqrt_dR_spread_i_sv1 + reco::deltaR(mean_eta_sv1, mean_phi_sv1, sv1_i_sharedjet_tk_eta[j], sv1_i_sharedjet_tk_phi[j]);
+						sum_sqrt_dR_spread_i_sv1 = sum_sqrt_dR_spread_i_sv1 + pow(reco::deltaR(mean_eta_sv1, mean_phi_sv1, sv1_i_sharedjet_tk_eta[j], sv1_i_sharedjet_tk_phi[j]),2);
 					}
 
 				    double avg_dR_spread_track_pair = sqrt((sum_sqrt_dR_spread_i_sv0/ sv0_i_sharedjet_which_idx.size()) + (sum_sqrt_dR_spread_i_sv1 / sv1_i_sharedjet_which_idx.size()));	// is this the correct rms of the two track spreads combined? need a division by 2? 
 					std::cout << "dR significance: " << avg_dR_track_pair / avg_dR_spread_track_pair << std::endl; 
-					h_twomost_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair/ avg_dR_spread_track_pair);
+					std::cout << "dR err: " << avg_dR_spread_track_pair << std::endl;
+                                        std::cout << "dR: " << avg_dR_track_pair << std::endl;
+                                        h_twomost_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair/ avg_dR_spread_track_pair);
 					h_twomost_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
 					h_twomost_shared_tracks_pair_dR_rms->Fill(avg_dR_spread_track_pair);
 
@@ -1662,6 +1678,12 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					if (sv0_i_sharedjet_which_idx.size() == 1 && sv1_i_sharedjet_which_idx.size() >= 4) {
 						h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[0], sv0_i_sharedjet_tk_vtx_dist[0]);
 						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(median_tk_vtx_dist_pT_sv1, median_tk_vtx_dist_sv1);
+						h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+						h_twomost_correct_mis_reco_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
+						h_twomost_correct_mis_reco_shared_tracks_pair_dR_rms->Fill(avg_dR_spread_track_pair);
+						h_2D_twomost_correct_shared_tracks_sum_pT_median_tkvtxdistsig->Fill(sum_pt_i_sv1, median_tk_vtx_dist_sv1);
+						h_2D_twomost_correct_shared_tracks_sum_pT_mis_reco_sum_pT->Fill(sum_pt_i_sv1, sum_pt_i_sv0);
+						h_2D_twomost_correct_shared_tracks_sum_pT_dR_sig->Fill(sum_pt_i_sv1, avg_dR_track_pair / avg_dR_spread_track_pair);
 						std::cout << "4&&1: median tk_vtx_dist = " << median_tk_vtx_dist_sv1 << " its pT = " << median_tk_vtx_dist_pT_sv1 << std::endl;
 						double sum_tk_vtx_dist_i_sv1 = 0;
 						for (unsigned int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {
@@ -1672,6 +1694,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					if (sv1_i_sharedjet_which_idx.size() == 1 && sv0_i_sharedjet_which_idx.size() >= 4) {
 						h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[0], sv1_i_sharedjet_tk_vtx_dist[0]);
 						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(median_tk_vtx_dist_pT_sv0, median_tk_vtx_dist_sv0);
+						h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+						h_twomost_correct_mis_reco_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
+						h_twomost_correct_mis_reco_shared_tracks_pair_dR_rms->Fill(avg_dR_spread_track_pair);
+						h_2D_twomost_correct_shared_tracks_sum_pT_median_tkvtxdistsig->Fill(sum_pt_i_sv0, median_tk_vtx_dist_sv0);
+						h_2D_twomost_correct_shared_tracks_sum_pT_mis_reco_sum_pT->Fill(sum_pt_i_sv0, sum_pt_i_sv1);
+						h_2D_twomost_correct_shared_tracks_sum_pT_dR_sig->Fill(sum_pt_i_sv0, avg_dR_track_pair / avg_dR_spread_track_pair);
+
 						std::cout << "4&&1: median tk_vtx_dist = " << median_tk_vtx_dist_sv0 << " its pT = " << median_tk_vtx_dist_pT_sv0 << std::endl;
 						double sum_tk_vtx_dist_i_sv0 = 0;
 						for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
