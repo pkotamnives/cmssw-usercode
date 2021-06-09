@@ -232,6 +232,7 @@ private:
   TH1F* h_twomost_multi_shared_tracks_pair_asym_sum_pT;
   TH1F* h_twomost_multi_shared_tracks_pair_diff_sum_pT;
 
+  TH2F* h_2D_twomost_multi_shared_tracks_pair_avg_dR_dR_rms;
   TH2F* h_2D_twomost_multi_shared_tracks_pair_diff_dR_rms_dPhi_SVs;
   TH2F* h_2D_twomost_multi_shared_tracks_pair_diff_shared_ntrack_dPhi_SVs;
   TH2F* h_2D_twomost_multi_shared_tracks_pair_asym_sum_pT_dPhi_SVs;
@@ -401,6 +402,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_twomost_multi_shared_tracks_pair_asym_sum_pT = fs->make<TH1F>("h_twomost_multi_shared_tracks_pair_asym_sum_pT", "dR_sig < 1 && shared-ntracks's vtx0 && 's vtx1 >= 2; #frac{more shared-ntrack sum pT - less shared-ntrack sum pT}{more shared-ntrack sum pT + more less-ntrack sum pT}", 10, -1, 1);
 	h_twomost_multi_shared_tracks_pair_diff_sum_pT = fs->make<TH1F>("h_twomost_multi_shared_tracks_pair_diff_sum_pT", "dR_sig < 1 && shared-ntracks's vtx0 && 's vtx1 >= 2; more shared-ntrack sum pT - less shared-ntrack sum pT", 20, -50, 50);
 
+	h_2D_twomost_multi_shared_tracks_pair_avg_dR_dR_rms = fs->make<TH2F>("h_2D_twomost_multi_shared_tracks_pair_avg_dR_dR_rms", "dR_sig < 1 && shared-ntracks's vtx0 && 's vtx1 >= 2; dR rms of a shared-track pair; avg. dR of a shared-track pair", 60, 0, 0.6, 50, 0, 5);
 	h_2D_twomost_multi_shared_tracks_pair_diff_dR_rms_dPhi_SVs = fs->make<TH2F>("h_2D_twomost_multi_shared_tracks_pair_diff_dR_rms_dPhi_SVs", "dR_sig < 1 && shared-ntracks's vtx0 && 's vtx1 >= 2; more shared-ntrack dR rms - less shared-ntrack dR rms; dPhi(vtx0,vtx1)", 30, -0.6, 0.6, 30, -3.14, 3.14);
 	h_2D_twomost_multi_shared_tracks_pair_diff_shared_ntrack_dPhi_SVs = fs->make<TH2F>("h_2D_twomost_multi_shared_tracks_pair_diff_shared_ntrack_dPhi_SVs", "dR_sig < 1 && shared-ntracks's vtx0 && 's vtx1 >= 2; more shared-ntrack - less shared-ntrack; dPhi(vtx0,vtx1)", 10, 0, 10, 10, -3.14, 3.14);
 	h_2D_twomost_multi_shared_tracks_pair_asym_sum_pT_dPhi_SVs = fs->make<TH2F>("h_2D_twomost_multi_shared_tracks_pair_asym_sum_pT_dPhi_SVs", "dR_sig < 1 && shared-ntracks's vtx0 && 's vtx1 >= 2; #frac{more shared-ntrack sum pT - less shared-ntrack sum pT}{more shared-ntrack sum pT + more less-ntrack sum pT}; dPhi(vtx0,vtx1)", 10, -1, 1, 10, -3.14, 3.14);
@@ -1390,6 +1392,15 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			Measurement1D dBV0_Meas1D = vertex_dist_2d.distance(v0, fake_bs_vtx); 
 			double dBV0 = dBV0_Meas1D.value();
 			double bs2derr_V0 = dBV0_Meas1D.error();
+
+			double v0x = v0.position().x() - bsx;
+			double v0y = v0.position().y() - bsy;
+			
+			double phi0 = atan2(v0y, v0x);
+			double v1x = v1.position().x() - bsx;
+			double v1y = v1.position().y() - bsy;
+			
+			double phi1 = atan2(v1y, v1x);
                          
 			for (auto it = v0.tracks_begin(), ite = v0.tracks_end(); it != ite; ++it) {
 				
@@ -1711,7 +1722,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 				    double avg_dR_spread_track_pair = sqrt((sum_sqrt_dR_spread_i_sv0/ sv0_i_sharedjet_which_idx.size()) + (sum_sqrt_dR_spread_i_sv1 / sv1_i_sharedjet_which_idx.size()));	// is this the correct rms of the two track spreads combined? need a division by 2? 
 					std::cout << "dR significance: " << avg_dR_track_pair / avg_dR_spread_track_pair << std::endl; 
-					std::cout << "dR err: " << avg_dR_spread_track_pair << std::endl;
+					std::cout << "dR rms: " << avg_dR_spread_track_pair << std::endl;
                                         std::cout << "dR: " << avg_dR_track_pair << std::endl;
                                         h_twomost_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair/ avg_dR_spread_track_pair);
 					h_twomost_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
@@ -1769,11 +1780,13 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					if ((avg_dR_track_pair / avg_dR_spread_track_pair)< 1 && sv0_i_sharedjet_which_idx.size() >= 2 && sv1_i_sharedjet_which_idx.size() >= 2) {
 
 						if (sv0_i_sharedjet_which_idx.size() >= sv1_i_sharedjet_which_idx.size()) {
+
 							h_twomost_multi_shared_tracks_pair_diff_dR_rms->Fill(sqrt((sum_sqrt_dR_spread_i_sv0 / sv0_i_sharedjet_which_idx.size()))- sqrt((sum_sqrt_dR_spread_i_sv1 / sv1_i_sharedjet_which_idx.size())));
 							h_twomost_multi_shared_tracks_pair_diff_shared_ntrack->Fill(sv0_i_sharedjet_which_idx.size() - sv1_i_sharedjet_which_idx.size());
 							h_twomost_multi_shared_tracks_pair_asym_sum_pT->Fill((sum_pt_i_sv0 - sum_pt_i_sv1)/(sum_pt_i_sv0 + sum_pt_i_sv1));
 							h_twomost_multi_shared_tracks_pair_diff_sum_pT->Fill(sum_pt_i_sv0 - sum_pt_i_sv1);
 
+							h_2D_twomost_multi_shared_tracks_pair_avg_dR_dR_rms->Fill(avg_dR_spread_track_pair, avg_dR_track_pair);
 							h_2D_twomost_multi_shared_tracks_pair_diff_dR_rms_dPhi_SVs->Fill(sqrt((sum_sqrt_dR_spread_i_sv0 / sv0_i_sharedjet_which_idx.size())) - sqrt((sum_sqrt_dR_spread_i_sv1 / sv1_i_sharedjet_which_idx.size())), reco::deltaPhi(phi0, phi1));
 							h_2D_twomost_multi_shared_tracks_pair_diff_shared_ntrack_dPhi_SVs->Fill(sv0_i_sharedjet_which_idx.size() - sv1_i_sharedjet_which_idx.size(), reco::deltaPhi(phi0, phi1));
 							h_2D_twomost_multi_shared_tracks_pair_asym_sum_pT_dPhi_SVs->Fill((sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1), reco::deltaPhi(phi0, phi1));
@@ -1785,6 +1798,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 							h_twomost_multi_shared_tracks_pair_asym_sum_pT->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv1 + sum_pt_i_sv0));
 							h_twomost_multi_shared_tracks_pair_diff_sum_pT->Fill(sum_pt_i_sv1 - sum_pt_i_sv0);
 
+							h_2D_twomost_multi_shared_tracks_pair_avg_dR_dR_rms->Fill(avg_dR_spread_track_pair, avg_dR_track_pair);
 							h_2D_twomost_multi_shared_tracks_pair_diff_dR_rms_dPhi_SVs->Fill(sqrt((sum_sqrt_dR_spread_i_sv1 / sv1_i_sharedjet_which_idx.size())) - sqrt((sum_sqrt_dR_spread_i_sv0 / sv0_i_sharedjet_which_idx.size())), reco::deltaPhi(phi0, phi1));
 							h_2D_twomost_multi_shared_tracks_pair_diff_shared_ntrack_dPhi_SVs->Fill(sv1_i_sharedjet_which_idx.size() - sv0_i_sharedjet_which_idx.size(), reco::deltaPhi(phi0, phi1));
 							h_2D_twomost_multi_shared_tracks_pair_asym_sum_pT_dPhi_SVs->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv1 + sum_pt_i_sv0), reco::deltaPhi(phi0, phi1));
