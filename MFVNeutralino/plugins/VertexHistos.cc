@@ -104,18 +104,18 @@ MFVVertexHistos::MFVVertexHistos(const edm::ParameterSet & cfg)
 
 	h_nsv = fs->make<TH1F>("h_nsv", ";# of secondary vertices;arb. units", 15, 0, 15);
 	h_SVs_shared_jet_or_not = fs->make<TH1F>("h_SVs_shared_jet_or_not", ";SV tracks share jet?", 2, 0, 2);
-	h_SVs_shared_jet_dR_sig	= fs->make<TH1F>("h_SVs_shared_jet_dR_sig", "; avg. dR(shared-tracks'SV0,shared-tracks'SV1)", 50, 0, 10);
+	h_SVs_shared_jet_dR_sig	= fs->make<TH1F>("h_SVs_shared_jet_dR_sig", "; dR(shared-tracks'SV0,shared-tracks'SV1) significance", 50, 0, 10);
     h_SVs_shared_jet_diff_shared_tracks = fs->make<TH1F>("h_SVs_shared_jet_diff_shared_tracks", "; more shared-ntrack - less shared-ntrack", 20, 0, 20);
 	h_2D_SVs_shared_jet_diff_shared_tracks_asym_sum_pT = fs->make<TH2F>("h_2D_SVs_shared_jet_diff_shared_tracks_asym_sum_pT", "; more shared-ntrack - less shared-ntrack; #frac{more shared-ntrack sum pT - less shared-ntrack sum pT}{more shared-ntrack sum pT + less shared-ntrack sum pT}", 20, 0, 20, 50, -1, 1);
 	h_2D_SVs_shared_jet_diff_shared_tracks_dPhi_shared_tracks = fs->make<TH2F>("h_2D_SVs_shared_jet_diff_shared_tracks_dPhi_shared_tracks", "; more shared-ntrack - less shared-ntrack; dPhi(shared-tracks'SV0,shared-tracks'SV1)", 20, 0, 20, 50, 0, 0.3);
 	h_2D_SVs_shared_jet_diff_shared_tracks_dPhi_SVs = fs->make<TH2F>("h_2D_SVs_shared_jet_diff_shared_tracks_dPhi_SVs", "; more shared-ntrack - less shared-ntrack; dPhi(SV0,SV1)", 20, 0, 20, 50, 0, 3.14);
 
 	h_2D_split_SVs_shared_jet_dPhi_LSPs_dPhi_SVs = fs->make<TH2F>("h_2D_split_SVs_shared_jet_dPhi_LSPs_dPhi_SVs", "dR significance < 1; dPhi(LSP0,LSP1); dPhi(SV0,SV1)", 50, 0, 3.14, 50, 0, 3.14);
-	h_2D_split_SVs_shared_jet_dPhi_LSPs_dVV_SVs = fs->make<TH2F>("h_2D_split_SVs_shared_jet_dPhi_LSPs_dPhi_SVs", "dR significance < 1; dPhi(LSP0,LSP1); dVV(SV0,SV1)", 50, 0, 3.14, 100, 0, 2);
-	h_2D_split_SVs_shared_jet_diff_dPhi_LSPs_SVs_diff_dPhi_LSPs_shared_tracks = fs->make<TH2F>("h_2D_split_SVs_shared_jet_diff_dPhi_LSPs_SVs_diff_dPhi_LSPs_shared_tracks", "dR significance < 1; dPhi(SV0,SV1) - dPhi(LSP0,LSP1); dPhi(shared-tracks'SV0,shared-tracks'SV1) - dPhi(LSP0,LSP1)", 50, 0, 3.14, 50, 0, 3.14);
+	h_2D_split_SVs_shared_jet_dPhi_LSPs_dVV_SVs = fs->make<TH2F>("h_2D_split_SVs_shared_jet_dPhi_LSPs_dVV_SVs", "dR significance < 1; dPhi(LSP0,LSP1); 3D dVV(SV0,SV1)", 50, 0, 3.14, 100, 0, 0.1);
+	h_2D_split_SVs_shared_jet_diff_dPhi_LSPs_SVs_diff_dPhi_LSPs_shared_tracks = fs->make<TH2F>("h_2D_split_SVs_shared_jet_diff_dPhi_LSPs_SVs_diff_dPhi_LSPs_shared_tracks", "dR significance < 1; dPhi(SV0,SV1) - dPhi(LSP0,LSP1); dPhi(shared-tracks'SV0,shared-tracks'SV1) - dPhi(LSP0,LSP1)", 50, -3.14, 3.14, 50, -3.14, 3.14);
 	h_2D_split_SVs_shared_jet_diff_shared_tracks_dPhi_SVs = fs->make<TH2F>("h_2D_split_SVs_shared_jet_diff_shared_tracks_dPhi_SVs", "dR significance < 1; more shared-ntrack - less shared-ntrack; dPhi(SV0,SV1)", 20, 0, 20, 50, 0, 3.14);
-	h_2D_split_SVs_shared_jet_asym_sum_pT_dPhi_SVs = = fs->make<TH2F>("h_2D_split_SVs_shared_jet_asym_sum_pT_dPhi_SVs", "dR significance < 1; #frac{more sum pT - less sum pT}{more sum pT + less sum pT}; dPhi(SV0,SV1)", 50, -1, 1, 50, 0, 3.14);
-	h_split_SVs_shared_jet_diff_dPhi_SVs_shared_tracks = fs->make<TH1F>("h_split_SVs_shared_jet_diff_dPhi_SVs_shared_tracks", "dR significance < 1; dPhi(shared-tracks'SV0,shared-tracks'SV1) - dPhi(SV0,SV1)", 50, 0, 3.14);
+	h_2D_split_SVs_shared_jet_asym_sum_pT_dPhi_SVs = fs->make<TH2F>("h_2D_split_SVs_shared_jet_asym_sum_pT_dPhi_SVs", "dR significance < 1; #frac{more sum pT - less sum pT}{more sum pT + less sum pT}; dPhi(SV0,SV1)", 50, -1, 1, 50, 0, 3.14);
+	h_split_SVs_shared_jet_diff_dPhi_SVs_shared_tracks = fs->make<TH1F>("h_split_SVs_shared_jet_diff_dPhi_SVs_shared_tracks", "dR significance < 1; dPhi(shared-tracks'SV0,shared-tracks'SV1) - dPhi(SV0,SV1)", 50, -3.14, 3.14);
 
 
 	}
@@ -422,7 +422,7 @@ void MFVVertexHistos::analyze(const edm::Event & event, const edm::EventSetup&) 
 						h_2D_split_SVs_shared_jet_diff_shared_tracks_dPhi_SVs->Fill(sv1_i_sharedjet_which_idx.size() - sv0_i_sharedjet_which_idx.size(), fabs(reco::deltaPhi(phi1, phi0)), w);
 					}
 
-					if (sum_pt_i_sv0 >= sum_pt_i_sv0) {
+					if (sum_pt_i_sv0 >= sum_pt_i_sv1) {
 						h_2D_split_SVs_shared_jet_asym_sum_pT_dPhi_SVs->Fill((sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1), fabs(reco::deltaPhi(phi1, phi0)), w);
 					}
 					else {
