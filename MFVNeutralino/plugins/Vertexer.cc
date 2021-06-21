@@ -186,7 +186,9 @@ private:
   TH1F* h_noshare_vertex_tkvtxdistsig_ver2;
 
   TH1F* h_noshare_vertex_tkvtxdist_ref_to_vtx;
+  TH2F* h_2D_noshare_vertex_tkvtxdist_ref_to_vtx_ref_to_bsp; 
   TH2F* h_2D_noshare_vertex_tkvtxdist_miss_dist_diff_pT;
+  TH2F* h_2D_noshare_vertex_tkvtxdist_miss_dist_err_diff_pT;
 
   TH1F* h_n_noshare_vertices;
   TH1F* h_noshare_vertex_ntracks;
@@ -423,8 +425,10 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_noshare_vertex_tkvtxdisterr_ver2 = fs->make<TH1F>("h_noshare_vertex_tkvtxdisterr_ver2", "", 100, 0, 0.1);
 	h_noshare_vertex_tkvtxdistsig_ver2 = fs->make<TH1F>("h_noshare_vertex_tkvtxdistsig_ver2", "", 100, 0, 6);
 
-	h_noshare_vertex_tkvtxdist_ref_to_vtx = fs->make<TH1F>("h_noshare_vertex_tkvtxdist_ref_to_vtx", "; 3d dist(vtx, ref_trk)", 100, 0, 0.05);
-	h_2D_noshare_vertex_tkvtxdist_miss_dist_diff_pT = fs->make<TH2F>("h_2D_noshare_vertex_tkvtxdist_miss_dist_diff_pT", ";miss_dist() - track_dist(); track's pT", 100, -0.05, 0.05, 100, 0, 0.05);
+	h_noshare_vertex_tkvtxdist_ref_to_vtx = fs->make<TH1F>("h_noshare_vertex_tkvtxdist_ref_to_vtx", "; 3d dist(vtx, ref_trk) cm.", 100, 0, 1);
+	h_2D_noshare_vertex_tkvtxdist_ref_to_vtx_ref_to_bsp = fs->make<TH2F>("h_2D_noshare_vertex_tkvtxdist_ref_to_vtx_ref_to_bsp", "; 3d dist(vtx, ref_trk) cm.; 3d dist(bsp, ref_trk) cm.", 100, 0, 1, 100, 0, 1);
+	h_2D_noshare_vertex_tkvtxdist_miss_dist_diff_pT = fs->make<TH2F>("h_2D_noshare_vertex_tkvtxdist_miss_dist_diff_pT", ";miss_dist() - track_dist() cm.; track's pT", 100, -0.01, 0.01, 50, 0,100 );
+	h_2D_noshare_vertex_tkvtxdist_miss_dist_err_diff_pT = fs->make<TH2F>("h_2D_noshare_vertex_tkvtxdist_miss_dist_err_diff_pT", ";miss_dist().err() - track_dist().err() cm.; track's pT", 100, -0.001, 0.001, 50, 0, 100);
 
     h_noshare_vertex_ntracks         = fs->make<TH1F>("h_noshare_vertex_ntracks",         "",  30,  0, 30);
     h_noshare_vertex_track_weights   = fs->make<TH1F>("h_noshare_vertex_track_weights",   "",  21,   0,      1.05);
@@ -1117,8 +1121,12 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					h_noshare_vertex_tkvtxdistsig_ver2->Fill(tkvtx_dist_ver2.significance());
 
 					AlgebraicVector3 d(v.x() - seed_track.track().vx(),v.y() - seed_track.track().vy(),v.z() - seed_track.track().vz());
+					AlgebraicVector3 dbsp(bsx - seed_track.track().vx(), bsy - seed_track.track().vy(), bsz - seed_track.track().vz());
 					h_noshare_vertex_tkvtxdist_ref_to_vtx->Fill(ROOT::Math::Mag(d));
+					h_2D_noshare_vertex_tkvtxdist_ref_to_vtx_ref_to_bsp->Fill(ROOT::Math::Mag(d),ROOT::Math::Mag(dbsp));
 					h_2D_noshare_vertex_tkvtxdist_miss_dist_diff_pT->Fill(tkvtx_dist_ver2.value()- tk_vtx_dist.second.value(), seed_track.track().pt());
+					h_2D_noshare_vertex_tkvtxdist_miss_dist_err_diff_pT->Fill(tkvtx_dist_ver2.error() - tk_vtx_dist.second.error(), seed_track.track().pt());
+
 
 					if (tk_vtx_dist.second.significance() < trackrefine_sigmacut) {
 						set_trackrefine_sigmacut_tks.insert(it->castTo<reco::TrackRef>());
