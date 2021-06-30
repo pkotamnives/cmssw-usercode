@@ -206,6 +206,7 @@ private:
   TH1F* h_noshare_track_multiplicity;
   TH1F* h_max_noshare_track_multiplicity;
   TH1F* h_n_output_vertices;
+  TH1F* h_n_output_quality_vertices;
 
   // extra plots for track refinement in two steps
   TH1F* h_noshare_trackrefine_sigmacut_vertex_chi2;
@@ -477,6 +478,7 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
     h_noshare_track_multiplicity     = fs->make<TH1F>("h_noshare_track_multiplicity",     "",  40,   0,     40);
     h_max_noshare_track_multiplicity = fs->make<TH1F>("h_max_noshare_track_multiplicity", "",  40,   0,     40);
     h_n_output_vertices           = fs->make<TH1F>("h_n_output_vertices",           "", 50, 0, 50);
+	h_n_output_quality_vertices = fs->make<TH1F>("h_n_output_quality_vertices", "", 50, 0, 50);
 
 	h_noshare_trackrefine_sigmacut_vertex_chi2 = fs->make<TH1F>("h_noshare_trackrefine_sigmacut_vertex_chi2", ";chi2/dof", 20, 0, max_seed_vertex_chi2);
 	h_noshare_trackrefine_sigmacut_vertex_tkvtxdistsig = fs->make<TH1F>("h_noshare_trackrefine_sigmacut_vertex_tkvtxdistsig", ";missdist sig", 100, 0, 6);
@@ -689,26 +691,23 @@ void MFVVertexer::finish(edm::Event& event, const std::vector<reco::TransientTra
   }
 
   if (verbose) printf("vertices:\n");
-
+  int count_quality_vertices = 0;
   for (const reco::Vertex& v : *vertices) {
-	  //apply quality cuts 
-	  if (v.nTracks() >= 5) {
-		  if (verbose) printf("x: %f y %f z %f\n", v.x(), v.y(), v.z());
-		  for (auto it = v.tracks_begin(), ite = v.tracks_end(); it != ite; ++it) {
-			  reco::TrackRef tk = it->castTo<reco::TrackRef>();
-			  if (verbose) printf("id: %i key: %u <%f,%f,%f,%f,%f>\n", tk.id().id(), tk.key(), tk->charge() * tk->pt(), tk->eta(), tk->phi(), tk->dxy(), tk->dz());
-			  tracks_inVertices->push_back(*tk);
-		  }
-	  }
-	  else {
-		  vertices->erase(v);
-	  }
+    if (verbose) printf("x: %f y %f z %f\n", v.x(), v.y(), v.z());
+    for (auto it = v.tracks_begin(), ite = v.tracks_end(); it != ite; ++it) {
+      reco::TrackRef tk = it->castTo<reco::TrackRef>();
+      if (verbose) printf("id: %i key: %u <%f,%f,%f,%f,%f>\n", tk.id().id(), tk.key(), tk->charge()*tk->pt(), tk->eta(), tk->phi(), tk->dxy(), tk->dz());
+      tracks_inVertices->push_back(*tk);
+    }
+	if (v.nTracks() >= 5)
+		++count_quality_vertices;
   }
 
   if (verbose)
     printf("n_output_vertices: %lu\n", vertices->size());
   if (histos)
     h_n_output_vertices->Fill(vertices->size());
+    h_n_output_quality_vertices->Fill(count_quality_vertices);
 
   event.put(std::move(vertices));
   event.put(std::move(vpeffs));
