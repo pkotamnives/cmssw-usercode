@@ -267,9 +267,15 @@ private:
   TH1F* h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist;
   TH1F* h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err;
   TH1F* h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err;
+  TH1F* h_twomost_b2b_shared_tracks_pair_SVa_ratio_sum_pT;
+  TH1F* h_twomost_b2b_shared_tracks_pair_SVb_ratio_sum_pT;
+  TH1F* h_twomost_b2b_sub_shared_tracks_pair_dR_sig;
   TH2F* h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig;
+  TH2F* h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks;
   TH2F* h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb;
   TH2F* h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb;
+  TH2F* h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb;
+  TH2F* h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb;
 
   TH2F* h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT;
   TH2F* h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks;
@@ -301,9 +307,15 @@ private:
   TH1F* h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist;
   TH1F* h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err;
   TH1F* h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err;
+  TH1F* h_twomost_mid_b2b_shared_tracks_pair_SVa_ratio_sum_pT;
+  TH1F* h_twomost_mid_b2b_shared_tracks_pair_SVb_ratio_sum_pT;
+  TH1F* h_twomost_mid_b2b_sub_shared_tracks_pair_dR_sig;
   TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig;
+  TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks;
   TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb;
   TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb;
+  TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb;
+  TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb;
 
   TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT;
   TH2F* h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks;
@@ -333,9 +345,15 @@ private:
   TH1F* h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist;
   TH1F* h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err;
   TH1F* h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err;
+  TH1F* h_twomost_non_b2b_shared_tracks_pair_SVa_ratio_sum_pT;
+  TH1F* h_twomost_non_b2b_shared_tracks_pair_SVb_ratio_sum_pT;
+  TH1F* h_twomost_non_b2b_sub_shared_tracks_pair_dR_sig;
   TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig;
+  TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks;
   TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb;
   TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb;
+  TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb;
+  TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb;
 
   TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT;
   TH2F* h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks;
@@ -539,16 +557,22 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/SVa", 30, 0, 6);
 	h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/SVb", 30, 0, 6);
 	h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist (cm.)/SVa", 30, 0, 0.06);
-	h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist (cm.)/SVb", 30, 0, 0.06);
+	h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist (cm.)/SVb", 30, 0, 0.06);
 	h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist error (cm.)/SVa", 30, 0, 0.02);
 	h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist error (cm.)/SVb", 30, 0, 0.02);
+	h_twomost_b2b_shared_tracks_pair_SVa_ratio_sum_pT = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVa_ratio_sum_pT", "dPhi(vtx0,vtx1) >= 2.7 && median miss-dist SVb > 2; ratio sum pT's SVa", 30, 0, 1);
+	h_twomost_b2b_shared_tracks_pair_SVb_ratio_sum_pT = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_SVb_ratio_sum_pT", "dPhi(vtx0,vtx1) >= 2.7 && median miss-dist SVb > 2; ratio sum pT's SVb", 30, 0, 1);
+	h_twomost_b2b_sub_shared_tracks_pair_dR_sig = fs->make<TH1F>("h_twomost_b2b_sub_shared_tracks_pair_dR_sig", "dPhi(vtx0,vtx1) >= 2.7 && median miss-dist SVb > 2; dR significance of a shared-track pair", 50, 0, 10);
 	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/more-trk SVa; median miss-dist sig/less-trk SVb", 30, 0, 6, 30, 0, 6);
+	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks", "dPhi(vtx0,vtx1) >= 2.7; shared-tracks/more-trk SVa; shared-tracks/less-trk SVb", 20, 0, 20, 20, 0, 20);
 	h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb", "dPhi(vtx0,vtx1) >= 2.7; dR significance of a shared-track pair; median miss-dist sig/less-trk SVb", 50, 0, 10, 30, 0, 6);
 	h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb", "dPhi(vtx0,vtx1) >= 2.7; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}; median miss-dist sig/less-trk SVb", 10, -1, 1, 30, 0, 6);
-	
-	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT", "dPhi(vtx0,vtx1) >= 2.7 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}", 30, 0, 6, 10, -1, 1);
-	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks", "dPhi(vtx0,vtx1) >= 2.7 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; # of shared ntrack/SVa", 20, 0, 20, 10, -1, 1);
-	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks", "dPhi(vtx0,vtx1) >= 2.7 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; # of non-shared ntrack/SVa", 20, 0, 20, 10, -1, 1);
+	h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb", "dPhi(vtx0,vtx1) >= 2.7; # of shared ntrack/SVa; median miss-dist sig/less-trk SVb", 20, 0, 20, 30, 0, 6);
+	h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb", "dPhi(vtx0,vtx1) >= 2.7; # of non-shared ntrack/SVa; median miss-dist sig/less-trk SVb", 20, 0, 20, 30, 0, 6);
+
+	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/more-trk SVa; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}", 30, 0, 6, 10, -1, 1);
+	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/more-trk SVa; # of shared ntrack/SVa", 30, 0, 6, 20, 0, 20);
+	h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks = fs->make<TH2F>("h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/more-trk SVa; # of non-shared ntrack/SVa", 30, 0, 6, 20, 0, 20);
 
 	h_twomost_b2b_shared_tracks_pair_equal_SVa_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_equal_SVamedian_tkvtxdistsig", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/equal-trk SVa", 30, 0, 6);
 	h_twomost_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig", "dPhi(vtx0,vtx1) >= 2.7; median miss-dist sig/equal-trk SVb", 30, 0, 6);
@@ -572,16 +596,24 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/SVa", 30, 0, 6);
 	h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/SVb", 30, 0, 6);
 	h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist (cm.)/SVa", 30, 0, 0.06);
-	h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist (cm.)/SVb", 30, 0, 0.06);
+	h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist (cm.)/SVb", 30, 0, 0.06);
 	h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist error (cm.)/SVa", 30, 0, 0.02);
 	h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist error (cm.)/SVb", 30, 0, 0.02);
+	h_twomost_mid_b2b_shared_tracks_pair_SVa_ratio_sum_pT = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVa_ratio_sum_pT", "0.4 <= dPhi(vtx0,vtx1) < 2.7 && median miss-dist SVb > 2; ratio sum pT's SVa", 30, 0, 1);
+	h_twomost_mid_b2b_shared_tracks_pair_SVb_ratio_sum_pT = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_SVb_ratio_sum_pT", "0.4 <= dPhi(vtx0,vtx1) < 2.7 && median miss-dist SVb > 2; ratio sum pT's SVa", 30, 0, 1);
+	h_twomost_mid_b2b_sub_shared_tracks_pair_dR_sig = fs->make<TH1F>("h_twomost_mid_b2b_sub_shared_tracks_pair_dR_sig", "0.4 <= dPhi(vtx0,vtx1) < 2.7 && median miss-dist SVb > 2; dR significance of a shared-track pair", 50, 0, 10);
+
 	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/more-trk SVa; median miss-dist sig/less-trk SVb", 30, 0, 6, 30, 0, 6);
+	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks", "0.4 <= dPhi(vtx0,vtx1) < 2.7; shared-tracks/more-trk SVa; shared-tracks/less-trk SVb", 20, 0, 20, 20, 0, 20);
+
 	h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb", "0.4 <= dPhi(vtx0,vtx1) < 2.7; dR significance of a shared-track pair; median miss-dist sig/less-trk SVb", 50, 0, 10, 30, 0, 6);
 	h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb", "0.4 <= dPhi(vtx0,vtx1) < 2.7; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}; median miss-dist sig/less-trk SVb", 10, -1, 1, 30, 0, 6);
+	h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb", "0.4 <= dPhi(vtx0,vtx1) < 2.7; # of shared ntrack/SVa; median miss-dist sig/less-trk SVb", 20, 0, 20, 30, 0, 6);
+	h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb", "dPhi(vtx0,vtx1) >= 2.7; # of non-shared ntrack/SVa; median miss-dist sig/less-trk SVb", 20, 0, 20, 30, 0, 6);
 
-	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT", "0.4 <= dPhi(vtx0,vtx1) < 2.7 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}", 30, 0, 6, 10, -1, 1);
-	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks", "0.4 <= dPhi(vtx0,vtx1) < 2.7 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; # of shared ntrack/SVa", 20, 0, 20, 10, -1, 1);
-	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks", "0.4 <= dPhi(vtx0,vtx1) < 2.7 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; # of non-shared ntrack/SVa", 20, 0, 20, 10, -1, 1);
+	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/more-trk SVa; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}", 30, 0, 6, 10, -1, 1);
+	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/more-trk SVa; # of shared ntrack/SVa", 30, 0, 6, 20, 0, 20);
+	h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks = fs->make<TH2F>("h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/more-trk SVa; # of non-shared ntrack/SVa", 30, 0, 6, 20, 0, 20);
 
 	h_twomost_mid_b2b_shared_tracks_pair_equal_SVa_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_equal_SVamedian_tkvtxdistsig", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/equal-trk SVa", 30, 0, 6);
 	h_twomost_mid_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_mid_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig", "0.4 <= dPhi(vtx0,vtx1) < 2.7; median miss-dist sig/equal-trk SVb", 30, 0, 6);
@@ -604,16 +636,24 @@ MFVVertexer::MFVVertexer(const edm::ParameterSet& cfg)
 	h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig", "dPhi(vtx0,vtx1) < 0.4; median miss-dist sig/SVa", 30, 0, 6);
 	h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig", "dPhi(vtx0,vtx1) < 0.4; median miss-dist sig/SVb", 30, 0, 6);
 	h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist", "dPhi(vtx0,vtx1) < 0.4; median miss-dist (cm.)/SVa", 30, 0, 0.06);
-	h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist", "dPhi(vtx0,vtx1) < 0.4; median miss-dist (cm.)/SVb", 30, 0, 0.06);
+	h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist", "dPhi(vtx0,vtx1) < 0.4; median miss-dist (cm.)/SVb", 30, 0, 0.06);
 	h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err", "dPhi(vtx0,vtx1) < 0.4; median miss-dist error (cm.)/SVa", 30, 0, 0.02);
 	h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err", "dPhi(vtx0,vtx1) < 0.4; median miss-dist error (cm.)/SVb", 30, 0, 0.02);
+	h_twomost_non_b2b_shared_tracks_pair_SVa_ratio_sum_pT = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVa_ratio_sum_pT", "dPhi(vtx0, vtx1) < 0.4 && median miss-dist SVb > 2; ratio sum pT's SVa", 30, 0, 1);
+	h_twomost_non_b2b_shared_tracks_pair_SVb_ratio_sum_pT = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_SVb_ratio_sum_pT", "dPhi(vtx0, vtx1) < 0.4 && median miss-dist SVb > 2; ratio sum pT's SVa", 30, 0, 1);
+	h_twomost_non_b2b_sub_shared_tracks_pair_dR_sig = fs->make<TH1F>("h_twomost_non_b2b_sub_shared_tracks_pair_dR_sig", "dPhi(vtx0, vtx1) < 0.4 && median miss-dist SVb > 2; dR significance of a shared-track pair", 50, 0, 10);
+
 	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig", "dPhi(vtx0,vtx1) < 0.4; median miss-dist sig/more-trk SVa; median miss-dist sig/less-trk SVb", 30, 0, 6, 30, 0, 6);
+	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks", "dPhi(vtx0,vtx1) < 0.4; shared-tracks/more-trk SVa; shared-tracks/less-trk SVb", 20, 0, 20, 20, 0, 20);
+
 	h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb", "dPhi(vtx0,vtx1) < 0.4; dR significance of a shared-track pair; median miss-dist sig/less-trk SVb", 50, 0, 10, 30, 0, 6);
 	h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb", "dPhi(vtx0,vtx1) < 0.4; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}; median miss-dist sig/less-trk SVb", 10, -1, 1, 30, 0, 6);
+	h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb", "dPhi(vtx0,vtx1) < 0.4; # of shared ntrack/SVa; median miss-dist sig/less-trk SVb", 20, 0, 20, 30, 0, 6);
+	h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb", "dPhi(vtx0,vtx1) < 0.4; # of non-shared ntrack/SVa; median miss-dist sig/less-trk SVb", 20, 0, 20, 30, 0, 6);
 
-	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT", "dPhi(vtx0,vtx1) < 0.4 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}", 30, 0, 6, 10, -1, 1);
-	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks", "dPhi(vtx0,vtx1) < 0.4 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; # of shared ntrack/SVa", 20, 0, 20, 10, -1, 1);
-	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks", "dPhi(vtx0,vtx1) < 0.4 && more SVb's median_tkvtxdistsig < 2; median miss-dist sig/less-trk SVa; # of non-shared ntrack/SVa", 20, 0, 20, 10, -1, 1);
+	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT", "dPhi(vtx0,vtx1) < 0.4 ; median miss-dist sig/more-trk SVa; #frac{SVa's sum pT - SVb's sum pT}{SVa's sum pT + SVb's sum pT}", 30, 0, 6, 10, -1, 1);
+	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks", "dPhi(vtx0,vtx1) < 0.4 ; median miss-dist sig/more-trk SVa; # of shared ntrack/SVa", 30, 0, 6, 20, 0, 20);
+	h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks = fs->make<TH2F>("h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks", "dPhi(vtx0,vtx1) < 0.4; median miss-dist sig/more-trk SVa; # of non-shared ntrack/SVa", 30, 0, 6, 20, 0, 20);
 
 	h_twomost_non_b2b_shared_tracks_pair_equal_SVa_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_equal_SVamedian_tkvtxdistsig", "dPhi(vtx0,vtx1) < 0.4; median miss-dist sig/equal-trk SVa", 30, 0, 6);
 	h_twomost_non_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig = fs->make<TH1F>("h_twomost_non_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig", "dPhi(vtx0,vtx1) < 0.4; median miss-dist sig/equal-trk SVb", 30, 0, 6);
@@ -705,9 +745,10 @@ void MFVVertexer::finish(edm::Event& event, const std::vector<reco::TransientTra
 
   if (verbose)
     printf("n_output_vertices: %lu\n", vertices->size());
-  if (histos)
+  if (histos) {
     h_n_output_vertices->Fill(vertices->size());
     h_n_output_quality_vertices->Fill(count_quality_vertices);
+  }
 
   event.put(std::move(vertices));
   event.put(std::move(vpeffs));
@@ -1310,7 +1351,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				}
 
 				// we replace the noshare vertex by the vertex after the track refinement
-				v = trackrefine_trimmax_v;
+				//v = trackrefine_trimmax_v;
 			}
 		}
 
@@ -1375,10 +1416,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				//v1z = v[1]->z() - bsz;
 				phi1 = atan2(v1y, v1x);
 
-				if (reco::deltaPhi(phi0, phi1) < 0.5)
+				if (reco::deltaPhi(phi0, phi1) < 0.5){
 					h_2D_close_dvv_its_significance_before_merge->Fill(v_dist.value(), v_dist.significance());
 					h_close_dvv_its_significance_before_merge->Fill(v_dist.significance());
 					h_close_dvv_its_value_before_merge->Fill(v_dist.value());
+                                }
 
 				if (v_dist.value() < merge_anyway_dist || v_dist.significance() < merge_anyway_sig) {
 					if (verbose)
@@ -1698,8 +1740,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				std::vector<int> nsharedjet_tracks_sv1;
 				std::vector<std::vector<int> >sv0_sharedjet_which_idx;
 				std::vector<std::vector<int> >sv1_sharedjet_which_idx;
-				
-			                                          
 	
 				std::vector<int> sv0_track_which_jet = sv_track_which_jet[first_ntracks_vtxidx];
 				std::vector<int> sv0_track_which_idx = sv_track_which_idx[first_ntracks_vtxidx];
@@ -1712,6 +1752,17 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
                 std::cout << "vtx0 ntracks: " << sv0_track_which_idx.size() << std::endl;                        
 				std::cout << "vtx1 ntracks: " << sv1_track_which_idx.size() << std::endl; 
 				
+				double vtx_sum_pt_i_sv0 = 0;
+				for (unsigned int j = 0; j < sv0_track_which_idx.size(); j++) {
+					int idx = sv0_track_which_idx[j] - 1;
+					std::cout << "vtx0's all tracks w/ idx: " << idx << std::endl; 
+					vtx_sum_pt_i_sv0 = vtx_sum_pt_i_sv0 + tks_v0[idx]->pt();
+				}
+				double vtx_sum_pt_i_sv1 = 0;
+				for (unsigned int j = 0; j < sv1_track_which_idx.size(); j++) {
+					int idx = sv1_track_which_idx[j] - 1;
+					vtx_sum_pt_i_sv1 = vtx_sum_pt_i_sv1 + tks_v1[idx]->pt();
+				}
 
 				while (std::find_first_of(sv_track_which_jet_copy[first_ntracks_vtxidx].begin(), sv_track_which_jet_copy[first_ntracks_vtxidx].end(), sv_track_which_jet_copy[second_ntracks_vtxidx].begin(), sv_track_which_jet_copy[second_ntracks_vtxidx].end()) != sv_track_which_jet_copy[first_ntracks_vtxidx].end()) {
 					nsharedjets++;
@@ -1831,6 +1882,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					std::cout << " shared-jet index: " << jet_index << std::endl;
 					for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
 						int idx = sv0_i_sharedjet_which_idx[j]-1;
+						std::cout << "vtx0's only shared tracks w/ idx: " << idx << std::endl; 
                         sum_pt_i_sv0 = sum_pt_i_sv0 + tks_v0[idx]->pt();
                         reco::TransientTrack v0_track;
                         v0_track = tt_builder->build(tks_v0[idx]);
@@ -1991,10 +2043,11 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					h_twomost_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
 					h_twomost_shared_tracks_pair_dR_rms->Fill(avg_dR_spread_track_pair);
 
-
+                                        
 
 					if (sv0_i_sharedjet_which_idx.size() == 1 && sv1_i_sharedjet_which_idx.size() >= 4) {
-						h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[0], sv0_i_sharedjet_tk_vtx_dist[0]);
+						 
+                                                h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[0], sv0_i_sharedjet_tk_vtx_dist[0]);
 						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(median_tk_vtx_dist_pT_sv1, median_tk_vtx_dist_sv1);
 						h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
 						h_twomost_correct_mis_reco_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
@@ -2008,13 +2061,15 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						h_2D_twomost_correct_shared_tracks_diff_ntracks_asym_sum_pT->Fill(sv1_i_sharedjet_which_idx.size() - sv0_i_sharedjet_which_idx.size(), (sum_pt_i_sv1 - sum_pt_i_sv0)/(sum_pt_i_sv1 + sum_pt_i_sv0));
 						std::cout << "4&&1: median tk_vtx_dist = " << median_tk_vtx_dist_sv1 << " its pT = " << median_tk_vtx_dist_pT_sv1 << std::endl;
 						double sum_tk_vtx_dist_i_sv1 = 0;
+                                                std::cout << __LINE__ << std::endl;  
 						for (unsigned int j = 0; j < sv1_i_sharedjet_which_idx.size(); j++) {
 							h_2D_twomost_correct_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[j], sv1_i_sharedjet_tk_vtx_dist[j]);
 							sum_tk_vtx_dist_i_sv1 = sum_tk_vtx_dist_i_sv1 + sv1_i_sharedjet_tk_vtx_dist[j]; 
 						}
 					}
 					if (sv1_i_sharedjet_which_idx.size() == 1 && sv0_i_sharedjet_which_idx.size() >= 4) {
-						h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[0], sv1_i_sharedjet_tk_vtx_dist[0]);
+						
+                                                h_2D_twomost_mis_reco_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[0], sv1_i_sharedjet_tk_vtx_dist[0]);
 						h_2D_twomost_median_correct_shared_tracks_pT_tkvtxdistsig->Fill(median_tk_vtx_dist_pT_sv0, median_tk_vtx_dist_sv0);
 						h_twomost_correct_mis_reco_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
 						h_twomost_correct_mis_reco_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
@@ -2028,22 +2083,25 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 						h_2D_twomost_correct_shared_tracks_diff_ntracks_asym_sum_pT->Fill(sv0_i_sharedjet_which_idx.size() - sv1_i_sharedjet_which_idx.size(), (sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 						std::cout << "4&&1: median tk_vtx_dist = " << median_tk_vtx_dist_sv0 << " its pT = " << median_tk_vtx_dist_pT_sv0 << std::endl;
 						double sum_tk_vtx_dist_i_sv0 = 0;
-						for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
+						std::cout << __LINE__ << std::endl; 
+                                                for (unsigned int j = 0; j < sv0_i_sharedjet_which_idx.size(); j++) {
 							h_2D_twomost_correct_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[j], sv0_i_sharedjet_tk_vtx_dist[j]);
 							sum_tk_vtx_dist_i_sv0 = sum_tk_vtx_dist_i_sv0 + sv0_i_sharedjet_tk_vtx_dist[j];
 						}
 						
 					}
-
+                                        std::cout << __LINE__ << std::endl; 
 					if (sv1_i_sharedjet_which_idx.size() == 1 && sv0_i_sharedjet_which_idx.size() == 1) {
 						h_2D_twomost_one_one_shared_tracks_pT_tkvtxdistsig->Fill(sv0_i_sharedjet_tk_pT[0], sv0_i_sharedjet_tk_vtx_dist[0]);
 						h_2D_twomost_one_one_shared_tracks_pT_tkvtxdistsig->Fill(sv1_i_sharedjet_tk_pT[0], sv1_i_sharedjet_tk_vtx_dist[0]);
 					}
 
-					//apply quality cuts 
+					//apply quality cuts
+					std::cout << __LINE__ << std::endl;  
 					if (sv0_track_which_idx.size() >= 5 && sv1_track_which_idx.size() >= 5) {
+                                                
 						if (fabs(reco::deltaPhi(phi0, phi1)) >= 2.7) {
-
+                                                        
 							h_twomost_b2b_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
 							h_twomost_b2b_shared_tracks_pair_dR->Fill(avg_dR_track_pair);
 							h_twomost_b2b_shared_tracks_pair_dR_rms->Fill(avg_dR_spread_track_pair);
@@ -2055,26 +2113,38 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
 								h_twomost_b2b_shared_tracks_pair_asym_sum_pT->Fill((sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 								h_twomost_b2b_shared_tracks_pair_asym_median_tkvtxdistsig->Fill((median_tk_vtx_dist_sv0 - median_tk_vtx_dist_sv1) / (median_tk_vtx_dist_sv0 + median_tk_vtx_dist_sv1));
-								h_twomost_b2b_shared_tracks_pair_diff_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0 - median_tk_vtx_dist_sv1);
+								std::cout << __LINE__ << std::endl; 
+                                                                h_twomost_b2b_shared_tracks_pair_diff_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0 - median_tk_vtx_dist_sv1);
 								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0);
 								h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv1);
 								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv0);
 								h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv1);
 								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
-								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
-
+								h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
+                                                                std::cout << __LINE__ << std::endl; 
 								if (sv0_i_sharedjet_which_idx.size() > sv1_i_sharedjet_which_idx.size()) {
+									if (median_tk_vtx_dist_sv1 > 2) {
+										h_twomost_b2b_shared_tracks_pair_SVa_ratio_sum_pT->Fill(sum_pt_i_sv0 / vtx_sum_pt_i_sv0);
+										h_twomost_b2b_shared_tracks_pair_SVb_ratio_sum_pT->Fill(sum_pt_i_sv1 / vtx_sum_pt_i_sv1);
+										h_twomost_b2b_sub_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+									}
 									h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0, median_tk_vtx_dist_sv1);
+									h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks->Fill(sv0_i_sharedjet_which_idx.size(), sv1_i_sharedjet_which_idx.size());
 									h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv1, median_tk_vtx_dist_sv1);
 									h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb->Fill((sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1), median_tk_vtx_dist_sv1);
-
-									if (median_tk_vtx_dist_sv1 < 2) {
+                                                                        std::cout << __LINE__ << std::endl; 
+									
+                                                                                std::cout << __LINE__ << std::endl; 
 										h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT->Fill(median_tk_vtx_dist_sv0, (sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 										h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_i_sharedjet_which_idx.size());
-										h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size());
-									}
+										std::cout << __LINE__ << std::endl; 
+                                        h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size());
+										h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb->Fill(sv1_i_sharedjet_which_idx.size(),median_tk_vtx_dist_sv1);
+										h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb->Fill(sv1_track_which_idx.size() - sv1_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv1);
+									
 								}
 								else {
+									
 									h_twomost_b2b_shared_tracks_pair_equal_SVa_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0);
 									h_twomost_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv1);
 									h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_equal_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv1);
@@ -2102,17 +2172,27 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv1);
 								h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv0);
 								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
-								h_twomost_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
+								h_twomost_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
+								if (median_tk_vtx_dist_sv0 > 2) {
+									h_twomost_b2b_shared_tracks_pair_SVa_ratio_sum_pT->Fill(sum_pt_i_sv1 / vtx_sum_pt_i_sv1);
+									h_twomost_b2b_shared_tracks_pair_SVb_ratio_sum_pT->Fill(sum_pt_i_sv0 / vtx_sum_pt_i_sv0);
+									h_twomost_b2b_sub_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+								}
 
 								h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv1, median_tk_vtx_dist_sv0);
+								h_2D_twomost_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks->Fill(sv1_i_sharedjet_which_idx.size(), sv0_i_sharedjet_which_idx.size());
+
 								h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv0);
 								h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), median_tk_vtx_dist_sv0);
+								h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb->Fill(sv0_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv0);
+								h_2D_twomost_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb->Fill(sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv0);
 
-								if (median_tk_vtx_dist_sv0 < 2) {
+
+								
 									h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT->Fill(median_tk_vtx_dist_sv1, (sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 									h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks->Fill(median_tk_vtx_dist_sv1, sv1_i_sharedjet_which_idx.size());
 									h_2D_twomost_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv1, sv1_track_which_idx.size() - sv1_i_sharedjet_which_idx.size());
-								}
+								
 
 								h_2D_twomost_b2b_shared_tracks_pair_asym_sum_pT_diff_shared_ntrack->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), sv1_i_sharedjet_which_idx.size() - sv0_i_sharedjet_which_idx.size());
 								h_2D_twomost_b2b_shared_tracks_pair_asym_sum_pT_dR_sig->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), avg_dR_track_pair / avg_dR_spread_track_pair);
@@ -2142,18 +2222,28 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 								h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv0);
 								h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv1);
 								h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
-								h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
+								h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
 
 								if (sv0_i_sharedjet_which_idx.size() > sv1_i_sharedjet_which_idx.size()) {
+									if (median_tk_vtx_dist_sv1 > 2) {
+										h_twomost_mid_b2b_shared_tracks_pair_SVa_ratio_sum_pT->Fill(sum_pt_i_sv0 / vtx_sum_pt_i_sv0);
+										h_twomost_mid_b2b_shared_tracks_pair_SVb_ratio_sum_pT->Fill(sum_pt_i_sv1 / vtx_sum_pt_i_sv1);
+										h_twomost_mid_b2b_sub_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+									}
 									h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0, median_tk_vtx_dist_sv1);
+									h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks->Fill(sv0_i_sharedjet_which_idx.size(), sv1_i_sharedjet_which_idx.size());
+
 									h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv1);
 									h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb->Fill((sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1), median_tk_vtx_dist_sv1);
+									h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb->Fill(sv1_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv1);
+									h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb->Fill(sv1_track_which_idx.size() - sv1_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv1);
 
-									if (median_tk_vtx_dist_sv1 < 2) {
+
+									
 										h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT->Fill(median_tk_vtx_dist_sv0, (sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 										h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_i_sharedjet_which_idx.size());
 										h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size());
-									}
+									
 
 								}
 								else {
@@ -2182,17 +2272,27 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 								h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv1);
 								h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv0);
 								h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
-								h_twomost_mid_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
+								h_twomost_mid_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
+								if (median_tk_vtx_dist_sv0 > 2) {
+									h_twomost_mid_b2b_shared_tracks_pair_SVa_ratio_sum_pT->Fill(sum_pt_i_sv1 / vtx_sum_pt_i_sv1);
+									h_twomost_mid_b2b_shared_tracks_pair_SVb_ratio_sum_pT->Fill(sum_pt_i_sv0 / vtx_sum_pt_i_sv0);
+									h_twomost_mid_b2b_sub_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+								}
 
 								h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv1, median_tk_vtx_dist_sv0);
+								h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks->Fill(sv1_i_sharedjet_which_idx.size(), sv0_i_sharedjet_which_idx.size());
+
 								h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv0);
 								h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), median_tk_vtx_dist_sv0);
+								h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb->Fill(sv0_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv0);
+								h_2D_twomost_mid_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb->Fill(sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv0);
 
-								if (median_tk_vtx_dist_sv0 < 2) {
+
+								
 									h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT->Fill(median_tk_vtx_dist_sv1, (sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 									h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks->Fill(median_tk_vtx_dist_sv1, sv1_i_sharedjet_which_idx.size());
 									h_2D_twomost_mid_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv1, sv1_track_which_idx.size() - sv1_i_sharedjet_which_idx.size());
-								}
+								
 
 								h_2D_twomost_mid_b2b_shared_tracks_pair_asym_sum_pT_diff_shared_ntrack->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), sv1_i_sharedjet_which_idx.size() - sv0_i_sharedjet_which_idx.size());
 								h_2D_twomost_mid_b2b_shared_tracks_pair_asym_sum_pT_dR_sig->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), avg_dR_track_pair / avg_dR_spread_track_pair);
@@ -2222,21 +2322,32 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 								h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv0);
 								h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv1);
 								h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
-								h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
+								h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
 
 								if (sv0_i_sharedjet_which_idx.size() > sv1_i_sharedjet_which_idx.size()) {
+									if (median_tk_vtx_dist_sv1 > 2) {
+										h_twomost_non_b2b_shared_tracks_pair_SVa_ratio_sum_pT->Fill(sum_pt_i_sv0 / vtx_sum_pt_i_sv0);
+										h_twomost_non_b2b_shared_tracks_pair_SVb_ratio_sum_pT->Fill(sum_pt_i_sv1 / vtx_sum_pt_i_sv1);
+										h_twomost_non_b2b_sub_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+									}
 									h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0, median_tk_vtx_dist_sv1);
+									h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks->Fill(sv0_i_sharedjet_which_idx.size(), sv1_i_sharedjet_which_idx.size());
+
 									h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv1);
 									h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb->Fill((sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1), median_tk_vtx_dist_sv1);
+									h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb->Fill(sv1_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv1);
+									h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb->Fill(sv1_track_which_idx.size() - sv1_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv1);
 
-									if (median_tk_vtx_dist_sv1 < 2) {
+
+									
 										h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT->Fill(median_tk_vtx_dist_sv0, (sum_pt_i_sv0 - sum_pt_i_sv1) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 										h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_i_sharedjet_which_idx.size());
 										h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv0, sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size());
-									}
+									
 
 								}
 								else {
+
 									h_twomost_non_b2b_shared_tracks_pair_equal_SVa_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv0);
 									h_twomost_non_b2b_shared_tracks_pair_equal_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv1);
 									h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_equal_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv1);
@@ -2262,17 +2373,27 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 								h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv1);
 								h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist->Fill(median_tk_vtx_dist_val_sv0);
 								h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv1);
-								h_twomost_non_b2b_shared_tracks_pair_SVa_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
+								h_twomost_non_b2b_shared_tracks_pair_SVb_median_tkvtxdist_err->Fill(median_tk_vtx_dist_err_sv0);
+								if (median_tk_vtx_dist_sv0 > 2) {
+									h_twomost_non_b2b_shared_tracks_pair_SVa_ratio_sum_pT->Fill(sum_pt_i_sv1 / vtx_sum_pt_i_sv1);
+									h_twomost_non_b2b_shared_tracks_pair_SVb_ratio_sum_pT->Fill(sum_pt_i_sv0 / vtx_sum_pt_i_sv0);
+									h_twomost_non_b2b_sub_shared_tracks_pair_dR_sig->Fill(avg_dR_track_pair / avg_dR_spread_track_pair);
+								}
 
 								h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_median_tkvtxdistsig->Fill(median_tk_vtx_dist_sv1, median_tk_vtx_dist_sv0);
+								h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_less_SVb_shared_tracks->Fill(sv1_i_sharedjet_which_idx.size(), sv0_i_sharedjet_which_idx.size());
+
 								h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_dR_sig_less_SVb->Fill(avg_dR_track_pair / avg_dR_spread_track_pair, median_tk_vtx_dist_sv0);
 								h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_asym_sum_pT_less_SVb->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), median_tk_vtx_dist_sv0);
+								h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_shared_ntracks_less_SVb->Fill(sv0_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv0);
+								h_2D_twomost_non_b2b_shared_tracks_pair_median_tkvtxdistsig_non_shared_ntracks_less_SVb->Fill(sv0_track_which_idx.size() - sv0_i_sharedjet_which_idx.size(), median_tk_vtx_dist_sv0);
 
-								if (median_tk_vtx_dist_sv0 < 2) {
+
+								
 									h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_asym_sum_pT->Fill(median_tk_vtx_dist_sv1, (sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1));
 									h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_shared_ntracks->Fill(median_tk_vtx_dist_sv1, sv1_i_sharedjet_which_idx.size());
 									h_2D_twomost_non_b2b_shared_tracks_pair_more_SVa_median_tkvtxdistsig_non_shared_ntracks->Fill(median_tk_vtx_dist_sv1, sv1_track_which_idx.size() - sv1_i_sharedjet_which_idx.size());
-								}
+								
 
 
 								h_2D_twomost_non_b2b_shared_tracks_pair_asym_sum_pT_diff_shared_ntrack->Fill((sum_pt_i_sv1 - sum_pt_i_sv0) / (sum_pt_i_sv0 + sum_pt_i_sv1), sv1_i_sharedjet_which_idx.size() - sv0_i_sharedjet_which_idx.size());
@@ -2439,8 +2560,8 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 					h_twomost_output_shared_jet_after_dVV->Fill(mag(nosharedjets_v0x - nosharedjets_v1x, nosharedjets_v0y - nosharedjets_v1y));
                 }
                 
-				v0 = nosharedjets_v0;
-				v1 = nosharedjets_v1;
+				//v0 = nosharedjets_v0;
+				//v1 = nosharedjets_v1;
 			}
 		}
 	}
