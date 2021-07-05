@@ -1351,7 +1351,7 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 				}
 
 				// we replace the noshare vertex by the vertex after the track refinement
-				//v = trackrefine_trimmax_v;
+				v = trackrefine_trimmax_v;
 			}
 		}
 
@@ -1752,17 +1752,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
                 std::cout << "vtx0 ntracks: " << sv0_track_which_idx.size() << std::endl;                        
 				std::cout << "vtx1 ntracks: " << sv1_track_which_idx.size() << std::endl; 
 				
-				double vtx_sum_pt_i_sv0 = 0;
-				for (unsigned int j = 0; j < sv0_track_which_idx.size(); j++) {
-					int idx = sv0_track_which_idx[j] - 1;
-					std::cout << "vtx0's all tracks w/ idx: " << idx << std::endl; 
-					vtx_sum_pt_i_sv0 = vtx_sum_pt_i_sv0 + tks_v0[idx]->pt();
-				}
-				double vtx_sum_pt_i_sv1 = 0;
-				for (unsigned int j = 0; j < sv1_track_which_idx.size(); j++) {
-					int idx = sv1_track_which_idx[j] - 1;
-					vtx_sum_pt_i_sv1 = vtx_sum_pt_i_sv1 + tks_v1[idx]->pt();
-				}
 
 				while (std::find_first_of(sv_track_which_jet_copy[first_ntracks_vtxidx].begin(), sv_track_which_jet_copy[first_ntracks_vtxidx].end(), sv_track_which_jet_copy[second_ntracks_vtxidx].begin(), sv_track_which_jet_copy[second_ntracks_vtxidx].end()) != sv_track_which_jet_copy[first_ntracks_vtxidx].end()) {
 					nsharedjets++;
@@ -1860,7 +1849,18 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 
                 std::cout << "the number of shared-jets is " << nsharedjets << std::endl;                                               
 				//std::cout << "sv0's phi = " << phi0 << " and " << "sv1's phi = " << phi1 << std::endl;                                  
-                                
+				double vtx_sum_pt_i_sv0 = 0;
+				for (unsigned int j = 0; j < sv0_track_which_idx.size(); j++) {
+					int idx = sv0_track_which_idx[j] - 1;
+					std::cout << "vtx0's all tracks w/ idx: " << idx << std::endl;
+					vtx_sum_pt_i_sv0 = vtx_sum_pt_i_sv0 + tks_v0[idx]->pt();
+				}
+				double vtx_sum_pt_i_sv1 = 0;
+				for (unsigned int j = 0; j < sv1_track_which_idx.size(); j++) {
+					int idx = sv1_track_which_idx[j] - 1;
+					vtx_sum_pt_i_sv1 = vtx_sum_pt_i_sv1 + tks_v1[idx]->pt();
+				}
+
 				for (int i = 0; i < nsharedjets; i++) {
                                     
 					
