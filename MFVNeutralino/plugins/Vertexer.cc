@@ -1719,6 +1719,10 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			double dBV0 = dBV0_Meas1D.value();
 			double bs2derr_V0 = dBV0_Meas1D.error();
 
+			Measurement1D dBV1_Meas1D = vertex_dist_2d.distance(v1, fake_bs_vtx);
+			double dBV1 = dBV1_Meas1D.value();
+			double bs2derr_V1 = dBV1_Meas1D.error();
+
 			double v0x = v0.position().x() - bsx;
 			double v0y = v0.position().y() - bsy;
 			
@@ -1763,9 +1767,6 @@ void MFVVertexer::produce(edm::Event& event, const edm::EventSetup& setup) {
 			h_twomost_output_vertex_bs2derr->Fill(bs2derr_V0);
 
 			
-			Measurement1D dBV1_Meas1D = vertex_dist_2d.distance(v1, fake_bs_vtx);
-			double dBV1 = dBV1_Meas1D.value();
-			double bs2derr_V1 = dBV1_Meas1D.error();
 
 			for (auto it = v1.tracks_begin(), ite = v1.tracks_end(); it != ite; ++it) {
 
